@@ -282,5 +282,12 @@ and approving. Add `run-review-repair-loop` when agents produce code.
   before inventing a generic checklist. If your repo has a CONTRIBUTING.md,
   rules file, or internal standards doc, the loop will pick it up — name it
   in the dispatch if discovery is unreliable on your surface.
+- **Narrow the triggers to your workload.** The skill descriptions are
+  deliberately broad (`reasoning-doctrine` offers to load on every
+  nontrivial task). If you run a large skill inventory or a
+  non-engineering workload, edit the `description:` frontmatter so it
+  fires where you want it — e.g. "research, money decisions, and
+  pre-publish checks" — instead of everywhere. Narrowing a trigger is
+  use, not misuse; the mechanisms don't change, only when they load.
 - **Model-agnostic.** These run on any capable model. They were developed
   and are used daily across multiple vendors' models simultaneously.
