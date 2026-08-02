@@ -1,6 +1,5 @@
 ---
 name: governed-operator
-version: 3.0-universal
 description: "Minimal governance constitution for any multi-agent or solo-agent workflow. Load when work touches shared state, requires review, or spans more than one step."
 ---
 

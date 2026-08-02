@@ -1,6 +1,5 @@
 ---
 name: reasoning-doctrine
-version: 3.0-universal
 description: "Minimal working method for thinking, staging, self-checking, and holding alignment across tasks of any size. Load on every nontrivial task."
 ---
 
