@@ -81,6 +81,16 @@ verify it on the real surface.)
 | `universal-starter/governed-operator-universal-SKILL.md` | Core constitution, minimal ceremony |
 | `universal-starter/reasoning-doctrine-universal-SKILL.md` | Core working method, self-contained |
 
+### Patterns (Enforcement)
+
+Not skills — these are working code you install and wire, for the jobs
+instructions cannot do. The skills tell you to pair them with real enforcement;
+this is that enforcement.
+
+| Pattern | Purpose |
+|---|---|
+| [`destructive-command-guard/`](destructive-command-guard/) | PreToolUse hook that denies catastrophic Bash commands before your agent runs them. Python, no dependencies, with a regression suite and a built-in sentinel for proving it's live. |
+
 ## How to use
 
 1. Copy the skill directories into your agent's skills folder.
