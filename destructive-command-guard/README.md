@@ -195,6 +195,33 @@ The sentinel is safe by design. If the guard is dead, nothing happens; if it is
 live, nothing executes. **Never test a guard with a command that would do real
 damage if the guard failed.**
 
+Each surface wraps the denial in its own error format. On Antigravity it
+surfaces as an invalid-tool-call error carrying the reason through:
+
+```
+Error invalid tool call: model output error: invalid tool call error
+(invalid_args) tool call denied with reason: Destructive-command guard
+self-test denied before Bash execution.
+```
+
+Recognize the wrapper for your surface so you can tell a real denial from a
+command that merely failed.
+
+### Getting an answer you can trust
+
+Ask the agent to run the compound form instead of the bare sentinel:
+
+```
+echo GUARD_INACTIVE_PROOF && destructive-guard-self-test
+```
+
+The whole command is denied as one unit, so `GUARD_INACTIVE_PROOF` can only
+appear in the output if the guard failed to fire. A bare sentinel proves the
+guard is live only if you trust the agent's report of being blocked — and an
+agent that has just read the expected reason string can reproduce it whether or
+not it was actually stopped. Here the passing result is *no output at all*,
+which is the one thing a plausible reconstruction cannot produce.
+
 ## Tests
 
 ```
@@ -253,8 +280,21 @@ reason and can adapt instead of retrying blindly.
 
 ## Verification status
 
-Claude Code and Codex wiring have been run in practice. The Cursor and
-Antigravity envelopes are implemented from those products' published hook
-documentation and are covered by `test_adapters.py`, but have not been executed
-inside a live session on either product. If you are the first to run one, the
-sentinel above is how you find out.
+| Surface | Envelope tested | Run in a live session |
+|---|---|---|
+| Claude Code | yes | yes |
+| Codex | yes | yes |
+| Antigravity | yes | yes — 2026-08-04 |
+| Cursor | yes | **no** |
+
+The Cursor envelope is built from Cursor's published hook documentation and is
+covered by `test_adapters.py`, but has never been executed inside a live Cursor
+session. It should work; nobody has proven it. If you are the first to run it,
+the sentinel above is how you find out — and a note back would be welcome.
+
+"Envelope tested" and "run in a live session" are deliberately separate columns.
+The first says the hook reads and writes that surface's wire format correctly,
+which a test can establish offline. The second says the surface actually calls
+the hook and honours the denial, which only a real session can establish. A
+guard that passes the first and fails the second is the dangerous case: it looks
+installed and protects nothing.
