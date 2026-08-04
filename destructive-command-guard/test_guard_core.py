@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
-"""Regression tests for the destructive-command PreToolUse hook."""
+"""Regression tests for the surface-independent matching logic.
+
+These call guard_core.denial_reason() directly. No agent, no payload, no
+subprocess — if a case here fails, the guard is wrong on every surface at once.
+Envelope handling is tested separately in test_adapters.py.
+"""
 
 import importlib.util
-import json
 from pathlib import Path
 import shlex
-import subprocess
-import sys
 import unittest
 
 
-HOOK = Path(__file__).with_name("destructive_commands.py")
-
-spec = importlib.util.spec_from_file_location("destructive_commands", HOOK)
-hook = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(hook)
+CORE = Path(__file__).with_name("guard_core.py")
+spec = importlib.util.spec_from_file_location("guard_core", CORE)
+guard_core = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(guard_core)
 
 BLOCKED_COMMANDS = {
-    "sentinel": "destructive-guard-self-test",
+    "sentinel": guard_core.SELF_TEST_SENTINEL,
     "rm-short": "rm -rf /",
     "rm-reordered-short": "rm -fr /*",
     "rm-split-flags": "rm -r -f ~",
@@ -113,83 +114,58 @@ SAFE_COMMANDS = {
 }
 
 
-def payload(command):
-    return json.dumps(
-        {
-            "hook_event_name": "PreToolUse",
-            "tool_name": "Bash",
-            "tool_input": {"command": command},
-        }
-    )
-
-
-def invoke(raw_input):
-    return subprocess.run(
-        [sys.executable, str(HOOK)],
-        input=raw_input,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-
-
-class DestructiveCommandHookTests(unittest.TestCase):
-    def test_blocked_commands_return_documented_deny_shape(self):
+class GuardCoreTests(unittest.TestCase):
+    def test_blocked_commands_are_denied(self):
         for name, command in BLOCKED_COMMANDS.items():
             with self.subTest(name=name):
-                result = invoke(payload(command))
-                self.assertEqual(result.returncode, 0)
-                self.assertEqual(result.stderr, "")
-                output = json.loads(result.stdout)
-                hook_output = output["hookSpecificOutput"]
-                self.assertEqual(hook_output["hookEventName"], "PreToolUse")
-                self.assertEqual(hook_output["permissionDecision"], "deny")
-                self.assertTrue(hook_output["permissionDecisionReason"])
+                self.assertIsNotNone(guard_core.denial_reason(command))
 
-    def test_safe_commands_produce_no_decision(self):
+    def test_safe_commands_are_allowed(self):
         for name, command in SAFE_COMMANDS.items():
             with self.subTest(name=name):
-                result = invoke(payload(command))
-                self.assertEqual(result.returncode, 0)
-                self.assertEqual(result.stdout, "")
-                self.assertEqual(result.stderr, "")
-
-    def test_malformed_payloads_fail_open(self):
-        malformed = {
-            "invalid-json": "not-json",
-            "null": "null",
-            "missing-tool-input": "{}",
-            "missing-command": '{"tool_input": {}}',
-            "wrong-command-type": '{"tool_input": {"command": 42}}',
-        }
-        for name, raw_input in malformed.items():
-            with self.subTest(name=name):
-                result = invoke(raw_input)
-                self.assertEqual(result.returncode, 0)
-                self.assertEqual(result.stdout, "")
-                self.assertEqual(result.stderr, "")
-
-    def test_list_payload_denies_when_any_command_is_blocked(self):
-        result = invoke(payload(["git status", "sudo rm -rf /System"]))
-        self.assertEqual(result.returncode, 0)
-        output = json.loads(result.stdout)
-        self.assertEqual(
-            output["hookSpecificOutput"]["permissionDecision"],
-            "deny",
-        )
+                self.assertIsNone(guard_core.denial_reason(command))
 
     def test_nested_command_depth_is_bounded(self):
         nested = "rm -rf /"
-        for _ in range(hook.MAX_NESTED_COMMAND_DEPTH + 2):
+        for _ in range(guard_core.MAX_NESTED_COMMAND_DEPTH + 2):
             nested = "bash -c " + shlex.quote(nested)
-        self.assertEqual(hook.denial_reason(nested), hook.INSPECTION_LIMIT_REASON)
+        self.assertEqual(
+            guard_core.denial_reason(nested),
+            guard_core.INSPECTION_LIMIT_REASON,
+        )
 
     def test_rm_reason_matches_declared_coverage(self):
         self.assertEqual(
-            hook.denial_reason("rm -rf /System/Library"),
-            hook.RM_REASON,
+            guard_core.denial_reason("rm -rf /System/Library"),
+            guard_core.RM_REASON,
         )
-        self.assertNotIn("macOS system files", hook.RM_REASON)
+        self.assertNotIn("macOS system files", guard_core.RM_REASON)
+
+    def test_protected_and_sealed_roots_are_not_symmetric(self):
+        # SEALED_ROOTS protect every descendant, named or not.
+        for root in guard_core.SEALED_ROOTS:
+            with self.subTest(root=root, kind="sealed"):
+                self.assertIsNotNone(
+                    guard_core.denial_reason(f"rm -rf {root}/anything")
+                )
+
+        # PROTECTED_ROOTS that are not sealed protect the root and globs under
+        # it, but allow a named descendant — that is your own project.
+        for root in guard_core.PROTECTED_ROOTS:
+            if root in guard_core.SEALED_ROOTS:
+                continue
+            with self.subTest(root=root, kind="protected"):
+                self.assertIsNotNone(guard_core.denial_reason(f"rm -rf {root}"))
+                self.assertIsNotNone(guard_core.denial_reason(f"rm -rf {root}/*"))
+                self.assertIsNone(
+                    guard_core.denial_reason(f"rm -rf {root}/someone/project")
+                )
+
+    def test_self_test_sentinel_is_denied_with_its_own_reason(self):
+        self.assertEqual(
+            guard_core.denial_reason(guard_core.SELF_TEST_SENTINEL),
+            guard_core.SELF_TEST_REASON,
+        )
 
 
 if __name__ == "__main__":
