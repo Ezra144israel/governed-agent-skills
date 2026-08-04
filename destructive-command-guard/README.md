@@ -29,13 +29,17 @@ entry to `ENVELOPES` — never touching the core.
 |---|---|---|---|---|---|
 | Claude Code | `PreToolUse` | `~/.claude/settings.json` | `tool_input.command` | `hookSpecificOutput.permissionDecision` | 0 |
 | Codex | `PreToolUse` | `~/.codex/hooks.json` | `tool_input.command` | same as Claude Code | 0 |
-| Kimi CLI | `PreToolUse` | `~/.kimi/config.toml` | `tool_input.command` | same as Claude Code | **2** |
+| Kimi Code CLI † | `PreToolUse` | `~/.kimi/config.toml` | `tool_input.command` | same as Claude Code | **2** |
 | Cursor | `beforeShellExecution` | `~/.cursor/hooks.json` | `command` | `permission` | 0 |
 | Antigravity | `PreToolUse` | `.agents/hooks.json` or `~/.gemini/config/` | `toolCall.args.CommandLine` | `decision` | 0 |
 
 The hook detects which envelope it is being called with and replies in kind. No
 per-surface build, no configuration flag. Set `DESTRUCTIVE_GUARD_ENVELOPE` to
 `claude`, `kimi`, `cursor`, or `antigravity` if you ever need to force one.
+
+† **Kimi Code CLI only.** The macOS Kimi desktop app does not invoke hooks at
+all — see [Verification status](#verification-status). Wiring this on the
+desktop app produces no protection whatsoever.
 
 **Kimi is the subtle one.** Its payload and deny JSON are identical to Claude
 Code's, so it would be tempting to treat them as one envelope — but Kimi blocks
