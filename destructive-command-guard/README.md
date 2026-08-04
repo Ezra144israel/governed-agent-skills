@@ -66,6 +66,10 @@ catastrophe, not a substitute for recovery.
 
 ## Install
 
+Requires `python3` and nothing else — no packages, no virtualenv. Standard
+library only, and it runs on the system Python that ships with macOS (verified
+on 3.9). If `python3` resolves for you, the guard runs.
+
 Copy both Python files into your agent's hooks directory — the hook loads the
 core from its own directory, so they must sit together:
 
