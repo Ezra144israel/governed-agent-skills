@@ -145,6 +145,17 @@ timeout = 30
 No extra flag is needed — the hook recognizes Kimi from `tool_name` and exits 2
 on denial by itself.
 
+> **Does not work on the Kimi desktop app.** Hooks are a Kimi Code *CLI*
+> feature. On macOS `Kimi.app` (build dated 2026-07-29) a valid `[[hooks]]`
+> block was never invoked — not for shell commands, and not even with
+> `matcher = ".*"`, which should match every tool. An instrumented wrapper
+> logging every invocation recorded nothing across three fresh sessions, while
+> the same guard fed a Kimi payload by hand returned the correct denial and
+> exit 2 every time. The config above is written from Kimi's published CLI
+> documentation and should work there; on the desktop app this guard will not
+> protect you, and you should not assume otherwise because the config looks
+> right.
+
 ### Wiring — Cursor
 
 `~/.cursor/hooks.json` for all projects, or `.cursor/hooks.json` in one repo.
@@ -313,18 +324,32 @@ reason and can adapt instead of retrying blindly.
 | Claude Code | yes | yes |
 | Codex | yes | yes |
 | Antigravity | yes | yes — 2026-08-04 |
-| Kimi CLI | yes | **no** |
-| Cursor | yes | **no** |
+| Cursor | yes | not attempted |
+| Kimi Code CLI | yes | not attempted |
+| Kimi desktop app | yes | **hook never invoked — see below** |
 
-The Kimi and Cursor envelopes are built from those products' published hook
-documentation and are covered by `test_adapters.py`, but neither has been
-executed inside a live session. They should work; nobody has proven it. If you
-are the first to run one, the sentinel above is how you find out — and a note
-back would be welcome.
+The Cursor envelope is built from Cursor's published hook documentation and is
+covered by `test_adapters.py`, but has never been executed in a live Cursor
+session. It should work; nobody has proven it. If you are the first to run one,
+the sentinel above is how you find out — and a note back would be welcome.
 
-Kimi deserves particular suspicion on first run, because its failure mode is
-quiet. If the exit code is wrong the denial still prints and the command still
-executes, so use the compound form below rather than the bare sentinel.
+**Kimi is a genuine negative result, and worth reading before you wire it.**
+Hooks are documented for Kimi Code CLI. On the macOS desktop app they were never
+invoked at all: a valid `[[hooks]]` block, then a wildcard `matcher = ".*"`
+that should match every tool, produced zero invocations across three fresh
+sessions with an instrumented wrapper logging every call. The guard was correct
+the whole time — hand it a Kimi payload and it returns the right denial with
+exit 2. Nothing on the guard side can fix a hook that is never called.
+
+Two things follow. First, if you use the Kimi desktop app, this guard gives you
+no protection no matter how correct the config looks — and "the config looks
+right" is exactly the false assurance the sentinel exists to puncture. Second,
+the CLI remains untested; the envelope is implemented and unit-tested, so if you
+run the actual CLI it is worth trying, with the compound check below rather than
+a bare sentinel.
+
+That distinction between *envelope tested* and *run live* earned its keep here.
+Kimi passes every offline test in this repo and does not work.
 
 "Envelope tested" and "run in a live session" are deliberately separate columns.
 The first says the hook reads and writes that surface's wire format correctly,
