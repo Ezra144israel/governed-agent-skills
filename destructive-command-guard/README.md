@@ -65,9 +65,9 @@ mkdir -p ~/.claude/hooks
 cp guard_core.py destructive_commands.py ~/.claude/hooks/
 ```
 
-Substitute `~/.codex/hooks/` or `~/.cursor/hooks/` as appropriate. A missing
-`guard_core.py` makes the hook fail loudly rather than silently pass every
-command — see Design notes.
+Substitute `~/.codex/hooks/`, `~/.cursor/hooks/`, or `~/.gemini/config/hooks/`
+as appropriate. A missing `guard_core.py` makes the hook fail loudly rather than
+silently pass every command — see Design notes.
 
 ### Wiring — Claude Code
 
@@ -139,12 +139,41 @@ guard that only inspects some commands is not a guard:
 
 ### Wiring — Antigravity
 
-Antigravity fires `PreToolUse` before `run_command` and honours
-`{"decision": "deny"}`, with `hooks.json` living in `.agents/` in the workspace
-or `~/.gemini/config/`. Check Antigravity's own hooks documentation for the
-exact entry syntax — the payload and response shapes are handled for you, but
-the surrounding config schema is theirs and it is not reproduced here from
-memory.
+`hooks.json` in `.agents/` in your workspace, or `~/.gemini/config/` for all
+projects. Antigravity's schema differs from the others in two ways worth
+reading carefully: the top level is a map of **named hook groups**, not a
+`hooks` key, and the `matcher` selects a **tool name** (`run_command`), not a
+command pattern.
+
+```json
+{
+  "destructive-command-guard": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$HOME/.gemini/config/hooks/destructive_commands.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+> **Watch the `enabled` key.** Antigravity hook groups accept
+> `"enabled": false`, and the safety-gate example in their own documentation
+> ships with it set. Copy that example as a starting point and you get a guard
+> that is wired, syntactically valid, and doing nothing. Omit the key (it
+> defaults to enabled) or set it to `true` — then prove it with the sentinel
+> below rather than trusting the file.
+
+Scripts are run as shell commands, and the doc's examples use relative paths
+(`./scripts/lint.sh`) without stating what they are relative to. Use an absolute
+`$HOME`-anchored path as above and the ambiguity disappears.
 
 ## Verify it's live
 
