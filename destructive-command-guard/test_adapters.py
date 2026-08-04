@@ -46,33 +46,6 @@ ENVELOPES = {
         _claude_deny_shape,
         0,
     ),
-    "kimi": (
-        # Same payload and deny shape as Claude, but tool_name is "Shell" and
-        # Kimi blocks on exit 2. Getting the exit code wrong here means a
-        # correct-looking denial that does not actually stop the command.
-        lambda command: {
-            "session_id": "abc123",
-            "cwd": "/tmp",
-            "hook_event_name": "PreToolUse",
-            "tool_name": "Shell",
-            "tool_input": {"command": command},
-        },
-        _claude_deny_shape,
-        2,
-    ),
-    "cursor": (
-        lambda command: {
-            "command": command,
-            "cwd": "/tmp",
-            "sandbox": False,
-        },
-        lambda out: (
-            out["permission"] == "deny"
-            and bool(out["user_message"])
-            and bool(out["agent_message"])
-        ),
-        0,
-    ),
     "antigravity": (
         lambda command: {
             "toolCall": {
@@ -113,9 +86,10 @@ class EnvelopeTests(unittest.TestCase):
                 self.assertTrue(is_deny(json.loads(result.stdout)))
 
     def test_each_envelope_uses_its_own_deny_exit_code(self):
-        # Kimi blocks on exit 2; the others honour the JSON and expect 0. A
-        # wrong code here is the silent failure: correct denial text, command
-        # runs anyway.
+        # Both current surfaces block on the JSON and expect 0, but the code is
+        # asserted per envelope because not every agent behaves that way. A
+        # wrong code is the silent failure: correct denial text, command runs
+        # anyway.
         for name, (build, _is_deny, expected_code) in ENVELOPES.items():
             with self.subTest(envelope=name):
                 result = invoke(json.dumps(build(BLOCKED)))
@@ -130,16 +104,17 @@ class EnvelopeTests(unittest.TestCase):
                 self.assertEqual(result.stderr, "")
 
     def test_forced_envelope_overrides_detection(self):
-        # A Cursor-shaped payload forced to the claude envelope finds no
-        # tool_input, so it must fail open rather than guess.
-        payload = json.dumps(ENVELOPES["cursor"][0](BLOCKED))
+        # An Antigravity-shaped payload forced to the claude envelope finds no
+        # tool_input, so it must fail open rather than guess at a deny format
+        # the caller would not understand.
+        payload = json.dumps(ENVELOPES["antigravity"][0](BLOCKED))
         result = invoke(payload, env={"DESTRUCTIVE_GUARD_ENVELOPE": "claude"})
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout, "")
 
         # Forced to its own envelope it denies as normal.
-        result = invoke(payload, env={"DESTRUCTIVE_GUARD_ENVELOPE": "cursor"})
-        self.assertEqual(json.loads(result.stdout)["permission"], "deny")
+        result = invoke(payload, env={"DESTRUCTIVE_GUARD_ENVELOPE": "antigravity"})
+        self.assertEqual(json.loads(result.stdout)["decision"], "deny")
 
     def test_claude_envelope_accepts_a_command_list(self):
         payload = json.dumps(
@@ -159,8 +134,8 @@ class EnvelopeTests(unittest.TestCase):
             "unknown-envelope": '{"someOtherAgent": {"cmd": "rm -rf /"}}',
             "missing-command": '{"tool_input": {}}',
             "wrong-command-type": '{"tool_input": {"command": 42}}',
-            "cursor-wrong-type": '{"command": 42}',
             "antigravity-no-args": '{"toolCall": {"name": "run_command"}}',
+            "bare-command-key": '{"command": "rm -rf /"}',
         }
         for name, raw_input in cases.items():
             with self.subTest(name=name):
@@ -181,18 +156,6 @@ class EnvelopeTests(unittest.TestCase):
                     result.stdout,
                 )
 
-    def test_kimi_payload_is_not_handled_as_claude(self):
-        # The regression this guards: Kimi's payload matches Claude's
-        # extractor, so envelope order decides whether it exits 2 or 0.
-        payload = json.dumps(ENVELOPES["kimi"][0](BLOCKED))
-        result = invoke(payload)
-        self.assertEqual(result.returncode, 2)
-
-        # Forcing the claude envelope reproduces the bug, which proves the
-        # detection is what prevents it rather than something incidental.
-        forced = invoke(payload, env={"DESTRUCTIVE_GUARD_ENVELOPE": "claude"})
-        self.assertTrue(forced.stdout.strip())
-        self.assertEqual(forced.returncode, 0)
 
 
 if __name__ == "__main__":

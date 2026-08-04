@@ -89,7 +89,7 @@ this is that enforcement.
 
 | Pattern | Purpose |
 |---|---|
-| [`destructive-command-guard/`](destructive-command-guard/) | Pre-execution hook that denies catastrophic shell commands before your agent runs them. Works on Claude Code, Codex, Cursor, and Antigravity from one file — it detects each surface's payload shape and answers in that surface's deny format. Python, no dependencies, with a regression suite and a built-in sentinel for proving it's live. |
+| [`destructive-command-guard/`](destructive-command-guard/) | Pre-execution hook that denies catastrophic shell commands before your agent runs them. Works on Claude Code, Codex, and Antigravity from one file — it detects each surface's payload shape and answers in that surface's deny format. Python, no dependencies, with a regression suite and a built-in sentinel for proving it's live. |
 
 ## How to use
 

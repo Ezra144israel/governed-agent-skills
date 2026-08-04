@@ -9,13 +9,10 @@ identical on every surface.
 Supported envelopes are detected automatically from the payload:
 
   claude       Claude Code and Codex   tool_input.command            exit 0
-  kimi         Kimi CLI                tool_input.command            exit 2
-  cursor       Cursor                  command                       exit 0
   antigravity  Antigravity             toolCall.args.CommandLine     exit 0
 
-Kimi shares Claude's payload and deny shape but identifies its shell tool as
-"Shell" rather than "Bash", and blocks on exit code 2 rather than on the JSON
-alone — so the exit code travels with the envelope.
+Only surfaces confirmed working in a live session are listed. Others have been
+implemented and removed again pending confirmation; see the git history.
 
 Set DESTRUCTIVE_GUARD_ENVELOPE to one of those names to skip detection.
 
@@ -66,34 +63,6 @@ def _claude_render(reason):
     }
 
 
-def _kimi_extract(payload):
-    """Kimi CLI: same payload as Claude Code, but the tool is named "Shell".
-
-    Distinguishing the two matters because Kimi requires exit code 2 to block.
-    A Kimi payload that fell through to the claude envelope would print a
-    perfectly correct denial and exit 0 — the command would run anyway.
-    """
-    if payload.get("tool_name") != "Shell":
-        return None
-    tool_input = payload.get("tool_input")
-    if not isinstance(tool_input, dict):
-        return None
-    return _as_command_list(tool_input.get("command"))
-
-
-def _cursor_extract(payload):
-    """Cursor beforeShellExecution: {"command": "...", "cwd": ...}"""
-    return _as_command_list(payload.get("command"))
-
-
-def _cursor_render(reason):
-    return {
-        "permission": "deny",
-        "user_message": reason,
-        "agent_message": reason,
-    }
-
-
 def _antigravity_extract(payload):
     """Antigravity PreToolUse: {"toolCall": {"args": {"CommandLine": ...}}}"""
     tool_call = payload.get("toolCall")
@@ -111,18 +80,17 @@ def _antigravity_render(reason):
 
 # (name, extract, render, deny_exit_code)
 #
-# Order matters. Kimi must precede claude because its payload also carries
-# tool_input.command and would otherwise be handled with the wrong exit code.
-# Cursor's flat "command" key is the loosest match, so it is tried last.
+# Order matters: most specific envelope first, so a payload that could satisfy
+# two extractors is claimed by the narrower one.
 #
-# The exit code is part of the surface contract, not an implementation detail:
-# Kimi blocks on exit 2, while the others honour the JSON alone and are left at
-# 0 because that is the behaviour verified against them.
+# The deny exit code is part of each surface's contract rather than an
+# implementation detail. Both surfaces here block on the JSON alone and want 0,
+# but not every agent does — some treat a zero exit as "hook had no opinion" and
+# run the command regardless of what the JSON said. Keep it per-envelope so that
+# difference stays visible instead of being buried in a shared return.
 ENVELOPES = (
     ("antigravity", _antigravity_extract, _antigravity_render, 0),
-    ("kimi", _kimi_extract, _claude_render, 2),
     ("claude", _claude_extract, _claude_render, 0),
-    ("cursor", _cursor_extract, _cursor_render, 0),
 )
 
 

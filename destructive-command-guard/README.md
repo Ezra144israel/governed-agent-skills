@@ -29,25 +29,18 @@ entry to `ENVELOPES` — never touching the core.
 |---|---|---|---|---|---|
 | Claude Code | `PreToolUse` | `~/.claude/settings.json` | `tool_input.command` | `hookSpecificOutput.permissionDecision` | 0 |
 | Codex | `PreToolUse` | `~/.codex/hooks.json` | `tool_input.command` | same as Claude Code | 0 |
-| Kimi Code CLI † | `PreToolUse` | `~/.kimi/config.toml` | `tool_input.command` | same as Claude Code | **2** |
-| Cursor | `beforeShellExecution` | `~/.cursor/hooks.json` | `command` | `permission` | 0 |
 | Antigravity | `PreToolUse` | `.agents/hooks.json` or `~/.gemini/config/` | `toolCall.args.CommandLine` | `decision` | 0 |
 
 The hook detects which envelope it is being called with and replies in kind. No
 per-surface build, no configuration flag. Set `DESTRUCTIVE_GUARD_ENVELOPE` to
-`claude`, `kimi`, `cursor`, or `antigravity` if you ever need to force one.
+`claude` or `antigravity` if you ever need to force one.
 
-† **Kimi Code CLI only.** The macOS Kimi desktop app does not invoke hooks at
-all — see [Verification status](#verification-status). Wiring this on the
-desktop app produces no protection whatsoever.
-
-**Kimi is the subtle one.** Its payload and deny JSON are identical to Claude
-Code's, so it would be tempting to treat them as one envelope — but Kimi blocks
-on **exit code 2**, not on the JSON alone. A Kimi payload handled as Claude
-prints a flawless denial and exits 0, and the command runs anyway: the guard
-looks like it worked and did nothing. The two are told apart by `tool_name`,
-which is `"Shell"` on Kimi and `"Bash"` on Claude Code, and `test_adapters.py`
-asserts both the code and the discrimination.
+**Every surface listed here has been confirmed working in a live session.**
+Other agents expose pre-execution hooks and are straightforward to add — the
+work is an envelope adapter, not a change to the guard — but nothing goes in
+this table on documentation alone. A surface that passes every offline test can
+still fail to call the hook at all, and a guard you believe in but that never
+runs is worse than no guard.
 
 ## What it blocks — and what it deliberately doesn't
 
@@ -82,9 +75,9 @@ mkdir -p ~/.claude/hooks
 cp guard_core.py destructive_commands.py ~/.claude/hooks/
 ```
 
-Substitute `~/.codex/hooks/`, `~/.cursor/hooks/`, or `~/.gemini/config/hooks/`
-as appropriate. A missing `guard_core.py` makes the hook fail loudly rather than
-silently pass every command — see Design notes.
+Substitute `~/.codex/hooks/` or `~/.gemini/config/hooks/` as appropriate. A
+missing `guard_core.py` makes the hook fail loudly rather than silently pass
+every command — see Design notes.
 
 ### Wiring — Claude Code
 
@@ -128,52 +121,6 @@ silently pass every command — see Design notes.
             "statusMessage": "Checking destructive command policy"
           }
         ]
-      }
-    ]
-  }
-}
-```
-
-### Wiring — Kimi CLI
-
-`~/.kimi/config.toml`. TOML rather than JSON, and the tool matcher is `Shell`:
-
-```toml
-[[hooks]]
-event = "PreToolUse"
-matcher = "Shell"
-command = 'python3 "$HOME/.kimi/hooks/destructive_commands.py"'
-timeout = 30
-```
-
-No extra flag is needed — the hook recognizes Kimi from `tool_name` and exits 2
-on denial by itself.
-
-> **Does not work on the Kimi desktop app.** Hooks are a Kimi Code *CLI*
-> feature. On macOS `Kimi.app` (build dated 2026-07-29) a valid `[[hooks]]`
-> block was never invoked — not for shell commands, and not even with
-> `matcher = ".*"`, which should match every tool. An instrumented wrapper
-> logging every invocation recorded nothing across three fresh sessions, while
-> the same guard fed a Kimi payload by hand returned the correct denial and
-> exit 2 every time. The config above is written from Kimi's published CLI
-> documentation and should work there; on the desktop app this guard will not
-> protect you, and you should not assume otherwise because the config looks
-> right.
-
-### Wiring — Cursor
-
-`~/.cursor/hooks.json` for all projects, or `.cursor/hooks.json` in one repo.
-The `matcher` is a regex over the command; `.*` is deliberate here, because a
-guard that only inspects some commands is not a guard:
-
-```json
-{
-  "version": 1,
-  "hooks": {
-    "beforeShellExecution": [
-      {
-        "command": "python3 \"$HOME/.cursor/hooks/destructive_commands.py\"",
-        "matcher": ".*"
       }
     ]
   }
@@ -328,36 +275,14 @@ reason and can adapt instead of retrying blindly.
 | Claude Code | yes | yes |
 | Codex | yes | yes |
 | Antigravity | yes | yes — 2026-08-04 |
-| Cursor | yes | not attempted |
-| Kimi Code CLI | yes | not attempted |
-| Kimi desktop app | yes | **hook never invoked — see below** |
 
-The Cursor envelope is built from Cursor's published hook documentation and is
-covered by `test_adapters.py`, but has never been executed in a live Cursor
-session. It should work; nobody has proven it. If you are the first to run one,
-the sentinel above is how you find out — and a note back would be welcome.
+"Envelope tested" and "run in a live session" are deliberately separate columns,
+and nothing ships here on the first alone. The first says the hook reads and
+writes that surface's wire format correctly, which a test can establish offline.
+The second says the surface actually calls the hook and honours the denial,
+which only a real session can establish.
 
-**Kimi is a genuine negative result, and worth reading before you wire it.**
-Hooks are documented for Kimi Code CLI. On the macOS desktop app they were never
-invoked at all: a valid `[[hooks]]` block, then a wildcard `matcher = ".*"`
-that should match every tool, produced zero invocations across three fresh
-sessions with an instrumented wrapper logging every call. The guard was correct
-the whole time — hand it a Kimi payload and it returns the right denial with
-exit 2. Nothing on the guard side can fix a hook that is never called.
-
-Two things follow. First, if you use the Kimi desktop app, this guard gives you
-no protection no matter how correct the config looks — and "the config looks
-right" is exactly the false assurance the sentinel exists to puncture. Second,
-the CLI remains untested; the envelope is implemented and unit-tested, so if you
-run the actual CLI it is worth trying, with the compound check below rather than
-a bare sentinel.
-
-That distinction between *envelope tested* and *run live* earned its keep here.
-Kimi passes every offline test in this repo and does not work.
-
-"Envelope tested" and "run in a live session" are deliberately separate columns.
-The first says the hook reads and writes that surface's wire format correctly,
-which a test can establish offline. The second says the surface actually calls
-the hook and honours the denial, which only a real session can establish. A
-guard that passes the first and fails the second is the dangerous case: it looks
-installed and protects nothing.
+A guard that passes the first and fails the second is the dangerous case: it
+looks installed, its config reads correctly, its tests are green, and it
+protects nothing. That is not hypothetical — it is why this table is shorter
+than the set of agents whose hook APIs are documented.
