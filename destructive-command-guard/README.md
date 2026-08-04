@@ -25,16 +25,25 @@ entry to `ENVELOPES` — never touching the core.
 
 ## Supported surfaces
 
-| Surface | Hook event | Config file | Command at | Deny response |
-|---|---|---|---|---|
-| Claude Code | `PreToolUse` | `~/.claude/settings.json` | `tool_input.command` | `hookSpecificOutput.permissionDecision` |
-| Codex | `PreToolUse` | `~/.codex/hooks.json` | `tool_input.command` | same as Claude Code |
-| Cursor | `beforeShellExecution` | `~/.cursor/hooks.json` | `command` | `permission` |
-| Antigravity | `PreToolUse` | `.agents/hooks.json` or `~/.gemini/config/` | `toolCall.args.CommandLine` | `decision` |
+| Surface | Hook event | Config file | Command at | Deny response | Deny exit |
+|---|---|---|---|---|---|
+| Claude Code | `PreToolUse` | `~/.claude/settings.json` | `tool_input.command` | `hookSpecificOutput.permissionDecision` | 0 |
+| Codex | `PreToolUse` | `~/.codex/hooks.json` | `tool_input.command` | same as Claude Code | 0 |
+| Kimi CLI | `PreToolUse` | `~/.kimi/config.toml` | `tool_input.command` | same as Claude Code | **2** |
+| Cursor | `beforeShellExecution` | `~/.cursor/hooks.json` | `command` | `permission` | 0 |
+| Antigravity | `PreToolUse` | `.agents/hooks.json` or `~/.gemini/config/` | `toolCall.args.CommandLine` | `decision` | 0 |
 
 The hook detects which envelope it is being called with and replies in kind. No
 per-surface build, no configuration flag. Set `DESTRUCTIVE_GUARD_ENVELOPE` to
-`claude`, `cursor`, or `antigravity` if you ever need to force one.
+`claude`, `kimi`, `cursor`, or `antigravity` if you ever need to force one.
+
+**Kimi is the subtle one.** Its payload and deny JSON are identical to Claude
+Code's, so it would be tempting to treat them as one envelope — but Kimi blocks
+on **exit code 2**, not on the JSON alone. A Kimi payload handled as Claude
+prints a flawless denial and exits 0, and the command runs anyway: the guard
+looks like it worked and did nothing. The two are told apart by `tool_name`,
+which is `"Shell"` on Kimi and `"Bash"` on Claude Code, and `test_adapters.py`
+asserts both the code and the discrimination.
 
 ## What it blocks — and what it deliberately doesn't
 
@@ -116,6 +125,21 @@ silently pass every command — see Design notes.
   }
 }
 ```
+
+### Wiring — Kimi CLI
+
+`~/.kimi/config.toml`. TOML rather than JSON, and the tool matcher is `Shell`:
+
+```toml
+[[hooks]]
+event = "PreToolUse"
+matcher = "Shell"
+command = 'python3 "$HOME/.kimi/hooks/destructive_commands.py"'
+timeout = 30
+```
+
+No extra flag is needed — the hook recognizes Kimi from `tool_name` and exits 2
+on denial by itself.
 
 ### Wiring — Cursor
 
@@ -285,12 +309,18 @@ reason and can adapt instead of retrying blindly.
 | Claude Code | yes | yes |
 | Codex | yes | yes |
 | Antigravity | yes | yes — 2026-08-04 |
+| Kimi CLI | yes | **no** |
 | Cursor | yes | **no** |
 
-The Cursor envelope is built from Cursor's published hook documentation and is
-covered by `test_adapters.py`, but has never been executed inside a live Cursor
-session. It should work; nobody has proven it. If you are the first to run it,
-the sentinel above is how you find out — and a note back would be welcome.
+The Kimi and Cursor envelopes are built from those products' published hook
+documentation and are covered by `test_adapters.py`, but neither has been
+executed inside a live session. They should work; nobody has proven it. If you
+are the first to run one, the sentinel above is how you find out — and a note
+back would be welcome.
+
+Kimi deserves particular suspicion on first run, because its failure mode is
+quiet. If the exit code is wrong the denial still prints and the command still
+executes, so use the compound form below rather than the bare sentinel.
 
 "Envelope tested" and "run in a live session" are deliberately separate columns.
 The first says the hook reads and writes that surface's wire format correctly,

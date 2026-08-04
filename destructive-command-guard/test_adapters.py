@@ -26,7 +26,16 @@ spec.loader.exec_module(guard_core)
 BLOCKED = "sudo rm -rf /System"
 SAFE = "git status"
 
-# name -> (payload builder, deny-shape assertion)
+def _claude_deny_shape(out):
+    block = out["hookSpecificOutput"]
+    return (
+        block["hookEventName"] == "PreToolUse"
+        and block["permissionDecision"] == "deny"
+        and bool(block["permissionDecisionReason"])
+    )
+
+
+# name -> (payload builder, deny-shape assertion, expected exit code on deny)
 ENVELOPES = {
     "claude": (
         lambda command: {
@@ -34,11 +43,22 @@ ENVELOPES = {
             "tool_name": "Bash",
             "tool_input": {"command": command},
         },
-        lambda out: (
-            out["hookSpecificOutput"]["hookEventName"] == "PreToolUse"
-            and out["hookSpecificOutput"]["permissionDecision"] == "deny"
-            and bool(out["hookSpecificOutput"]["permissionDecisionReason"])
-        ),
+        _claude_deny_shape,
+        0,
+    ),
+    "kimi": (
+        # Same payload and deny shape as Claude, but tool_name is "Shell" and
+        # Kimi blocks on exit 2. Getting the exit code wrong here means a
+        # correct-looking denial that does not actually stop the command.
+        lambda command: {
+            "session_id": "abc123",
+            "cwd": "/tmp",
+            "hook_event_name": "PreToolUse",
+            "tool_name": "Shell",
+            "tool_input": {"command": command},
+        },
+        _claude_deny_shape,
+        2,
     ),
     "cursor": (
         lambda command: {
@@ -51,6 +71,7 @@ ENVELOPES = {
             and bool(out["user_message"])
             and bool(out["agent_message"])
         ),
+        0,
     ),
     "antigravity": (
         lambda command: {
@@ -62,6 +83,7 @@ ENVELOPES = {
             "conversationId": "test",
         },
         lambda out: out["decision"] == "deny" and bool(out["reason"]),
+        0,
     ),
 }
 
@@ -83,16 +105,24 @@ def invoke(raw_input, env=None):
 
 class EnvelopeTests(unittest.TestCase):
     def test_each_envelope_denies_in_its_own_shape(self):
-        for name, (build, is_deny) in ENVELOPES.items():
+        for name, (build, is_deny, _code) in ENVELOPES.items():
             with self.subTest(envelope=name):
                 result = invoke(json.dumps(build(BLOCKED)))
-                self.assertEqual(result.returncode, 0)
                 self.assertEqual(result.stderr, "")
                 self.assertTrue(result.stdout.strip(), "expected a deny payload")
                 self.assertTrue(is_deny(json.loads(result.stdout)))
 
+    def test_each_envelope_uses_its_own_deny_exit_code(self):
+        # Kimi blocks on exit 2; the others honour the JSON and expect 0. A
+        # wrong code here is the silent failure: correct denial text, command
+        # runs anyway.
+        for name, (build, _is_deny, expected_code) in ENVELOPES.items():
+            with self.subTest(envelope=name):
+                result = invoke(json.dumps(build(BLOCKED)))
+                self.assertEqual(result.returncode, expected_code)
+
     def test_each_envelope_stays_silent_on_safe_commands(self):
-        for name, (build, _is_deny) in ENVELOPES.items():
+        for name, (build, _is_deny, _code) in ENVELOPES.items():
             with self.subTest(envelope=name):
                 result = invoke(json.dumps(build(SAFE)))
                 self.assertEqual(result.returncode, 0)
@@ -140,7 +170,7 @@ class EnvelopeTests(unittest.TestCase):
                 self.assertEqual(result.stderr, "")
 
     def test_sentinel_denies_on_every_envelope(self):
-        for name, (build, is_deny) in ENVELOPES.items():
+        for name, (build, _is_deny, _code) in ENVELOPES.items():
             with self.subTest(envelope=name):
                 result = invoke(
                     json.dumps(build(guard_core.SELF_TEST_SENTINEL))
@@ -150,6 +180,19 @@ class EnvelopeTests(unittest.TestCase):
                     guard_core.SELF_TEST_REASON,
                     result.stdout,
                 )
+
+    def test_kimi_payload_is_not_handled_as_claude(self):
+        # The regression this guards: Kimi's payload matches Claude's
+        # extractor, so envelope order decides whether it exits 2 or 0.
+        payload = json.dumps(ENVELOPES["kimi"][0](BLOCKED))
+        result = invoke(payload)
+        self.assertEqual(result.returncode, 2)
+
+        # Forcing the claude envelope reproduces the bug, which proves the
+        # detection is what prevents it rather than something incidental.
+        forced = invoke(payload, env={"DESTRUCTIVE_GUARD_ENVELOPE": "claude"})
+        self.assertTrue(forced.stdout.strip())
+        self.assertEqual(forced.returncode, 0)
 
 
 if __name__ == "__main__":

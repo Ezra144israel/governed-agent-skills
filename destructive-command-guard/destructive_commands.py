@@ -8,9 +8,14 @@ identical on every surface.
 
 Supported envelopes are detected automatically from the payload:
 
-  claude       Claude Code and Codex   tool_input.command
-  cursor       Cursor                  command
-  antigravity  Antigravity             toolCall.args.CommandLine
+  claude       Claude Code and Codex   tool_input.command            exit 0
+  kimi         Kimi CLI                tool_input.command            exit 2
+  cursor       Cursor                  command                       exit 0
+  antigravity  Antigravity             toolCall.args.CommandLine     exit 0
+
+Kimi shares Claude's payload and deny shape but identifies its shell tool as
+"Shell" rather than "Bash", and blocks on exit code 2 rather than on the JSON
+alone — so the exit code travels with the envelope.
 
 Set DESTRUCTIVE_GUARD_ENVELOPE to one of those names to skip detection.
 
@@ -61,6 +66,21 @@ def _claude_render(reason):
     }
 
 
+def _kimi_extract(payload):
+    """Kimi CLI: same payload as Claude Code, but the tool is named "Shell".
+
+    Distinguishing the two matters because Kimi requires exit code 2 to block.
+    A Kimi payload that fell through to the claude envelope would print a
+    perfectly correct denial and exit 0 — the command would run anyway.
+    """
+    if payload.get("tool_name") != "Shell":
+        return None
+    tool_input = payload.get("tool_input")
+    if not isinstance(tool_input, dict):
+        return None
+    return _as_command_list(tool_input.get("command"))
+
+
 def _cursor_extract(payload):
     """Cursor beforeShellExecution: {"command": "...", "cwd": ...}"""
     return _as_command_list(payload.get("command"))
@@ -89,27 +109,35 @@ def _antigravity_render(reason):
     return {"decision": "deny", "reason": reason}
 
 
-# Order matters: most specific envelope first. Cursor's flat "command" key is
-# the loosest match, so it is tried last.
+# (name, extract, render, deny_exit_code)
+#
+# Order matters. Kimi must precede claude because its payload also carries
+# tool_input.command and would otherwise be handled with the wrong exit code.
+# Cursor's flat "command" key is the loosest match, so it is tried last.
+#
+# The exit code is part of the surface contract, not an implementation detail:
+# Kimi blocks on exit 2, while the others honour the JSON alone and are left at
+# 0 because that is the behaviour verified against them.
 ENVELOPES = (
-    ("antigravity", _antigravity_extract, _antigravity_render),
-    ("claude", _claude_extract, _claude_render),
-    ("cursor", _cursor_extract, _cursor_render),
+    ("antigravity", _antigravity_extract, _antigravity_render, 0),
+    ("kimi", _kimi_extract, _claude_render, 2),
+    ("claude", _claude_extract, _claude_render, 0),
+    ("cursor", _cursor_extract, _cursor_render, 0),
 )
 
 
 def detect_envelope(payload):
-    """Return (name, commands, render) for the first envelope that matches."""
+    """Return (name, commands, render, deny_exit_code) for the first match."""
     forced = os.environ.get("DESTRUCTIVE_GUARD_ENVELOPE")
     candidates = ENVELOPES
     if forced:
         candidates = tuple(item for item in ENVELOPES if item[0] == forced)
 
-    for name, extract, render in candidates:
+    for name, extract, render, deny_exit_code in candidates:
         commands = extract(payload)
         if commands is not None:
-            return name, commands, render
-    return None, [], None
+            return name, commands, render, deny_exit_code
+    return None, [], None, 0
 
 
 def main():
@@ -120,7 +148,7 @@ def main():
     if not isinstance(payload, dict):
         return 0
 
-    _name, commands, render = detect_envelope(payload)
+    _name, commands, render, deny_exit_code = detect_envelope(payload)
     if render is None:
         return 0
 
@@ -129,7 +157,7 @@ def main():
         if reason:
             json.dump(render(reason), sys.stdout)
             sys.stdout.write("\n")
-            return 0
+            return deny_exit_code
     return 0
 
 
