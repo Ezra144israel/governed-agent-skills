@@ -1,6 +1,18 @@
-# Governed Agent Skills
+# governed-agent-skills
 
-A governance constitution and working method for multi-agent and solo-agent workflows.
+**Your agent isn't careless. It's grading its own homework.**
+
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![skills](https://img.shields.io/badge/skills-3-blue.svg)
+![starters](https://img.shields.io/badge/starters-2-blue.svg)
+![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
+
+Give your AI coding agents a constitution, a working method, and an enforcement
+layer — so the agent that builds a thing is never the agent that approves it.
+Three skills, two lightweight starters for surfaces with no skill mechanism, and
+a hook that blocks catastrophic shell commands before they run.
+
+![Governed Agent Skills](assets/social-preview.png)
 
 Built and maintained by [Ezra Israel](https://github.com/Ezra144israel) · [X](https://x.com/Eisrael144). These skills govern the agent teams in daily use.
 
