@@ -135,9 +135,27 @@ as before; see [INSTALL.md](INSTALL.md).
 This repo also ships an [Agent Plugins](https://agent-plugins.org) manifest.
 Install support varies by surface — these are the documented routes:
 
-Route status: the Claude Code install is verified in practice. The other routes
-are documented by their vendors but have not yet been run by the maintainer —
-confirmations and failure reports both welcome.
+Route status — updated as surfaces are run in practice, not on documentation:
+
+- **Claude Code** (plugin route): verified in practice.
+- **GitHub Copilot CLI** (v1.0.78, direct repo install): verified in practice —
+  skills invoke on-topic and reference files load from the plugin's own install
+  directory. Note: current CLI builds mark direct repo installs as deprecated; a
+  marketplace-based route may be required in future versions.
+- **VS Code** (Agent Plugins install): plugin installs and its skills list
+  correctly; chat-side invocation could not be attributed to the plugin (probes
+  were answered by the user's personal skills copies, which shadow same-named
+  plugin skills). Copilot CLI, sharing the same plugin store, is fully verified.
+- **Codex / ChatGPT desktop, Cursor**: documented by their vendors, not yet run
+  by the maintainer.
+- **Manual copy** (folders under `skills/` into your agent's skills directory):
+  verified in practice on Kimi, Grok, and Antigravity.
+
+Confirmations and failure reports on any route are welcome.
+
+A note on what "verified" covers: skills are invoked when a request matches
+their description — they are not command-level enforcement. For hard blocking of
+destructive commands, see [destructive-command-guard/](destructive-command-guard/).
 
 **GitHub Copilot CLI:**
 
