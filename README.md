@@ -82,9 +82,9 @@ verify it on the real surface.)
 
 | Skill | Purpose | Files |
 |---|---|---|
-| `governed-operator-full/` | Governance constitution — seats, 5 gates, role integrity, outcome autonomy | `SKILL.md` |
-| `reasoning-doctrine-full/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 3 references |
-| `run-review-repair-loop-full/` | Bounded self-review with 1–5 scoring before handback | `SKILL.md` |
+| `skills/governed-operator/` | Governance constitution — seats, 5 gates, role integrity, outcome autonomy | `SKILL.md` |
+| `skills/reasoning-doctrine/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 3 references |
+| `skills/run-review-repair-loop/` | Bounded self-review with 1–5 scoring before handback | `SKILL.md` |
 
 ### Universal Starter (Lightweight)
 
@@ -106,17 +106,28 @@ this is that enforcement.
 ## How to use
 
 1. Copy the skill directories into your agent's skills folder.
-2. Load `governed-operator-full` for governed work (planning, reviews, dispatches).
-3. Load `reasoning-doctrine-full` for any nontrivial task.
+2. Load `governed-operator` for governed work (planning, reviews, dispatches).
+3. Load `reasoning-doctrine` for any nontrivial task.
 4. Load `run-review-repair-loop` for self-review before independent review.
 5. References load automatically when their trigger fires.
 
 ## Progressive loading
 
-`reasoning-doctrine-full` uses progressive loading:
+`reasoning-doctrine` uses progressive loading:
 - Core mechanisms load resident
 - Situational references load on trigger, not upfront
 - This preserves context budget for the task at hand
+
+## Install as a Claude Code plugin
+
+```
+/plugin marketplace add Ezra144israel/governed-agent-skills
+/plugin install governed@ezra-governed
+```
+
+Skills load namespaced (e.g. `/governed:reasoning-doctrine`). Manual
+installation — copying `skills/*` into `~/.claude/skills/` — still works exactly
+as before; see [INSTALL.md](INSTALL.md).
 
 ## License
 

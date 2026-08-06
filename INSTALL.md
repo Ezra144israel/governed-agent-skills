@@ -5,14 +5,12 @@ reference files). They work on any agent surface that can read markdown
 instructions; the install path differs per surface.
 
 **Pick one tier per skill.** Install either the full version (e.g.
-`governed-operator-full/`) or the universal-starter version — never both.
+`skills/governed-operator/`) or the universal-starter version — never both.
 The starters are self-contained condensations of the full skills; installing
 both causes duplicate or conflicting triggering.
 
-**Rename on install.** The repo folders carry a `-full` suffix for clarity.
-When installing, use the canonical name from each file's frontmatter as the
-folder name: `governed-operator`, `reasoning-doctrine`,
-`run-review-repair-loop`.
+**Folder names are already canonical.** Each folder under `skills/` matches the
+`name:` in its frontmatter, so copy it across as-is — no renaming step.
 
 ---
 
@@ -65,9 +63,9 @@ Personal (all your projects):
 
 ```
 mkdir -p ~/.claude/skills
-cp -r governed-operator-full ~/.claude/skills/governed-operator
-cp -r reasoning-doctrine-full ~/.claude/skills/reasoning-doctrine
-cp -r run-review-repair-loop-full ~/.claude/skills/run-review-repair-loop
+cp -r skills/governed-operator ~/.claude/skills/governed-operator
+cp -r skills/reasoning-doctrine ~/.claude/skills/reasoning-doctrine
+cp -r skills/run-review-repair-loop ~/.claude/skills/run-review-repair-loop
 ```
 
 Per-project (checked into one repo, applies only there): use
@@ -109,9 +107,9 @@ Codex discovers skills from `SKILL.md` folders, in priority order:
 
 ```
 mkdir -p ~/.agents/skills
-cp -r governed-operator-full ~/.agents/skills/governed-operator
-cp -r reasoning-doctrine-full ~/.agents/skills/reasoning-doctrine
-cp -r run-review-repair-loop-full ~/.agents/skills/run-review-repair-loop
+cp -r skills/governed-operator ~/.agents/skills/governed-operator
+cp -r skills/reasoning-doctrine ~/.agents/skills/reasoning-doctrine
+cp -r skills/run-review-repair-loop ~/.agents/skills/run-review-repair-loop
 ```
 
 Invoke explicitly with `$governed-operator` (or the `/skills` command), or
