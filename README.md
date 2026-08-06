@@ -130,6 +130,36 @@ Skills load namespaced (e.g. `/governed:reasoning-doctrine`). Manual
 installation — copying `skills/*` into `~/.claude/skills/` — still works exactly
 as before; see [INSTALL.md](INSTALL.md).
 
+## Install in other agents
+
+This repo also ships an [Agent Plugins](https://agent-plugins.org) manifest.
+Install support varies by surface — these are the verified routes:
+
+**GitHub Copilot CLI:**
+
+```
+copilot plugin install Ezra144israel/governed-agent-skills
+```
+
+**VS Code (Copilot):** enable the `chat.plugins.enabled` setting, then Command
+Palette → "Chat: Install Plugin From Source" → paste this repo's URL. (Preview
+feature; may be disabled by your organization.)
+
+**Cursor CLI:** run `agent`, then `/plugin`, paste this repo's URL, choose scope.
+
+**Codex / ChatGPT desktop:**
+
+```
+codex plugin marketplace add Ezra144israel/governed-agent-skills
+```
+
+then `/plugins` → source "ezra-governed" → install "governed" → start a new
+session.
+
+**Cursor desktop and ChatGPT web:** not yet directly installable — these require
+marketplace/directory listing. Until then, manual install works everywhere: copy
+any folder under `skills/` into your agent's skills directory.
+
 ## License
 
 MIT
