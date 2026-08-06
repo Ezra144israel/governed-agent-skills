@@ -133,7 +133,11 @@ as before; see [INSTALL.md](INSTALL.md).
 ## Install in other agents
 
 This repo also ships an [Agent Plugins](https://agent-plugins.org) manifest.
-Install support varies by surface — these are the verified routes:
+Install support varies by surface — these are the documented routes:
+
+Route status: the Claude Code install is verified in practice. The other routes
+are documented by their vendors but have not yet been run by the maintainer —
+confirmations and failure reports both welcome.
 
 **GitHub Copilot CLI:**
 
