@@ -3,6 +3,7 @@
 **Your agent isn't careless. It's grading its own homework.**
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
 ![skills](https://img.shields.io/badge/skills-3-blue.svg)
 ![starters](https://img.shields.io/badge/starters-2-blue.svg)
 ![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
