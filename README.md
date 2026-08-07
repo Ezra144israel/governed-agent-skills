@@ -4,14 +4,15 @@
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
-![skills](https://img.shields.io/badge/skills-3-blue.svg)
+![skills](https://img.shields.io/badge/skills-4-blue.svg)
 ![starters](https://img.shields.io/badge/starters-2-blue.svg)
 ![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
 
-Give your AI coding agents a constitution, a working method, and an enforcement
-layer — so the agent that builds a thing is never the agent that approves it.
-Three skills, two lightweight starters for surfaces with no skill mechanism, and
-a hook that blocks catastrophic shell commands before they run.
+Give your AI coding agents a constitution, a working method, a
+minimum-sufficient implementation lens, and an enforcement layer — so the
+agent that builds a thing is never the agent that approves it. Four skills,
+two lightweight starters for surfaces with no skill mechanism, and a hook that
+blocks catastrophic shell commands before they run.
 
 ![Governed Agent Skills](assets/social-preview.png)
 
@@ -85,6 +86,7 @@ verify it on the real surface.)
 |---|---|---|
 | `skills/governed-operator/` | Governance constitution — seats, 5 gates, role integrity, outcome autonomy | `SKILL.md` |
 | `skills/reasoning-doctrine/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 3 references |
+| `skills/write-maintainable-code/` | Minimum-sufficient implementation — code/no-code routes, ownership seams, speculative-concept control | `SKILL.md` |
 | `skills/run-review-repair-loop/` | Bounded self-review with 1–5 scoring before handback | `SKILL.md` |
 
 ### Universal Starter (Lightweight)
@@ -109,8 +111,14 @@ this is that enforcement.
 1. Copy the skill directories into your agent's skills folder.
 2. Load `governed-operator` for governed work (planning, reviews, dispatches).
 3. Load `reasoning-doctrine` for any nontrivial task.
-4. Load `run-review-repair-loop` for self-review before independent review.
-5. References load automatically when their trigger fires.
+4. After the outcome, acceptance evidence, scope, and authority are fixed, load
+   `write-maintainable-code` to compare implementation routes and enforce the
+   selected route.
+5. Load `run-review-repair-loop` for self-review before independent review.
+6. References load automatically when their trigger fires.
+
+Recommended load order: constitution, method, implementation lens when a fixed
+result needs an implementation decision, then review loop after the change.
 
 ## Progressive loading
 
