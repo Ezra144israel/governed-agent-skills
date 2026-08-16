@@ -9,7 +9,7 @@ Branch `main`, tracking `origin/main`; clean at last commit — the only uncommi
 v1.4.0 added `write-maintainable-code`, scoped to load only after outcome/scope/authority are fixed (per its frontmatter and README's load-order note). Preceding commits (`a9ceb5f`, `968069f`) split README install-route labels into "documented" vs. "verified in practice." `destructive-command-guard` commits show the same pattern: a Kimi desktop result was recorded negative, then removed from the shipped list (`8cbb720`, "Ship only live-verified surfaces") — a stated policy of shipping only what's been run live.
 
 ## Next actions
-No open work thread evidenced in the repo — last commit is a completed version bump, no TODO/roadmap file at top level; the only uncommitted files are this rollout's own scaffolding. Next action belongs to the operator's roadmap.
+Operator-stated (2026-08-16, not yet evidenced in the repo): updates to the skill set are already in the pipeline — this repo is actively evolving, which is why it carries memory. A session picking up that work should update this record with the specific slate. Standing continuity worth tracking here that git history does not hold: the per-surface verified-vs-documented matrix (README) and any feedback from the repo's consumers. Next action belongs to the operator's roadmap.
 
 ## Files & surfaces
 `README.md`, `INSTALL.md`, `LICENSE`, `plugin.json` (top level); `.claude-plugin/` (marketplace + plugin manifests); `skills/` (4 skill folders, `SKILL.md` + optional `references/`); `universal-starter/` (2 files); `destructive-command-guard/` (core, adapters, tests, README); `assets/social-preview.png`.
