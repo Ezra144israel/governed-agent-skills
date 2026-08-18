@@ -9,15 +9,16 @@ This file exists because the default failure modes on long tasks are known: drif
 
 ## Progressive loading
 
-This file is the resident core: the mechanisms that fire on nearly every task. Three situational bodies live in a `references/` directory **alongside this file, in this skill's own directory**, and are read when their trigger fires, not before. Resolve each path relative to wherever this SKILL.md was loaded from:
+This file is the resident core: the mechanisms that fire on nearly every task. Four situational bodies live in a `references/` directory **alongside this file, in this skill's own directory**, and are read when their trigger fires, not before. Resolve each path relative to wherever this SKILL.md was loaded from:
 
 | Read | When |
 |---|---|
 | `references/escalation-and-retries.md` | any step comes back wrong, a tool fails, or confidence is degrading across attempts |
 | `references/decomposition-and-delegation.md` | work is being split into steps for another executor, a subagent, or a dispatch |
 | `references/failure-patterns.md` | a failure tell fires, a correction lands, or you are diagnosing your own process |
+| `references/find-a-way.md` | the operator says `find a way`, `solve it another way`, `unblock this`, or an equivalent; a diagnosed and meaningfully corrected route fails while no true stop applies; a Pressure-Tester or Reviewer encounters any blocking finding; or either judging seat has a non-blocking finding with a lawful solution worth returning |
 
-Reading a reference is cheap; reading all three unprompted is the exact over-loading this structure exists to end. Context is a finite resource with diminishing marginal returns — every resident token spends attention budget whether or not it is relevant to the task in hand.
+Reading a reference is cheap; reading all four unprompted is the exact over-loading this structure exists to end. Context is a finite resource with diminishing marginal returns — every resident token spends attention budget whether or not it is relevant to the task in hand.
 
 ## Doctrine priority when rules conflict
 

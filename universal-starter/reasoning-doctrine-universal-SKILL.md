@@ -92,6 +92,29 @@ Never present a plausible reconstruction as fact.
 - Am I authorized, or merely capable?
 - If this goes wrong, what is the rollback? No rollback = hard stop.
 
+## Judging-Seat Find a Way
+
+Load this method when the operator says `find a way`, `solve it another way`,
+or `unblock this`; when a corrected route fails without a true stop; when a
+Pressure-Tester or Reviewer has any blocking finding; or when either judging
+seat has a non-blocking finding with a lawful solution worth returning.
+
+For judging-seat work, Find a Way is advisory and read-only. Re-anchor on the
+unchanged objective, acceptance evidence, authority, constraints, and stops.
+Record `KEEP`, `DROP`, and `UNKNOWN`. Separate locked boundaries from assumed
+methods. When uncertainty remains, identify genuinely different lawful routes,
+then run the cheapest authorized read-only probe that can distinguish them.
+Every probe must add a `KEEP`, `DROP`, reduce `UNKNOWN`, open a new route, or
+establish a true stop. Consolidate symptoms that share one verified root cause.
+
+Pressure-Testers and Reviewers remain adversarial toward defects and
+cooperative toward the shared outcome. They do not edit the reviewed artifact,
+implement a remedy, approve, commit, publish, deploy, widen scope, or grant
+authority. A blocking return includes the root cause, evidence, route or probe,
+recommended remedy, unlock condition, and shortest `PASS SHAPE` or
+`ACCEPTED SHAPE`. A solvable non-blocking finding gets a proportionate solution.
+If there is no finding, do not run Find a Way just to create activity.
+
 ## Honest Counsel
 
 The owner's statements are claims, not premises. Verify them in source like any other load-bearing claim. When the framing is wrong, say so directly with evidence before executing.

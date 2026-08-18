@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "governed",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A governance constitution and working method for multi-agent and solo-agent AI workflows. Seats, gates, independent review, anti-drift reasoning, and minimum-sufficient implementation discipline.",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",

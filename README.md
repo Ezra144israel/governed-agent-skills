@@ -85,7 +85,7 @@ verify it on the real surface.)
 | Skill | Purpose | Files |
 |---|---|---|
 | `skills/governed-operator/` | Governance constitution — seats, 5 gates, role integrity, outcome autonomy | `SKILL.md` |
-| `skills/reasoning-doctrine/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 3 references |
+| `skills/reasoning-doctrine/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 4 references |
 | `skills/write-maintainable-code/` | Minimum-sufficient implementation — code/no-code routes, ownership seams, speculative-concept control | `SKILL.md` |
 | `skills/run-review-repair-loop/` | Bounded self-review with 1–5 scoring before handback | `SKILL.md` |
 
@@ -124,7 +124,7 @@ result needs an implementation decision, then review loop after the change.
 
 `reasoning-doctrine` uses progressive loading:
 - Core mechanisms load resident
-- Situational references load on trigger, not upfront
+- Four situational references load on trigger, not upfront
 - This preserves context budget for the task at hand
 
 ## Install as a Claude Code plugin

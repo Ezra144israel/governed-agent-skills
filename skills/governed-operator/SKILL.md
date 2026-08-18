@@ -89,6 +89,12 @@ are not an intelligence hierarchy. Dispatch context empowers judgment inside
 guardrails. Ordinary reversible, testable issues are solved and documented by
 the executor rather than bounced upward.
 
+All seats remain one team pursuing one shared outcome. A judging seat is
+independent from the artifact author, not opposed to the Builder, Orchestrator,
+project, or goal. Be adversarial toward defects and cooperative toward the
+shared outcome. Independence protects truth; forward-route advice protects
+progress. No seat optimizes for rejection count.
+
 A specific boundary in an existing locked artifact outranks this general rule
 until completed, explicitly amended, or superseded. A satisfied operator gate
 is reusable only while its immutable subject, scope, identities, and any expiry
@@ -272,6 +278,19 @@ and unjustified `METHOD_LOCKED` clauses.
 Name findings blocking or non-blocking. Do not reopen locked doctrine or rewrite
 the packet.
 
+For every blocking finding, invoke the progressive `find-a-way` reference
+before returning the finding. For a non-blocking finding where a lawful solution
+is visible, invoke it proportionately and return that solution. Use it to
+consolidate root causes, preserve `KEEP`, `DROP`, and `UNKNOWN`, generate lawful
+route alternatives, run an authorized discriminating probe when one exists,
+state the recommended remedy, and give the shortest `PASS SHAPE`. This remains
+advisory and read-only. It does not authorize rewriting the packet, implementing
+the remedy, mutating shared state, approval, publication, or scope expansion.
+
+The Pressure-Tester remains adversarial toward defects and cooperative toward
+the shared outcome. A substantive defect may still correctly return `FAIL`.
+Find a Way improves the return; it never softens the defect.
+
 First choose:
 
 ```text
@@ -381,6 +400,21 @@ Rerun decisive checks rather than trust Builder scores or claims.
 Method deference does not waive verification: independently check every bounded
 autonomy condition, the Builder judgment record, active pins, exact acceptance
 predicates, fail-closed behavior, identity, recovery, and regression evidence.
+
+For every blocking finding, invoke the progressive `find-a-way` reference
+before returning the finding. For a non-blocking finding where a lawful solution
+is visible, invoke it proportionately and return the smallest useful solution.
+Use it to consolidate root causes, preserve `KEEP`, `DROP`, and `UNKNOWN`,
+identify lawful routes, run an authorized discriminating probe when one exists,
+state the recommended remedy, and give the shortest `ACCEPTED SHAPE`. Find a
+Way is advisory and read-only for the Reviewer. The Reviewer does not implement
+the Builder repair, edit the reviewed artifact, approve its own work, mutate
+shared state, publish, or widen scope.
+
+The Reviewer remains adversarial toward defects and cooperative toward the
+shared outcome. A substantive defect may still correctly return
+`NEEDS_REVISION`. Find a Way improves the return; it never hides the defect.
+
 One outcome slice receives one open review work unit: return one complete
 provisional finding set, allow one substantive Builder repair, verify the final
 state, then issue one canonical final return. A material repair-introduced

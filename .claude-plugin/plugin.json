@@ -1,7 +1,7 @@
 {
   "name": "governed",
   "description": "A governance constitution and working method for multi-agent and solo-agent AI workflows. Seats, gates, independent review, anti-drift reasoning, and minimum-sufficient implementation discipline.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",
   "license": "MIT"
