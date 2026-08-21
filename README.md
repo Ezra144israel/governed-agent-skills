@@ -4,13 +4,13 @@
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
-![skills](https://img.shields.io/badge/skills-4-blue.svg)
+![skills](https://img.shields.io/badge/skills-3-blue.svg)
 ![starters](https://img.shields.io/badge/starters-2-blue.svg)
 ![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
 
 Give your AI coding agents a constitution, a working method, a
-minimum-sufficient implementation lens, and an enforcement layer — so the
-agent that builds a thing is never the agent that approves it. Four skills,
+minimum-sufficient implementation lens, and an enforcement layer, so the
+agent that builds a thing is never the agent that approves it. Three skills,
 two lightweight starters for surfaces with no skill mechanism, and a hook that
 blocks catastrophic shell commands before they run.
 
@@ -22,14 +22,14 @@ Built and maintained by [Ezra Israel](https://github.com/Ezra144israel) · [X](h
 
 These skills were built to govern teams of coding agents: agents that
 write code, review each other's work, and change repositories. That is
-where the constitution and the review loop earn their keep — when an
+where the constitution and independent review earn their keep, when an
 agent's mistake can reach a codebase, a deploy, or a canonical record.
 
 If your agents do other work — marketing copy, listings, research,
 design, operations — most of this package is heavier than you need.
 Take `reasoning-doctrine` (the working method: verify before asserting,
-never build on unconfirmed facts, catch drift on long tasks — it applies
-to any kind of work) and leave the constitution and review loop until
+never build on unconfirmed facts, catch drift on long tasks, it applies
+to any kind of work) and leave the constitution until
 the day your agents touch real code.
 
 An honest scope statement beats a broad one. If you install only one
@@ -87,7 +87,6 @@ verify it on the real surface.)
 | `skills/governed-operator/` | Governance constitution — seats, 5 gates, role integrity, outcome autonomy | `SKILL.md` |
 | `skills/reasoning-doctrine/` | Working method — stage loop, re-anchor, effort dial, anti-drift | `SKILL.md` + 4 references |
 | `skills/write-maintainable-code/` | Minimum-sufficient implementation — code/no-code routes, ownership seams, speculative-concept control | `SKILL.md` |
-| `skills/run-review-repair-loop/` | Bounded self-review with 1–5 scoring before handback | `SKILL.md` |
 
 ### Universal Starter (Lightweight)
 
@@ -114,11 +113,12 @@ this is that enforcement.
 4. After the outcome, acceptance evidence, scope, and authority are fixed, load
    `write-maintainable-code` to compare implementation routes and enforce the
    selected route.
-5. Load `run-review-repair-loop` for self-review before independent review.
-6. References load automatically when their trigger fires.
+5. Use an independent Reviewer for the final state. References load only when
+   their trigger fires.
 
 Recommended load order: constitution, method, implementation lens when a fixed
-result needs an implementation decision, then review loop after the change.
+result needs an implementation decision, then independent review after the
+change.
 
 ## Progressive loading
 

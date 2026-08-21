@@ -66,14 +66,13 @@ mkdir -p ~/.claude/skills
 cp -r skills/governed-operator ~/.claude/skills/governed-operator
 cp -r skills/reasoning-doctrine ~/.claude/skills/reasoning-doctrine
 cp -r skills/write-maintainable-code ~/.claude/skills/write-maintainable-code
-cp -r skills/run-review-repair-loop ~/.claude/skills/run-review-repair-loop
 ```
 
 Per-project (checked into one repo, applies only there): use
 `.claude/skills/` at the repo root instead of `~/.claude/skills/`.
 
 Verify: start a session and ask "what skills do you have available?" — the
-four names should appear. Reference files under `references/` load
+three names should appear. Reference files under `references/` load
 automatically when their trigger fires; don't flatten them.
 
 ## Claude web / desktop (claude.ai)
@@ -111,7 +110,6 @@ mkdir -p ~/.agents/skills
 cp -r skills/governed-operator ~/.agents/skills/governed-operator
 cp -r skills/reasoning-doctrine ~/.agents/skills/reasoning-doctrine
 cp -r skills/write-maintainable-code ~/.agents/skills/write-maintainable-code
-cp -r skills/run-review-repair-loop ~/.agents/skills/run-review-repair-loop
 ```
 
 Invoke explicitly with `$governed-operator` (or the `/skills` command), or
@@ -129,15 +127,14 @@ No native `SKILL.md` mechanism. Two workable routes:
    `reasoning-doctrine-universal-SKILL.md`) into the project's custom
    instructions. The starters exist for exactly this — they are sized for an
    instruction slot. When a fixed, authorized result needs an implementation
-   decision, attach and explicitly apply `write-maintainable-code/SKILL.md`;
-   after a change, attach and explicitly apply
-   `run-review-repair-loop/SKILL.md`.
-2. **Attached files:** attach the four full `SKILL.md` files to the Project and
+   decision, attach and explicitly apply `write-maintainable-code/SKILL.md`.
+   After a change, use an independent Reviewer for the final state.
+2. **Attached files:** attach the three full `SKILL.md` files to the Project and
    add these instruction lines: "Before any multi-step or review work, read and
    apply the attached governed-operator and reasoning-doctrine files. When a
    fixed, authorized result needs an implementation decision, read and apply
-   write-maintainable-code. After a change, read and apply
-   run-review-repair-loop."
+   write-maintainable-code. After a change, use an independent Reviewer for
+   the final state."
 
 There is no automatic triggering on these surfaces — tell the assistant when
 to apply a skill, or bind it in the project instructions.
@@ -260,22 +257,14 @@ work was done under the wrong rules. Cheap, and worth keeping.
   declines speculative concepts, and keeps the selected implementation
   proportionate, readable, and testable. It does not choose the outcome,
   adjudicate authority, or grade finished work.
-- **run-review-repair-loop** — bounded self-review before handoff. The agent
-  reviews its own diff, scores six categories 1–5 (overall = lowest score,
-  never an average), repairs concrete findings, and repeats up to an
-  iteration limit. The final score is evidence-backed self-assessment,
-  explicitly not independent approval. Load it when an agent finishes a code
-  change and before a second agent (or you) reviews it.
-
 ## Recommended load order
 
 Constitution first, method second, implementation lens only after the outcome,
-acceptance evidence, scope, and authority are fixed, then review loop after the
-change. Solo user with one assistant? Start with just `reasoning-doctrine` — it
+acceptance evidence, scope, and authority are fixed, then independent review
+after the change. Solo user with one assistant? Start with just `reasoning-doctrine` — it
 stands alone. Add `governed-operator` when you have two or more agents, or when
 you want seat separation between building and approving. Add
 `write-maintainable-code` when a fixed result needs an implementation decision.
-Add `run-review-repair-loop` when agents produce code.
 
 ## Things to know
 
@@ -291,11 +280,6 @@ Add `run-review-repair-loop` when agents produce code.
   and return formats are conventions. Rename freely. The load-bearing parts
   are the separations: author ≠ approver, builder ≠ certifier, claim ≠
   verified claim.
-- **Repository doctrine slots in.** `run-review-repair-loop` tells the agent
-  to discover and apply your repo's own standards (a doctrine or rules file)
-  before inventing a generic checklist. If your repo has a CONTRIBUTING.md,
-  rules file, or internal standards doc, the loop will pick it up — name it
-  in the dispatch if discovery is unreliable on your surface.
 - **Narrow the triggers to your workload.** The skill descriptions are
   deliberately broad (`reasoning-doctrine` offers to load on every
   nontrivial task). If you run a large skill inventory or a
