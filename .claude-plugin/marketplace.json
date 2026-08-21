@@ -1,12 +1,12 @@
 {
   "name": "ezra-governed",
   "owner": { "name": "Ezra Israel" },
-  "description": "Governed agent skills by Ezra Israel — constitution, reasoning doctrine, minimum-sufficient implementation, and review-repair loop for AI agent workflows.",
+  "description": "Governed agent skills by Ezra Israel: constitution, reasoning doctrine, and minimum-sufficient implementation for AI agent workflows.",
   "plugins": [
     {
       "name": "governed",
       "source": "./",
-      "description": "Governed-operator constitution, reasoning doctrine, minimum-sufficient implementation, and review-repair loop as one installable plugin."
+      "description": "Governed-operator constitution, reasoning doctrine, and minimum-sufficient implementation as one installable plugin."
     }
   ]
 }
