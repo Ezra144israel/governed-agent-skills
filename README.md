@@ -16,7 +16,8 @@ that approves it.
 
 ![The governed loop](assets/how-it-works.svg)
 
-Full picture, including when each skill loads: [docs/how-it-works.html](docs/how-it-works.html).
+Full picture, including when each skill loads:
+[**how it works, live page**](https://ezra144israel.github.io/governed-agent-skills/).
 
 Built and maintained by [Ezra Israel](https://github.com/Ezra144israel) · [X](https://x.com/Eisrael144).
 
