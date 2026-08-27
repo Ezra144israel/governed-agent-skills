@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governed Agent Skills</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#0E1116; --panel:#161B22; --panel2:#1C232C; --line:#2B3440;
+    --ink:#E8EDF2; --dim:#8B98A5; --accent:#3FB68B; --accent-dim:#22543F;
+    --amber:#D9A03F; --red:#D97066;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",Arial,sans-serif;font-size:16px;line-height:1.55;margin:0;padding:0 20px 90px}
+  main{max-width:880px;margin:0 auto}
+  .mono{font-family:"IBM Plex Mono",monospace}
+  h1{font-size:2.4rem;font-weight:600;letter-spacing:-0.01em;margin:64px 0 6px;text-wrap:balance}
+  h2{font-size:0.8rem;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin:64px 0 16px;font-family:"IBM Plex Mono",monospace}
+  .tag{color:var(--dim);font-size:1.1rem;max-width:56ch;margin:0}
+  .claim{font-family:"IBM Plex Mono",monospace;color:var(--accent);font-size:0.95rem;margin:22px 0 0}
+  .loopwrap{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:26px 20px 10px;overflow-x:auto}
+  .loopnote{color:var(--dim);font-size:0.85rem;max-width:64ch;margin:12px 4px}
+  .ladder{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .rung{display:grid;grid-template-columns:minmax(210px,4fr) auto minmax(180px,3fr);gap:0;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .rung:nth-child(even){background:var(--panel2)}
+  .rung:last-child{border-bottom:none}
+  .when{color:var(--ink);font-size:0.95rem}
+  .arrow{color:var(--accent);font-family:"IBM Plex Mono",monospace;padding:0 18px}
+  .skill{font-family:"IBM Plex Mono",monospace;font-size:0.9rem;color:var(--accent);white-space:nowrap}
+  .oneliner{grid-column:1 / -1;color:var(--dim);font-size:0.85rem;padding-top:4px}
+  .dial{display:flex;gap:10px;flex-wrap:wrap}
+  .g{flex:1;min-width:220px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+  .g .id{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1.1rem}
+  .g0 .id{color:var(--dim)} .g1 .id{color:var(--accent)} .g2 .id{color:var(--amber)}
+  .g p{color:var(--dim);font-size:0.88rem;margin:6px 0 0}
+  .units{display:flex;flex-wrap:wrap;gap:8px}
+  .unit{font-family:"IBM Plex Mono",monospace;font-size:0.8rem;border:1px solid var(--line);border-radius:999px;padding:5px 14px;background:var(--panel);color:var(--ink)}
+  .unit b{color:var(--accent);font-weight:500}
+  .foot{color:var(--dim);font-size:0.8rem;border-top:1px solid var(--line);margin-top:70px;padding-top:16px}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Governed Agent Skills</h1>
+  <p class="tag">Six skills that give AI coding agents a working method, a constitution, and hard limits on self-approval.</p>
+  <p class="claim">// the agent that builds a thing never approves it</p>
+
+  <h2>The loop</h2>
+  <div class="loopwrap">
+    <svg viewBox="0 0 800 290" width="800" height="290" role="img" aria-label="The governed loop: operator to orchestrator to pressure-test to builder to reviewer, publication back to operator">
+      <defs>
+        <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+          <path d="M0,0 L8,4.5 L0,9" fill="none" stroke="#3FB68B" stroke-width="1.4"/>
+        </marker>
+      </defs>
+      <!-- operator row -->
+      <rect x="310" y="18" width="180" height="52" rx="8" fill="#1C232C" stroke="#3FB68B"/>
+      <text x="400" y="40" text-anchor="middle" fill="#E8EDF2" font-family="IBM Plex Mono" font-size="14" font-weight="600">YOU · OPERATOR</text>
+      <text x="400" y="58" text-anchor="middle" fill="#8B98A5" font-family="IBM Plex Sans" font-size="11">own the outcome · press the button</text>
+      <!-- seats row -->
+      <rect x="30" y="150" width="160" height="52" rx="8" fill="#161B22" stroke="#2B3440"/>
+      <text x="110" y="172" text-anchor="middle" fill="#E8EDF2" font-family="IBM Plex Mono" font-size="13">ORCHESTRATOR</text>
+      <text x="110" y="190" text-anchor="middle" fill="#8B98A5" font-size="11" font-family="IBM Plex Sans">scopes and dispatches</text>
+      <rect x="228" y="150" width="160" height="52" rx="8" fill="#161B22" stroke="#2B3440"/>
+      <text x="308" y="172" text-anchor="middle" fill="#E8EDF2" font-family="IBM Plex Mono" font-size="13">PRESSURE-TEST</text>
+      <text x="308" y="190" text-anchor="middle" fill="#8B98A5" font-size="11" font-family="IBM Plex Sans">attacks the plan first</text>
+      <rect x="426" y="150" width="160" height="52" rx="8" fill="#161B22" stroke="#2B3440"/>
+      <text x="506" y="172" text-anchor="middle" fill="#E8EDF2" font-family="IBM Plex Mono" font-size="13">BUILDER</text>
+      <text x="506" y="190" text-anchor="middle" fill="#8B98A5" font-size="11" font-family="IBM Plex Sans">implements, never approves</text>
+      <rect x="624" y="150" width="150" height="52" rx="8" fill="#161B22" stroke="#2B3440"/>
+      <text x="699" y="172" text-anchor="middle" fill="#E8EDF2" font-family="IBM Plex Mono" font-size="13">REVIEWER</text>
+      <text x="699" y="190" text-anchor="middle" fill="#8B98A5" font-size="11" font-family="IBM Plex Sans">fresh session, real check</text>
+      <!-- arrows -->
+      <path d="M355 70 L120 148" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
+      <path d="M190 176 L226 176" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
+      <path d="M388 176 L424 176" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
+      <path d="M586 176 L622 176" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
+      <path d="M699 148 L452 72" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
+      <text x="238" y="106" fill="#8B98A5" font-size="11" font-family="IBM Plex Mono">you say what you want</text>
+      <text x="560" y="100" fill="#8B98A5" font-size="11" font-family="IBM Plex Mono">accepted work returns to you</text>
+      <!-- bottom rule -->
+      <text x="400" y="255" text-anchor="middle" fill="#D9A03F" font-family="IBM Plex Mono" font-size="12">publication is always yours · no seat can ship</text>
+      <text x="400" y="276" text-anchor="middle" fill="#8B98A5" font-family="IBM Plex Sans" font-size="11">solo mode: one agent, same rules, seats return one at a time as stakes rise</text>
+    </svg>
+  </div>
+  <p class="loopnote">A seat is a role for one session, not a person and not a vendor. Any model can fill any seat. What can never happen: the session that built the thing approving the thing.</p>
+
+  <h2>When each skill loads</h2>
+  <div class="ladder">
+    <div class="rung">
+      <span class="when">Any real task begins</span><span class="arrow">→</span><span class="skill">reasoning-doctrine</span>
+      <span class="oneliner">Stops drift. Frame, ground, converge, execute, verify. Every task.</span>
+    </div>
+    <div class="rung">
+      <span class="when">The work needs a plan</span><span class="arrow">→</span><span class="skill">portable-adaptive-planning</span>
+      <span class="oneliner">A plan is not permission. FINAL, then GO, and nothing runs without both.</span>
+    </div>
+    <div class="rung">
+      <span class="when">Work touches a repo, a record, or another agent</span><span class="arrow">→</span><span class="skill">governed-operator</span>
+      <span class="oneliner">The constitution. Seats, gates, and one rule above all: the builder never approves its own work.</span>
+    </div>
+    <div class="rung">
+      <span class="when">Outcome, scope, authority, evidence are fixed</span><span class="arrow">→</span><span class="skill">write-maintainable-code</span>
+      <span class="oneliner">The smallest change that truly does the job. Nothing speculative survives.</span>
+    </div>
+    <div class="rung">
+      <span class="when">Tests are written or judged</span><span class="arrow">→</span><span class="skill">test-verification</span>
+      <span class="oneliner">Tests prove behavior, not internals. Green is not proof.</span>
+    </div>
+    <div class="rung">
+      <span class="when">You explicitly ask for maximum assurance</span><span class="arrow">→</span><span class="skill">ship-it-or-fix-it</span>
+      <span class="oneliner">On your say-so only. The acceptance oracle freezes before the code exists.</span>
+    </div>
+  </div>
+
+  <h2>The governance dial</h2>
+  <div class="dial">
+    <div class="g g0"><span class="id">G0</span><p>Ordinary answers and analysis. Proportional self-checks, no ceremony.</p></div>
+    <div class="g g1"><span class="id">G1</span><p>Real changes. One builder, one independent reviewer, publication stays with you. The default.</p></div>
+    <div class="g g2"><span class="id">G2</span><p>Ship It or Fix It. Frozen oracle, independent judges, a cold final check. Only when you say so.</p></div>
+  </div>
+
+  <h2>Install what you need</h2>
+  <div class="units">
+    <span class="unit"><b>reasoning-doctrine</b> alone</span>
+    <span class="unit"><b>write-maintainable-code</b> alone</span>
+    <span class="unit"><b>test-verification</b> alone</span>
+    <span class="unit"><b>portable-adaptive-planning</b> alone</span>
+    <span class="unit"><b>governed-operator</b> + reasoning-doctrine</span>
+    <span class="unit"><b>ship-it-or-fix-it</b> + its three companions</span>
+    <span class="unit">all six</span>
+  </div>
+
+  <p class="foot">MIT · built and used daily by Ezra Israel · skills are instructions, not enforcement; pair with real permissions for anything that matters</p>
+</main>
+</body>
+</html>

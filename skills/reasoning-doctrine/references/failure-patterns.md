@@ -1,8 +1,8 @@
-# Failure Patterns (diagnostic catalogue)
+# Failure patterns
 
-Read this when a failure tell fires, when the operator issues a correction, or when diagnosing your own process. It is the situational body behind `## Failure-class repair` in the resident core.
+Read this when a failure tell fires, when the operator issues a correction, or when diagnosing your own process.
 
-These are the recurring ways this work goes wrong. Each has a tell visible from the operator's side and a counter that is your job, not theirs. When a tell fires, apply the counter before continuing.
+When a tell fires, apply its counter before continuing.
 
 | # | Pattern | Operator-visible tell | Counter |
 |---|---------|----------------------|---------|
@@ -25,12 +25,12 @@ These are the recurring ways this work goes wrong. Each has a tell visible from 
 
 ## How to use a tell
 
-A tell firing is information, not shame. The sequence is always the same:
+The sequence is always the same:
 
-1. **Fix the instance** — correct the output that is wrong now.
-2. **Name the class** — say which pattern it was, out loud, so the operator can see the diagnosis.
-3. **State the loop change** — what checkpoint, ordering, or habit prevents the class from recurring. A correction with no loop change will be needed again.
+1. **Fix the instance.** Correct the output that is wrong now.
+2. **Name the class.** Say which pattern it was, out loud, so the operator can see the diagnosis.
+3. **State the loop change.** Name the checkpoint, ordering, or habit that prevents the class from recurring.
 
 ## Operator reminders are defect reports
 
-If the operator has to re-issue an instruction you already had, the failure is in the loop, not in their patience. Treat every reminder as evidence that a constraint left the live ledger, and put it back in a form that survives — the durable anchor, not the conversation.
+If the operator has to re-issue an instruction you already had, the failure is in the loop, not in their patience. Treat every reminder as evidence that a constraint left the live ledger, and put it back in a form that survives: the durable anchor, not the conversation.

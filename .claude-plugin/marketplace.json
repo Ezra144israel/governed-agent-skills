@@ -1,12 +1,13 @@
 {
   "name": "ezra-governed",
   "owner": { "name": "Ezra Israel" },
-  "description": "Governed agent skills by Ezra Israel: constitution, reasoning doctrine, and minimum-sufficient implementation for AI agent workflows.",
+  "description": "Six governed agent skills: governance constitution, working method, minimum-sufficient implementation, adaptive planning, test-evidence standards, and a maximum-assurance convergence cycle. The agent that builds a thing never approves it.",
   "plugins": [
     {
       "name": "governed",
       "source": "./",
-      "description": "Governed-operator constitution, reasoning doctrine, and minimum-sufficient implementation as one installable plugin."
+      "version": "2.0.0",
+      "description": "Six governed agent skills: governance constitution, working method, minimum-sufficient implementation, adaptive planning, test-evidence standards, and a maximum-assurance convergence cycle. The agent that builds a thing never approves it."
     }
   ]
 }

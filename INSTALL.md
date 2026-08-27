@@ -1,28 +1,37 @@
 # Installation & Usage
 
+Package version 2.0.0.
+
 These skills are plain-markdown instruction packages (`SKILL.md` plus optional
 reference files). They work on any agent surface that can read markdown
 instructions; the install path differs per surface.
 
-**Pick one tier per skill.** Install either the full version (e.g.
-`skills/governed-operator/`) or the universal-starter version — never both.
-The starters are self-contained condensations of the full skills; installing
-both causes duplicate or conflicting triggering.
-
 **Folder names are already canonical.** Each folder under `skills/` matches the
-`name:` in its frontmatter, so copy it across as-is — no renaming step.
+`name:` in its frontmatter, so copy it across as-is, with no renaming step.
+
+**Respect the installation units.** Four skills work alone:
+`reasoning-doctrine`, `write-maintainable-code`, `test-verification`, and
+`portable-adaptive-planning`. Two have required companions:
+
+- `governed-operator` requires `reasoning-doctrine`;
+- `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`, and
+  `test-verification`.
+
+Installing a skill without its required companions leaves it honest but
+partially inoperative (for example, G2 work is unavailable without
+`ship-it-or-fix-it`'s companions present).
 
 ---
 
 # Before you install: check for conflicts with your existing setup
 
 These skills are opinionated. If your environment already carries
-instructions — a `CLAUDE.md`, an `AGENTS.md`, custom rules, other installed
-skills, project instructions — some of them may contradict what these skills
-mandate (who may commit, when tests are written, how reviews conclude, when
-the agent asks vs. proceeds). An undetected conflict shows up later as
-confusing agent behavior, and it will look like the skills are broken when
-the real problem is two rulebooks disagreeing.
+instructions, such as a `CLAUDE.md`, an `AGENTS.md`, custom rules, other
+installed skills, or project instructions, some of them may contradict what
+these skills mandate (who may commit, when tests are written, how reviews
+conclude, when the agent asks vs. proceeds). An undetected conflict shows up
+later as confusing agent behavior, and it will look like the skills are
+broken when the real problem is two rulebooks disagreeing.
 
 Two minutes of checking prevents that:
 
@@ -37,7 +46,7 @@ Read the SKILL.md files in <path to this repo> but do not install or apply
 them yet. Then read my existing configuration: CLAUDE.md / AGENTS.md /
 project instructions / rules files / currently installed skills. List every
 place where these skills would contradict, duplicate, or override something
-I already have — especially rules about committing and pushing, test
+I already have, especially rules about committing and pushing, test
 ordering, review and approval, when to ask me vs. proceed, and output
 format. For each conflict, tell me which side you would obey and why. Do
 not resolve anything; just report.
@@ -56,24 +65,29 @@ on the wrong thing.
 
 ## Claude Code (CLI)
 
-Skills live as folders on disk. Claude Code discovers them automatically —
-no configuration or upload step.
+Skills live as folders on disk. Claude Code discovers them automatically,
+with no configuration or upload step.
 
 Personal (all your projects):
 
 ```
 mkdir -p ~/.claude/skills
-cp -r skills/governed-operator ~/.claude/skills/governed-operator
 cp -r skills/reasoning-doctrine ~/.claude/skills/reasoning-doctrine
+cp -r skills/governed-operator ~/.claude/skills/governed-operator
 cp -r skills/write-maintainable-code ~/.claude/skills/write-maintainable-code
+cp -r skills/portable-adaptive-planning ~/.claude/skills/portable-adaptive-planning
+cp -r skills/test-verification ~/.claude/skills/test-verification
+cp -r skills/ship-it-or-fix-it ~/.claude/skills/ship-it-or-fix-it
 ```
+
+Copy only the units you want; see the installation units above.
 
 Per-project (checked into one repo, applies only there): use
 `.claude/skills/` at the repo root instead of `~/.claude/skills/`.
 
-Verify: start a session and ask "what skills do you have available?" — the
-three names should appear. Reference files under `references/` load
-automatically when their trigger fires; don't flatten them.
+Verify: start a session and ask "what skills do you have available?" The
+installed names should appear. Reference files under `references/` and
+`reference/` load automatically when their trigger fires; don't flatten them.
 
 ## Claude web / desktop (claude.ai)
 
@@ -84,8 +98,8 @@ file creation enabled.
    the folder inside the zip (e.g. `governed-operator/SKILL.md`).
 2. Go to **Settings → Features** (naming varies slightly by plan; look for
    Skills under Features or Capabilities).
-3. Upload each zip. Skills are per-user — each team member uploads their own
-   copy.
+3. Upload each zip. Skills are per-user, so each team member uploads their
+   own copy.
 
 Verify: in a new chat, ask Claude to list its available skills.
 
@@ -94,7 +108,7 @@ Verify: in a new chat, ask Claude to list its available skills.
 Upload each skill as a zip via the Skills API (`/v1/skills`) with the
 `skills-2025-10-02` beta header, enable the code execution tool, and pass the
 returned `skill_id` in the `container` parameter of your requests. API skills
-are workspace-wide but separate from claude.ai uploads — the two surfaces do
+are workspace-wide but separate from claude.ai uploads; the two surfaces do
 not sync.
 
 ## Codex (OpenAI)
@@ -107,10 +121,11 @@ Codex discovers skills from `SKILL.md` folders, in priority order:
 
 ```
 mkdir -p ~/.agents/skills
-cp -r skills/governed-operator ~/.agents/skills/governed-operator
 cp -r skills/reasoning-doctrine ~/.agents/skills/reasoning-doctrine
-cp -r skills/write-maintainable-code ~/.agents/skills/write-maintainable-code
+cp -r skills/governed-operator ~/.agents/skills/governed-operator
 ```
+
+(Add the other units the same way as needed.)
 
 Invoke explicitly with `$governed-operator` (or the `/skills` command), or
 let Codex select a skill implicitly when a task matches its description. You
@@ -120,115 +135,46 @@ by default.
 
 ## ChatGPT (web) and assistants without native skill support
 
-No native `SKILL.md` mechanism. Two workable routes:
+No native `SKILL.md` mechanism. Attach the `SKILL.md` files you want to a
+Project and add instruction lines such as: "Before any multi-step or review
+work, read and apply the attached governed-operator and reasoning-doctrine
+files. When a fixed, authorized result needs an implementation decision, read
+and apply write-maintainable-code. After a change, use an independent
+Reviewer for the final state."
 
-1. **Project instructions (recommended):** create a Project, paste the
-   universal-starter text (`governed-operator-universal-SKILL.md` and
-   `reasoning-doctrine-universal-SKILL.md`) into the project's custom
-   instructions. The starters exist for exactly this — they are sized for an
-   instruction slot. When a fixed, authorized result needs an implementation
-   decision, attach and explicitly apply `write-maintainable-code/SKILL.md`.
-   After a change, use an independent Reviewer for the final state.
-2. **Attached files:** attach the three full `SKILL.md` files to the Project and
-   add these instruction lines: "Before any multi-step or review work, read and
-   apply the attached governed-operator and reasoning-doctrine files. When a
-   fixed, authorized result needs an implementation decision, read and apply
-   write-maintainable-code. After a change, use an independent Reviewer for
-   the final state."
-
-There is no automatic triggering on these surfaces — tell the assistant when
-to apply a skill, or bind it in the project instructions.
+There is no automatic triggering on these surfaces, so tell the assistant
+when to apply a skill, or bind it in the project instructions.
 
 ## Other agents (Cursor, VS Code agents, custom frameworks)
 
 Anything that accepts a system prompt, rules file, or context file can run
-these: paste the universal starters into the rules/system layer, or point the
-agent at the full files at session start. The skills are plain instructions —
-no runtime, no dependencies.
+these: point the agent at the skill files at session start, or paste the
+files you need into the rules/system layer. The skills are plain
+instructions, with no runtime and no dependencies.
 
 ---
 
-# Activation — making the skills load every session
+# Activation: two modes
 
-Installing puts the files where the agent can find them. On most surfaces
-the agent still decides *whether* to load a skill by matching your request
-against its description. For a constitution and working method, you usually
-want them applied on every substantive session, not just when the agent
-guesses well. Wire that per surface:
+Installing puts the files where the agent can find them. On most surfaces the
+agent still decides *whether* to load a skill by matching your request
+against its description.
 
-## Claude Code — SessionStart hook
+1. **Manual invoke (default).** Invoke by name, or rely on description
+   matching. Zero setup; works everywhere.
+2. **Progressive loading (optional).** Wire a standing instruction or a small
+   session router so the right skill loads on the right trigger every
+   session. Full worked examples (a SessionStart hook, a router table, and
+   the `CLAUDE.md` → `AGENTS.md` shim pattern) live in
+   [activation/](activation/). They are example files: nothing in this repo
+   activates by cloning or installing; activation begins only after you copy
+   and wire an example yourself.
 
-Add a SessionStart hook that injects a standing instruction at the start of
-every session. Create the hook script:
-
-```bash
-#!/bin/bash
-# ~/.claude/hooks/load-governance.sh
-jq -n '{
-  "hookSpecificOutput": {
-    "hookEventName": "SessionStart",
-    "additionalContext": "Standing instruction: before any nontrivial task, load and apply the reasoning-doctrine skill. Before any multi-agent, review, dispatch, or repo-mutating work, also load and apply the governed-operator skill. State which of the two are applied in the first line of your first substantive response."
-  }
-}'
-```
-
-Register it in `~/.claude/settings.json` (all projects) or
-`.claude/settings.json` (one project):
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/load-governance.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-Make the script executable (`chmod +x ~/.claude/hooks/load-governance.sh`).
-A lighter-weight alternative is putting the same standing instruction in
-your `CLAUDE.md`, which is read every session — the hook is more reliable
-because it survives memory-file edits and fires on resume and compaction too.
-
-## Codex — AGENTS.md standing instruction
-
-Codex reads `AGENTS.md` every session (`~/.codex/AGENTS.md` globally, or the
-repo's `AGENTS.md`). Add the same standing instruction there:
-
-```
-Before any nontrivial task, load and apply $reasoning-doctrine.
-Before any multi-agent, review, or repo-mutating work, also load and
-apply $governed-operator. State which are applied in your first line.
-```
-
-## Claude web / desktop — Project instructions
-
-Skills uploaded to claude.ai activate by description matching. To make them
-deterministic, create a Project and put the standing instruction in the
-project's custom instructions (same text as above, minus the `$` syntax).
-Every chat in that project then starts under the rule.
-
-## ChatGPT — Project instructions
-
-Same pattern: the standing instruction lives in the Project's custom
-instructions and binds every conversation in the project. Since there is no
-skill registry, the instruction should point at the attached files or
-pasted starter text explicitly.
-
-## The load receipt (all surfaces)
-
-Note the last line of each instruction above: the agent states which skills
-it applied, in the first line of its first real response. That one line is
-what makes activation verifiable instead of assumed — if the receipt is
-missing or wrong, the wiring broke and you know immediately, before any
-work was done under the wrong rules. Cheap, and worth keeping.
+**The load receipt (all surfaces).** Whatever wiring you use, have the agent
+state which skills it applied, in the first line of its first real response.
+That one line makes activation verifiable instead of assumed. If the receipt
+is missing or wrong, the wiring broke and you know immediately, before any
+work was done under the wrong rules.
 
 ---
 
@@ -236,35 +182,45 @@ work was done under the wrong rules. Cheap, and worth keeping.
 
 ## What each one is for
 
-- **governed-operator** — the constitution. Defines four seats
-  (Orchestrator, Pressure-Tester, Builder, Reviewer), five non-negotiable
-  gates (ground before drafting; converge before building; dispatch a full
-  outcome contract; independent final-state review; done = owner-verified),
-  role integrity (whoever assembled it doesn't approve it), commit posture
-  (workers never commit or push), and outcome-autonomy rules that keep
-  governance from strangling throughput. Load it for any work that touches a
-  repo, produces an artifact someone else consumes, or involves more than
-  one agent.
-- **reasoning-doctrine** — the working method for a single agent. A
+- **reasoning-doctrine**: the working method for a single agent. A
   five-stage loop (frame, ground, converge, execute, verify), anti-drift
-  re-anchoring, an effort dial so small tasks stay small, and honesty
-  mechanics (mark every claim verified / inferred / unknown; never present a
-  guess in a confident register). Load it for any nontrivial task, with or
-  without the constitution.
-- **write-maintainable-code** — the minimum-sufficient implementation lens.
+  re-anchoring, and honesty mechanics (mark every claim verified, inferred,
+  or unknown; never present a guess in a confident register). Load it for
+  any nontrivial task, with or without the constitution.
+- **governed-operator**: the constitution. Defines four seats (Orchestrator,
+  Pressure-Tester, Builder, Reviewer), a G0/G1/G2 governance dial, five
+  non-negotiable gates (ground before drafting; converge before building;
+  dispatch a full outcome contract; independent final-state review; done =
+  owner-verified), role integrity (whoever assembled it doesn't approve it),
+  and commit posture (workers never commit or push). Load it for any work
+  that touches a repo, produces an artifact someone else consumes, or
+  involves more than one agent.
+- **write-maintainable-code**: the minimum-sufficient implementation lens.
   After the outcome, acceptance evidence, scope, and authority are fixed, it
   compares code and no-code routes, locates the smallest code ownership seam,
   declines speculative concepts, and keeps the selected implementation
-  proportionate, readable, and testable. It does not choose the outcome,
-  adjudicate authority, or grade finished work.
+  proportionate, readable, and testable.
+- **portable-adaptive-planning**: planning discipline. A compact Plan
+  Capsule, depth dial, safe restore of prior plan state, and a strict
+  FINAL/GO separation: a settled plan never authorizes execution by itself.
+- **test-verification**: test evidence standards. Behavioral proof through
+  public seams, mandatory failure-path coverage, fixture-vs-deployed
+  divergence, evaluator-change discipline, and a two-level objective
+  integrity model for when a test or metric is load-bearing.
+- **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
+  acceptance oracle is frozen and certified before the candidate exists;
+  independent judges run it; a cold, fresh-context judge issues the final
+  `SHIP`. Loads only on your explicit decision, never on task class alone.
+
 ## Recommended load order
 
-Constitution first, method second, implementation lens only after the outcome,
+Method first, constitution second, implementation lens only after the outcome,
 acceptance evidence, scope, and authority are fixed, then independent review
-after the change. Solo user with one assistant? Start with just `reasoning-doctrine` — it
-stands alone. Add `governed-operator` when you have two or more agents, or when
-you want seat separation between building and approving. Add
-`write-maintainable-code` when a fixed result needs an implementation decision.
+after the change. Solo user with one assistant? Start with just
+`reasoning-doctrine`; it stands alone. Add `governed-operator` (with
+`reasoning-doctrine`) when you have two or more agents, or when you want seat
+separation between building and approving. Add the rest as their situations
+appear.
 
 ## Things to know
 
@@ -272,10 +228,10 @@ you want seat separation between building and approving. Add
   don't technically prevent an agent from committing or approving. Pair them
   with real permissions (branch protection, read-only tokens) for anything
   that matters.
-- **Progressive loading is intentional.** `reasoning-doctrine`'s
-  `references/` files load only when their trigger fires (a failure, a
-  delegation, a retry). Don't paste them all into context up front — the
-  structure exists to protect the context budget.
+- **Progressive loading is intentional.** Reference files load only when
+  their trigger fires (a failure, a delegation, an escalation). Don't paste
+  them all into context up front; the structure exists to protect the
+  context budget.
 - **Adapt the vocabulary, keep the mechanisms.** Seat names, verdict labels,
   and return formats are conventions. Rename freely. The load-bearing parts
   are the separations: author ≠ approver, builder ≠ certifier, claim ≠
@@ -284,8 +240,8 @@ you want seat separation between building and approving. Add
   deliberately broad (`reasoning-doctrine` offers to load on every
   nontrivial task). If you run a large skill inventory or a
   non-engineering workload, edit the `description:` frontmatter so it
-  fires where you want it — e.g. "research, money decisions, and
-  pre-publish checks" — instead of everywhere. Narrowing a trigger is
+  fires where you want it, e.g. "research, money decisions, and
+  pre-publish checks", instead of everywhere. Narrowing a trigger is
   use, not misuse; the mechanisms don't change, only when they load.
 - **Model-agnostic.** These run on any capable model. They were developed
   and are used daily across multiple vendors' models simultaneously.

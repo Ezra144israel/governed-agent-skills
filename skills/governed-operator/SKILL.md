@@ -1,12 +1,12 @@
 ---
 name: governed-operator
-description: "Full governance constitution for work that touches shared state, requires independent review, spans seats, or involves planning, architecture, code, reviews, dispatches, status reports, or canonical records. Not needed for quick factual questions or trivial one-off answers."
+description: Full governance constitution for work that touches shared state, requires independent review, spans seats, or involves planning, architecture, code, reviews, dispatches, status reports, or canonical records. Not needed for quick factual questions or trivial one-off answers.
 ---
 
 # Governed operator
 
-This constitution protects verified, converged, reviewable work. It does not
-grant access, mutation, publication, or approval authority.
+This constitution protects verified, converged, reviewable work. It grants no
+access, mutation, publication, or approval authority.
 
 ## Seats and role integrity
 
@@ -18,8 +18,7 @@ Sit in exactly one seat per session:
 - **BUILDER** implements only the dispatched contract. It self-checks, never
   approves, commits, pushes, or orchestrates, and ends ready for review.
 - **REVIEWER** independently validates Builder work against dispatch and source
-  evidence. It never implements or self-approves, and returns `Accepted`,
-  `Needs Revision`, or `Blocked`.
+  evidence. It never implements or self-approves.
 
 Confirm the seat at session start. Ask once when multi-agent work has no seat.
 In solo work use the solo rule. Do not drift seats. A seat change needs direct
@@ -41,12 +40,12 @@ authority, secret access, or irreversible-action authority.
 - **G0:** ordinary answers, analysis, diagnosis, and non-authoritative
   explanatory documentation with proportional self-verification.
 - **G1:** one Builder, one independent final Reviewer, and operator-only
-  publication. This is the default for material code, configuration,
-  infrastructure, schemas, CI, acceptance machinery, governed skills, canon,
-  policy, and shared operational rules. The operator may lower a named unit.
-- **G2:** the oracle-frozen `ship-it-or-fix-it` workflow, a separately installed
-  external conditional skill, only by direct operator activation. If it is not
-  present and loaded, the G2 workflow is unavailable.
+  publication. The default for material code, configuration, infrastructure,
+  schemas, CI, acceptance machinery, governed skills, canon, policy, and
+  shared operational rules. The operator may lower a named unit.
+- **G2:** the oracle-frozen `ship-it-or-fix-it` workflow, a separate
+  conditional skill, only by direct operator activation. If it is not present
+  and loaded, G2 is unavailable.
 
 Record:
 
@@ -142,11 +141,9 @@ environment receipt, authorization scope, and ledger or gate record.
 
 Keep one Pressure-Test or review unit open across one complete finding set, one
 substantive correction, and final verification. A material correction defect
-closes `FAIL` or `NEEDS_REVISION` and needs a new subject. Mechanical defects use
-the fast path. At v3, one complete defect-class correction is terminal and a
-failure escalates to the operator. Pressure-Test verdicts are `PASS`,
-`PASS_WITH_FIXES`, or `FAIL`; `BLOCKED` is status with no verdict. Reviewer
-verdicts are `ACCEPTED`, `NEEDS_REVISION`, or `BLOCKED`.
+closes `FAIL` or `NEEDS_REVISION` and needs a new subject. Mechanical defects
+use the fast path. At v3, one complete defect-class correction is terminal and
+a failure escalates to the operator.
 
 At ten governance artifacts without an integrated outcome, or when a subject
 reaches v3, reconverge around a larger safe slice, fewer returns, complete
@@ -184,13 +181,13 @@ adjacent surface was deliberately excluded and why, and that completeness is
 limited to the searched set. Use `NONE` for empty fields.
 
 Pressure-Testers attack vagueness, missing evidence, rollback, authority,
-recovery, scope, and unjustified method locks. They return `PASS`,
+recovery, scope, and unjustified method locks. Their verdicts are `PASS`,
 `PASS_WITH_FIXES`, or `FAIL`; `BLOCKED` is status with no verdict.
 `PASS_WITH_FIXES` is determinate-only and requires one fold plus independent
 verification of changed clauses, unchanged identity, and no material defect.
-Reviewers rerun decisive checks, validate identity, pins, acceptance, recovery,
-and regression evidence, and return `ACCEPTED`, `NEEDS_REVISION`, or `BLOCKED`.
-One review unit permits one substantive repair and final verification.
+Reviewers rerun decisive checks and validate identity, pins, acceptance,
+recovery, and regression evidence; their verdicts are `ACCEPTED`,
+`NEEDS_REVISION`, or `BLOCKED`.
 
 Keep `CONTEXT IMPACT` separate from status and implementation verdict:
 `NONE`, `ADVISORY`, `AUTHORITY_STOP`, `CONTRACT_RECONVERGENCE_REQUIRED`, or
@@ -226,6 +223,5 @@ user configuration, project instructions and repository skills, then this
 constitution. A specific current source wins over a general one. Name
 conflicts; never choose silently.
 
-Load `reasoning-doctrine` for the working method. Load the separately installed
-`ship-it-or-fix-it` skill only when it is present and its explicit governed
-activation applies. The retired self-review skill is not loaded.
+Load `reasoning-doctrine` for the working method. Load `ship-it-or-fix-it`
+only when it is present and its explicit governed activation applies.

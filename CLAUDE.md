@@ -1,1 +1,1 @@
-Read `AGENTS.md` — it governs this repository.
+Read `AGENTS.md`. It governs this repository.

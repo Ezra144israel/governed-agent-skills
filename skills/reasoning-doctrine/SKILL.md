@@ -5,9 +5,6 @@ description: "The working method for every nontrivial task: frame the objective,
 
 # Reasoning doctrine
 
-Use this resident method to prevent drift, silent scope changes, unsupported
-claims, and premature completion. Read a reference only when its trigger fires.
-
 ## Progressive loading
 
 Resolve these paths relative to this skill:
@@ -19,7 +16,7 @@ Resolve these paths relative to this skill:
 | `references/failure-patterns.md` | a failure tell fires or a correction lands |
 | `references/find-a-way.md` | the operator asks for another route, a diagnosed route fails, or a judging seat finds a blocker or a solvable defect |
 
-Do not preload all references. The resident core should stay small.
+Do not preload all references.
 
 ## Priority and stages
 
@@ -84,13 +81,8 @@ not a green result. If a check is unavailable, state the exact limitation.
 ## Recovery and lawful routes
 
 When reality diverges, identify the defect class before fixing the instance.
-Read `escalation-and-retries.md` for retry and pre-existing-versus-introduced
-decisions. Read `failure-patterns.md` when a correction should become a
-structural rule. Read `find-a-way.md` when its trigger fires. Find a Way is
-advisory. It consolidates root causes, preserves `KEEP`, `DROP`, and `UNKNOWN`,
-offers lawful routes and probes, and returns the shortest acceptance shape. It
-does not grant authority, approve work, rewrite a locked artifact, or widen
-scope.
+Find a Way is advisory. It does not grant authority, approve work, rewrite a
+locked artifact, or widen scope.
 
 ## Communication gate
 
