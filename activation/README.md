@@ -64,7 +64,7 @@ Router rules that keep it safe:
 
 - **Fail closed.** Activate a skill only when its listed trigger matches. If
   the router is missing or stale, fall back to manual invoke; do not guess.
-- **Vetoes are absolute.** A row's veto (e.g. `ship-it-or-fix-it` never
+- **Vetoes are absolute.** A row's veto (for example, `ship-it-or-fix-it` never
   auto-activates on task class) outranks any trigger match.
 - **The load receipt.** The agent states which skills it applied in the
   first line of its first substantive response, so broken wiring is visible

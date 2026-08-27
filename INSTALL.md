@@ -29,7 +29,7 @@ These skills are opinionated. If your environment already carries
 instructions, such as a `CLAUDE.md`, an `AGENTS.md`, custom rules, other
 installed skills, or project instructions, some of them may contradict what
 these skills mandate (who may commit, when tests are written, how reviews
-conclude, when the agent asks vs. proceeds). An undetected conflict shows up
+conclude, when the agent asks versus proceeds). An undetected conflict shows up
 later as confusing agent behavior, and it will look like the skills are
 broken when the real problem is two rulebooks disagreeing.
 
@@ -47,7 +47,7 @@ them yet. Then read my existing configuration: CLAUDE.md / AGENTS.md /
 project instructions / rules files / currently installed skills. List every
 place where these skills would contradict, duplicate, or override something
 I already have, especially rules about committing and pushing, test
-ordering, review and approval, when to ask me vs. proceed, and output
+ordering, review and approval, when to ask me versus proceed, and output
 format. For each conflict, tell me which side you would obey and why. Do
 not resolve anything; just report.
 ```
@@ -95,7 +95,7 @@ Requires a paid plan (Pro, Max, Team, or Enterprise) with code execution /
 file creation enabled.
 
 1. Zip each skill folder individually, with `SKILL.md` at the top level of
-   the folder inside the zip (e.g. `governed-operator/SKILL.md`).
+   the folder inside the zip (for example `governed-operator/SKILL.md`).
 2. Go to **Settings → Features** (naming varies slightly by plan; look for
    Skills under Features or Capabilities).
 3. Upload each zip. Skills are per-user, so each team member uploads their
@@ -129,7 +129,7 @@ cp -r skills/governed-operator ~/.agents/skills/governed-operator
 
 Invoke explicitly with `$governed-operator` (or the `/skills` command), or
 let Codex select a skill implicitly when a task matches its description. You
-can also reference the skills from your `AGENTS.md` (e.g. "load
+can also reference the skills from your `AGENTS.md` (for example "load
 `governed-operator` before any multi-agent or review work") so they activate
 by default.
 
@@ -240,7 +240,7 @@ appear.
   deliberately broad (`reasoning-doctrine` offers to load on every
   nontrivial task). If you run a large skill inventory or a
   non-engineering workload, edit the `description:` frontmatter so it
-  fires where you want it, e.g. "research, money decisions, and
+  fires where you want it, for example "research, money decisions, and
   pre-publish checks", instead of everywhere. Narrowing a trigger is
   use, not misuse; the mechanisms don't change, only when they load.
 - **Model-agnostic.** These run on any capable model. They were developed

@@ -134,7 +134,7 @@ decision, never on task class alone.
 /plugin install governed@ezra-governed
 ```
 
-Skills load namespaced (e.g. `/governed:reasoning-doctrine`). Manual
+Skills load namespaced (for example `/governed:reasoning-doctrine`). Manual
 installation, copying `skills/*` into `~/.claude/skills/`, works exactly
 the same; see [INSTALL.md](INSTALL.md).
 
