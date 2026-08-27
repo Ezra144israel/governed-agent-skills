@@ -153,8 +153,9 @@ documentation:
 - **Codex / ChatGPT desktop, Cursor**: documented by their vendors, not yet
   run by the maintainer.
 - **Manual copy** (folders under `skills/` into your agent's skills
-  directory): verified in practice on Kimi, Grok, and Antigravity on v1.x;
-  not yet re-run on v2.
+  directory): verified in practice on Antigravity and Kimi on v2 with exact
+  byte-matched installs. Grok on v2 lists and parses all six; full body
+  readback not confirmed there.
 
 Confirmations and failure reports on any route are welcome.
 
