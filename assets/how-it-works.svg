@@ -29,8 +29,8 @@
   <path d="M388 210 L424 210" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
   <path d="M586 210 L622 210" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
   <path d="M699 182 L452 106" fill="none" stroke="#3FB68B" stroke-width="1.4" marker-end="url(#ah)"/>
-  <text x="230" y="140" fill="#8B98A5" font-size="11" font-family="Menlo, Consolas, monospace">you say what you want</text>
-  <text x="556" y="136" fill="#8B98A5" font-size="11" font-family="Menlo, Consolas, monospace">accepted work returns to you</text>
+  <text x="222" y="132" text-anchor="end" fill="#8B98A5" font-size="11" font-family="Menlo, Consolas, monospace">you say what you want</text>
+  <text x="578" y="132" fill="#8B98A5" font-size="11" font-family="Menlo, Consolas, monospace">accepted work returns to you</text>
   <!-- bottom -->
   <text x="400" y="284" text-anchor="middle" fill="#D9A03F" font-family="Menlo, Consolas, monospace" font-size="12">publication is always yours, no seat can ship</text>
   <text x="400" y="306" text-anchor="middle" fill="#8B98A5" font-family="Helvetica, Arial, sans-serif" font-size="11">solo mode: one agent, same rules, seats return one at a time as stakes rise</text>
