@@ -274,7 +274,7 @@ reason and can adapt instead of retrying blindly.
 |---|---|---|
 | Claude Code | yes | yes |
 | Codex | yes | yes |
-| Antigravity | yes | yes — 2026-08-04 |
+| Antigravity | yes | yes |
 
 "Envelope tested" and "run in a live session" are deliberately separate columns,
 and nothing ships here on the first alone. The first says the hook reads and

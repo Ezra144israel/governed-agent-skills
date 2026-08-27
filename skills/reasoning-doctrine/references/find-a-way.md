@@ -1,7 +1,6 @@
 # Find a Way
 
-This is a progressive reference, not a resident instruction. Load it when a
-trigger below fires. It helps the seat find the shortest lawful route toward
+Load this when a trigger below fires. It helps the seat find the shortest lawful route toward
 the unchanged objective. It does not change authority, scope, acceptance
 evidence, or stop conditions.
 
@@ -128,14 +127,13 @@ operator, or governing retry or attempt limits are exhausted.
 Return the exact blocker, preserved `KEEP`, failed routes, lawful alternatives,
 and what unlocks continuation. Name an authority proposal and re-entry
 condition when authority is the only missing piece. Do not collapse the result
-into “impossible.”
+into "impossible."
 
 ## 8. Apply it in judging seats
 
 Pressure-Testers and Reviewers use this reference to improve the quality of
 their return while preserving independent judgment. They are adversarial toward
-defects and cooperative toward the shared outcome. Find a Way is advisory and
-read-only for them unless the dispatch separately grants more authority.
+defects and cooperative toward the shared outcome.
 
 Pressure-Testers do not rewrite the packet they judge. Reviewers do not
 implement the Builder repair they judge. Advice is not authorship.
@@ -154,5 +152,5 @@ the judging seat cannot implement it.
 ## 9. Close the search
 
 When a route is verified and the problem is solved, close the finite route
-search. Do not keep generating alternatives after success. If no route is
-lawful or evidence is trustworthy, use the true-stop format instead.
+search. If no lawful route exists or essential evidence cannot be trusted,
+use the true-stop format instead.

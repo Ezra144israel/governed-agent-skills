@@ -1,0 +1,85 @@
+# Activation examples
+
+Everything in this folder is an **example**. Nothing here runs by cloning the
+repo or installing the plugin. Activation begins only after you copy a file
+into your own configuration and wire it yourself.
+
+Two activation modes exist for these skills:
+
+1. **Manual invoke** (default, zero setup): invoke a skill by name, or let
+   the agent match your request against the skill descriptions. Nothing in
+   this folder is needed.
+2. **Progressive loading**: make skill loading conditional and verifiable.
+   The right skill loads when its trigger fires, every session, and you can
+   see that it did.
+
+The rest of this file is mode 2.
+
+## Pattern 1: the instruction shim
+
+Some tools read `CLAUDE.md`, others read `AGENTS.md`, others read a rules
+file. Keep ONE canonical instruction file and make every other entry file a
+one-line shim pointing at it. This repo does it itself: its `CLAUDE.md`
+contains only "Read `AGENTS.md`. It governs this repository."
+
+Result: one source of truth for agent instructions, no drift between copies,
+and every surface reaches the same rules.
+
+## Pattern 2: the standing instruction
+
+The lightest progressive wiring: one standing instruction that binds every
+session. Example text:
+
+```
+Before any nontrivial task, load and apply the reasoning-doctrine skill.
+Before any multi-agent, review, dispatch, or repo-mutating work, also load
+and apply the governed-operator skill. State which of the two are applied
+in the first line of your first substantive response.
+```
+
+Where to put it:
+
+- **Claude Code:** a SessionStart hook (most reliable, because it fires on
+  start, resume, and compaction). See `session-router.example.sh` and
+  `settings.example.json`. A `CLAUDE.md` line also works but can be lost in
+  memory-file edits.
+- **Codex:** `~/.codex/AGENTS.md` or the repo's `AGENTS.md`, using
+  `$reasoning-doctrine` / `$governed-operator` syntax.
+- **claude.ai / ChatGPT:** the Project's custom instructions.
+
+## Pattern 3: the session router
+
+For a larger skill set, a standing instruction per skill stops scaling. A
+**router** is one generated table, injected at session start, that lists each
+skill with its triggers and vetoes. The agent activates a skill only when a
+trigger matches, and never activates a vetoed row.
+
+`ROUTER.example.md` is a complete router for this repo's six skills. Wire it
+on Claude Code with `session-router.example.sh` (which prints it as
+SessionStart context) plus the hook registration in `settings.example.json`.
+On other surfaces, paste the router into whatever standing-instruction slot
+the surface offers.
+
+Router rules that keep it safe:
+
+- **Fail closed.** Activate a skill only when its listed trigger matches. If
+  the router is missing or stale, fall back to manual invoke; do not guess.
+- **Vetoes are absolute.** A row's veto (e.g. `ship-it-or-fix-it` never
+  auto-activates on task class) outranks any trigger match.
+- **The load receipt.** The agent states which skills it applied in the
+  first line of its first substantive response, so broken wiring is visible
+  immediately.
+
+## Files
+
+| File | What it is |
+|---|---|
+| `ROUTER.example.md` | A complete session router for the six skills |
+| `session-router.example.sh` | SessionStart hook script that injects the router (Claude Code) |
+| `settings.example.json` | Hook registration snippet for `settings.json` (Claude Code) |
+
+To wire on Claude Code: copy `ROUTER.example.md` and
+`session-router.example.sh` to `~/.claude/hooks/`, drop the `.example`
+suffixes, `chmod +x` the script, and merge `settings.example.json` into
+`~/.claude/settings.json`. Verify with a fresh session: the first substantive
+reply should carry the load receipt.
