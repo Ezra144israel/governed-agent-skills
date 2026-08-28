@@ -1,6 +1,6 @@
 # Installation & Usage
 
-Package version 2.0.0.
+Package version 3.0.0.
 
 These skills are plain-markdown instruction packages (`SKILL.md` plus optional
 reference files). They work on any agent surface that can read markdown
@@ -9,13 +9,11 @@ instructions; the install path differs per surface.
 **Folder names are already canonical.** Each folder under `skills/` matches the
 `name:` in its frontmatter, so copy it across as-is, with no renaming step.
 
-**Respect the installation units.** Four skills work alone:
-`reasoning-doctrine`, `write-maintainable-code`, `test-verification`, and
-`portable-adaptive-planning`. Two have required companions:
+**Respect the installation units.** Three skills work alone:
+`reasoning-doctrine`, `grilling`, and `unslop`. Two have required companions:
 
 - `governed-operator` requires `reasoning-doctrine`;
-- `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`, and
-  `test-verification`.
+- `ship-it-or-fix-it` requires `governed-operator` and `reasoning-doctrine`.
 
 Installing a skill without its required companions leaves it honest but
 partially inoperative (for example, G2 work is unavailable without
@@ -74,10 +72,9 @@ Personal (all your projects):
 mkdir -p ~/.claude/skills
 cp -r skills/reasoning-doctrine ~/.claude/skills/reasoning-doctrine
 cp -r skills/governed-operator ~/.claude/skills/governed-operator
-cp -r skills/write-maintainable-code ~/.claude/skills/write-maintainable-code
-cp -r skills/portable-adaptive-planning ~/.claude/skills/portable-adaptive-planning
-cp -r skills/test-verification ~/.claude/skills/test-verification
 cp -r skills/ship-it-or-fix-it ~/.claude/skills/ship-it-or-fix-it
+cp -r skills/grilling ~/.claude/skills/grilling
+cp -r skills/unslop ~/.claude/skills/unslop
 ```
 
 Copy only the units you want; see the installation units above.
@@ -139,7 +136,7 @@ No native `SKILL.md` mechanism. Attach the `SKILL.md` files you want to a
 Project and add instruction lines such as: "Before any multi-step or review
 work, read and apply the attached governed-operator and reasoning-doctrine
 files. When a fixed, authorized result needs an implementation decision, read
-and apply write-maintainable-code. After a change, use an independent
+and keep the change minimum-sufficient. After a change, use an independent
 Reviewer for the final state."
 
 There is no automatic triggering on these surfaces, so tell the assistant
@@ -195,18 +192,13 @@ work was done under the wrong rules.
   and commit posture (workers never commit or push). Load it for any work
   that touches a repo, produces an artifact someone else consumes, or
   involves more than one agent.
-- **write-maintainable-code**: the minimum-sufficient implementation lens.
-  After the outcome, acceptance evidence, scope, and authority are fixed, it
-  compares code and no-code routes, locates the smallest code ownership seam,
-  declines speculative concepts, and keeps the selected implementation
-  proportionate, readable, and testable.
-- **portable-adaptive-planning**: planning discipline. A compact Plan
-  Capsule, depth dial, safe restore of prior plan state, and a strict
-  FINAL/GO separation: a settled plan never authorizes execution by itself.
-- **test-verification**: test evidence standards. Behavioral proof through
-  public seams, mandatory failure-path coverage, fixture-vs-deployed
-  divergence, evaluator-change discipline, and a two-level objective
-  integrity model for when a test or metric is load-bearing.
+- **grilling**: pre-contract interrogation. Works a design tree in rounds
+  before anything is agreed, so a plan is stress-tested while changing it is
+  still cheap. It holds only what waits on a design the user has not agreed;
+  per-act authority stays in `governed-operator`.
+- **unslop**: prose discipline for every writing surface, from replies and
+  docs to convergence packets and commit messages. Cuts AI tells, padding,
+  and false emphasis.
 - **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
   acceptance oracle is frozen and certified before the candidate exists;
   independent judges run it; a cold, fresh-context judge issues the final

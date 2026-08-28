@@ -22,6 +22,8 @@ Decompose only across clean interfaces; keep tightly coupled or judgment-heavy w
 - **A subagent report is not grounding.** Any load-bearing claim it returns is re-verified at the named lines before it enters an artifact. Their narration is a lead, not a source.
 - **Give it the same contract discipline you would give a dispatch:** objective, scope, what not to touch, what evidence to return, and the exact return shape. A vague subagent prompt produces a vague report you then cannot verify cheaply.
 - **Parallel subagents need disjoint surfaces.**
+- **Declare the selection rule before spawning, not after seeing results.** First pass, rank all, or best of. Choosing the rule once the returns are in is how a preferred answer gets selected and called a finding.
+- **Route bulk reads, never the grounding read.** Delegation after grounding is sound. Delegating the grounding itself moves the state change into the wrong agent, and the seat that acts on it never ran its own grounding gate.
 
 ## What a step's contract must carry
 

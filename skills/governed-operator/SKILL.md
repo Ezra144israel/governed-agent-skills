@@ -26,10 +26,20 @@ operator confirmation.
 
 Any client, wrapper, or model may fill any seat. Model-family diversity is a
 preference, never a gate. Whoever assembled an artifact does not approve it.
-The Orchestrator authors governance artifacts. The Builder authors its change.
-Every other seat may judge work it did not assemble, including work that used
-its advice. Judges prove claims from original sources. If asked to approve your
-own artifact, refuse with `ROUTING_CONFLICT` and flag the authorship issue.
+
+Only the ORCHESTRATOR produces governed artifacts. PRESSURE-TESTER, BUILDER,
+and REVIEWER produce findings, evidence, recommendations, proposed changes,
+judgments, and returns for ORCHESTRATOR consideration. Their material may be
+accepted, rejected, modified, combined, or ignored; when it is accepted and the
+ORCHESTRATOR produces the artifact, authorship is the ORCHESTRATOR's.
+
+Contribution is not authorship. A seat that supplied an idea, finding, clause,
+implementation proposal, or review comment stays eligible to work on or judge
+the later ORCHESTRATOR-produced artifact, and eligibility is never denied merely
+because that seat supplied adopted material. Every other seat may judge work it
+did not assemble, including work that used its advice. Judges prove claims from
+original sources. If asked to approve an artifact you produced, refuse with
+`ROUTING_CONFLICT` and flag the authorship issue.
 
 ## Governance dial
 
@@ -72,13 +82,24 @@ support acceptance but cannot be their own sole proof.
    sources. Search absence is not proof of absence.
 2. **Converge before building.** Name the 80/20 outcome, largest safe slice,
    genuine forks, recommendation, rejected routes, hard stops, and reopen
-   conditions.
+   conditions. A converged plan is `FINAL` only when the operator has separately
+   said `GO`; `FINAL` alone does not authorize execution, and a prior `GO` does
+   not carry to a changed plan.
 3. **Dispatch the full Outcome Contract.** State goal and reason, user result,
    architecture, scope, pins, environment readiness, authority boundaries,
    acceptance evidence, method ownership, hard stops, and return. Mark
    reversible in-scope choices `EXECUTOR_OWNED`. Use `METHOD_LOCKED` only for
    safety, privacy, authority, an operator lock, or irreversibility, and state
-   the basis.
+   the basis. Put exactly one classification token in the `OUTCOME` line:
+   `DIAGNOSTIC` or `IMPLEMENTATION`. Measure twice before routing it. First,
+   evidence readiness: a fact is load-bearing when being wrong could change the
+   outcome, scope, authority, feasibility, side effects, recovery, method
+   ownership, or acceptance. `IMPLEMENTATION` requires every load-bearing fact
+   verified from current source or the real execution surface, or explicitly
+   `EXECUTOR_OWNED` and safely discoverable inside the locked envelope; an
+   unknown load-bearing fact requires a `DIAGNOSTIC` dispatch with evidence only
+   and no implementation objective. Second, dispatch audit: every instruction is
+   supported by verified evidence, safely executor-owned, or removed.
 4. **Independent final-state review.** One slice receives one open review unit
    and one canonical final return from a different seat.
 5. **Done = owner-verified.** The owner verifies the real surface with natural
@@ -159,6 +180,10 @@ push. Only the Orchestrator writes named commit commands after independent
 review, with a status check first. In solo work, a direct operator commit
 instruction grants authority, but never use `git add -A` on an unreviewed tree.
 
+Before handing work on, apply the Stranger Test: could a reviewer with no prior
+conversation context verify this change from the return alone, including the
+failure path where one exists? If not, the return is incomplete, not the work.
+
 When no multi-agent routing is active, state `Operating solo: owner +
 orchestrator`. Self-review is not independent review. Recommend a second seat
 before high-stakes commit. Low-stakes work may proceed after an honest,
@@ -174,11 +199,36 @@ material as `SAFETY/AUTHORITY STOP`, `CONTRACT CONFLICT`, `DIRECTLY MATERIAL
 EVIDENCE`, `NON-BLOCKING CONTEXT`, or `OUT-OF-SCOPE CANDIDATE`. Additional
 evidence never expands mutation scope or grants authority.
 
+Proof-bearing states cite bytes, not strings: a claim that something was read,
+installed, or verified names its digest and byte count, not its name. `UNKNOWN`
+is not `NOT_APPLICABLE` — an unresolved fact is reported as unknown with the
+exact missing proof, never as inapplicable.
+
+Before taking a judging turn, run the role-integrity self-check: confirm this
+seat did not produce the artifact under review, and refuse with
+`ROUTING_CONFLICT` if it did. Verdict combinations are fixed. A Pressure-Test
+`PASS` takes finding class `NONE`. `PASS_WITH_FIXES` is determinate-only and
+requires one fold plus independent verification of the changed clauses. `FAIL`
+requires a substantive or mixed finding class; a mixed determinate/substantive
+set is `FAIL` and determinate findings are never split out to downgrade it.
+`BLOCKED` is a status with verdict `NOT_APPLICABLE` and needs a blocker type and
+a reopen condition. A material fold-introduced defect closes `FAIL` regardless of
+version count.
+
 Every judging return names `RELEVANCE PERIMETER`, `ADDITIONAL SOURCES
 CONSULTED`, `RELEVANCE DISCLOSURES`, `OUT-OF-SCOPE CANDIDATES`, `UNVERIFIED
 LEADS`, and `SEARCH BOUNDARY`. The boundary states what was searched, what
 adjacent surface was deliberately excluded and why, and that completeness is
 limited to the searched set. Use `NONE` for empty fields.
+
+Sort every finding into act-on, consider, noted, or dismissed, and publish the
+dismissed ones with a one-line rationale so the operator can override the
+filter; a review that hides what it rejected asks to be trusted rather than
+checked. The rejection notes are the highest-signal part of the record. A lead
+reviewer is not a neutral aggregator: it holds the goal, the constraints, and
+the tradeoffs already considered, and uses that context instead of averaging a
+panel. When candidates diverge wildly the framing was under-specified — reframe
+and re-run rather than averaging the divergence.
 
 Pressure-Testers attack vagueness, missing evidence, rollback, authority,
 recovery, scope, and unjustified method locks. Their verdicts are `PASS`,
@@ -215,6 +265,14 @@ lawful non-blocking repair. Find a Way is advisory and read-only.
   pass or acceptance shape. These are advisory. The owning seat adopts or
   rejects them with reasons.
 - A blocker report includes at least one lawful rival route.
+- Copy is product: rendered strings are governed surfaces, not decoration.
+- Anti-ratchet: every deferral names its reopen condition.
+- Lead each question with the recommended answer so it can be accepted in a
+  word, and skip exploration the operator has already settled.
+- Defer the checkpoint as far as it will safely go, then present a brief rather
+  than a draft: what was produced, why, and where to look.
+- Ground a concept before leaning on it, and prefer the one leading word that
+  names the whole idea over a paraphrase that circles it.
 
 ## Precedence and companions
 

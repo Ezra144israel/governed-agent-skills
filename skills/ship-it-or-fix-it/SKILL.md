@@ -97,7 +97,8 @@ no session may cross a stated exclusion. The Outcome Contract records the
 minimum sufficient assignment and explains why this Level 2 control
 is proportionate to the change risk.
 
-At ORACLE_FREEZE, apply the current `test-verification` guidance to public-seam,
+At ORACLE_FREEZE, apply the current `test-verification` guidance (sourced in
+`Substrate-8/team-hub-operator-web`, not in this package) to public-seam,
 failure-path, and durable-evidence design. At CYCLE_JUDGE and SHIP_JUDGE, apply
 the judging-seat rules in `governed-operator`. Pin both dependency identities in
 the Outcome Contract; they grant no additional authority.
