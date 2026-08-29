@@ -192,6 +192,10 @@ work was done under the wrong rules.
   and commit posture (workers never commit or push). Load it for any work
   that touches a repo, produces an artifact someone else consumes, or
   involves more than one agent.
+- **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
+  acceptance oracle is frozen and certified before the candidate exists;
+  independent judges run it; a cold, fresh-context judge issues the final
+  `SHIP`. Loads only on your explicit decision, never on task class alone.
 - **grilling**: pre-contract interrogation. Works a design tree in rounds
   before anything is agreed, so a plan is stress-tested while changing it is
   still cheap. It holds only what waits on a design the user has not agreed;
@@ -199,20 +203,14 @@ work was done under the wrong rules.
 - **unslop**: prose discipline for every writing surface, from replies and
   docs to convergence packets and commit messages. Cuts AI tells, padding,
   and false emphasis.
-- **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
-  acceptance oracle is frozen and certified before the candidate exists;
-  independent judges run it; a cold, fresh-context judge issues the final
-  `SHIP`. Loads only on your explicit decision, never on task class alone.
 
 ## Recommended load order
 
-Method first, constitution second, implementation lens only after the outcome,
-acceptance evidence, scope, and authority are fixed, then independent review
-after the change. Solo user with one assistant? Start with just
-`reasoning-doctrine`; it stands alone. Add `governed-operator` (with
-`reasoning-doctrine`) when you have two or more agents, or when you want seat
-separation between building and approving. Add the rest as their situations
-appear.
+Start with `reasoning-doctrine`; it stands alone. Add `governed-operator`
+(with `reasoning-doctrine`) when work needs governance or seat separation.
+Load `ship-it-or-fix-it` only when you explicitly choose maximum assurance.
+Use `grilling` before committing to a design. Use `unslop` on prose. Independent
+review follows the change under `governed-operator`.
 
 ## Things to know
 

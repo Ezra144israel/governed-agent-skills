@@ -5,14 +5,13 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
 ![version](https://img.shields.io/badge/version-3.0.0-blue.svg)
-![skills](https://img.shields.io/badge/skills-6-blue.svg)
+![skills](https://img.shields.io/badge/skills-5-blue.svg)
 ![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
 
-Give your AI coding agents a constitution, a working method, an implementation
-lens, planning discipline, test evidence standards, a maximum-assurance
-convergence cycle, and an enforcement hook that blocks catastrophic shell
-commands before they run. The agent that builds a thing is never the agent
-that approves it.
+Give your AI coding agents a working method, a constitution, a
+maximum-assurance convergence cycle, a design stress-test, prose discipline,
+and an enforcement hook that blocks catastrophic shell commands before they
+run. The agent that builds a thing is never the agent that approves it.
 
 ![The governed loop](assets/how-it-works.svg)
 
@@ -118,11 +117,10 @@ Two modes. Both work; pick per surface.
    files; nothing activates by cloning this repo.
 
 Recommended load order: `reasoning-doctrine` on any nontrivial task; add
-`governed-operator` (it requires the method) before governed work; the
-implementation lens after the outcome, acceptance evidence, scope, and
-authority are fixed; independent review after the change.
-`ship-it-or-fix-it` loads only on your explicit maximum-assurance
-decision, never on task class alone.
+`governed-operator` (it requires the method) before governed work;
+`ship-it-or-fix-it` loads only on your explicit maximum-assurance decision,
+never on task class alone; use `grilling` before committing to a design; and
+use `unslop` for prose. Independent review follows the change.
 
 ## Install as a Claude Code plugin
 
@@ -152,8 +150,8 @@ documentation:
   run by the maintainer.
 - **Manual copy** (folders under `skills/` into your agent's skills
   directory): verified in practice on Antigravity and Kimi on v2 with exact
-  byte-matched installs. Grok on v2 lists and parses all six skills of that version; full body
-  readback not confirmed there.
+  byte-matched installs. Grok on v2 lists and parses the skills shipped in
+  that version; full body readback is not confirmed there.
 
 Confirmations and failure reports on any route are welcome.
 
@@ -190,11 +188,11 @@ directory, respecting the installation units above.
 
 ## Credits
 
-The writing standards applied while editing this package draw on skills by
-other authors that are deliberately not republished here: `grilling` from
-[mattpocock/skills](https://github.com/mattpocock/skills) (MIT) and `unslop`
-from [cursor/plugins](https://github.com/cursor/plugins) (MIT, Lauren Tan).
-Install those from their own repos.
+This repository includes adapted copies of `grilling` and `unslop`. Their
+original MIT-licensed sources are
+[mattpocock/skills](https://github.com/mattpocock/skills) and
+[cursor/plugins](https://github.com/cursor/plugins) (Lauren Tan),
+respectively.
 
 ## License
 

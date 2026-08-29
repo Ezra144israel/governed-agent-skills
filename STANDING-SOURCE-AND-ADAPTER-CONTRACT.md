@@ -51,8 +51,8 @@ payloads. They are evidence, never source.
 
 | Skill | Distribution | Target surfaces | Adapter permitted |
 |---|---|---|---|
-| `governed-operator` | release | Claude Code, Codex, Agents, Claude shared, ChatGPT project | no |
 | `reasoning-doctrine` (+ 4 references) | release | Claude Code, Codex, Agents, Claude shared, ChatGPT project | no |
+| `governed-operator` | release | Claude Code, Codex, Agents, Claude shared, ChatGPT project | no |
 | `ship-it-or-fix-it` | release | Claude Code, Codex, Agents, Claude shared, ChatGPT project | no |
 | `grilling` | release | Claude Code, Codex, Agents, Claude shared | no |
 | `unslop` | release | Claude Code, Codex, Agents, Claude shared, ChatGPT project | no |

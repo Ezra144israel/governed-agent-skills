@@ -1,6 +1,6 @@
 {
   "name": "governed",
-  "description": "Five governed agent skills: governance constitution, working method, a maximum-assurance convergence cycle, pre-contract interrogation, and prose discipline. The agent that builds a thing never approves it.",
+  "description": "Five governed agent skills: reasoning-doctrine, governed-operator, ship-it-or-fix-it, grilling, and unslop. The agent that builds a thing never approves it.",
   "version": "3.0.0",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",
