@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "governed",
   "version": "3.0.0",
-  "description": "Five governed agent skills: reasoning-doctrine, governed-operator, ship-it-or-fix-it, grilling, and unslop. The agent that builds a thing never approves it.",
+  "description": "Six governed agent skills: reasoning-doctrine, governed-operator, write-maintainable-code, portable-adaptive-planning, test-verification, and ship-it-or-fix-it. The agent that builds a thing never approves it.",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",
   "license": "MIT",

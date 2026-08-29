@@ -54,7 +54,7 @@ For a larger skill set, a standing instruction per skill stops scaling. A
 skill with its triggers and vetoes. The agent activates a skill only when a
 trigger matches, and never activates a vetoed row.
 
-`ROUTER.example.md` is a complete router for this repo's five skills. Wire it
+`ROUTER.example.md` is a complete router for this repo's six skills. Wire it
 on Claude Code with `session-router.example.sh` (which prints it as
 SessionStart context) plus the hook registration in `settings.example.json`.
 On other surfaces, paste the router into whatever standing-instruction slot
@@ -74,7 +74,7 @@ Router rules that keep it safe:
 
 | File | What it is |
 |---|---|
-| `ROUTER.example.md` | A complete session router for the five skills |
+| `ROUTER.example.md` | A complete session router for the six skills |
 | `session-router.example.sh` | SessionStart hook script that injects the router (Claude Code) |
 | `settings.example.json` | Hook registration snippet for `settings.json` (Claude Code) |
 

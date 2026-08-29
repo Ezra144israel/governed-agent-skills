@@ -1,13 +1,13 @@
 {
   "name": "ezra-governed",
   "owner": { "name": "Ezra Israel" },
-  "description": "Five governed agent skills: reasoning-doctrine, governed-operator, ship-it-or-fix-it, grilling, and unslop. The agent that builds a thing never approves it.",
+  "description": "Six governed agent skills: reasoning-doctrine, governed-operator, write-maintainable-code, portable-adaptive-planning, test-verification, and ship-it-or-fix-it. The agent that builds a thing never approves it.",
   "plugins": [
     {
       "name": "governed",
       "source": "./",
       "version": "3.0.0",
-      "description": "Five governed agent skills: reasoning-doctrine, governed-operator, ship-it-or-fix-it, grilling, and unslop. The agent that builds a thing never approves it."
+      "description": "Six governed agent skills: reasoning-doctrine, governed-operator, write-maintainable-code, portable-adaptive-planning, test-verification, and ship-it-or-fix-it. The agent that builds a thing never approves it."
     }
   ]
 }

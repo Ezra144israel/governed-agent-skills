@@ -5,13 +5,14 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
 ![version](https://img.shields.io/badge/version-3.0.0-blue.svg)
-![skills](https://img.shields.io/badge/skills-5-blue.svg)
+![skills](https://img.shields.io/badge/skills-6-blue.svg)
 ![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
 
-Give your AI coding agents a working method, a constitution, a
-maximum-assurance convergence cycle, a design stress-test, prose discipline,
-and an enforcement hook that blocks catastrophic shell commands before they
-run. The agent that builds a thing is never the agent that approves it.
+Give your AI coding agents a working method, a constitution, an implementation
+lens, planning discipline, test evidence standards, a maximum-assurance
+convergence cycle, and an enforcement hook that blocks catastrophic shell
+commands before they run. The agent that builds a thing is never the agent that
+approves it.
 
 ![The governed loop](assets/how-it-works.svg)
 
@@ -81,19 +82,23 @@ check that exists: it costs one extra session.
 |---|---|---|
 | `skills/reasoning-doctrine/` | Stops drift. Frame, ground, converge, execute, verify. Every task. | `SKILL.md` + 4 references |
 | `skills/governed-operator/` | The constitution. Seats, gates, and one rule above all: the builder never approves its own work. | `SKILL.md` |
+| `skills/write-maintainable-code/` | The smallest change that truly does the job. Nothing speculative survives. | `SKILL.md` |
+| `skills/portable-adaptive-planning/` | A plan is not permission. FINAL, then GO, and nothing runs without both. | `SKILL.md` + 1 reference |
+| `skills/test-verification/` | Tests prove behavior, not internals. Green is not proof. | `SKILL.md` + 1 reference |
 | `skills/ship-it-or-fix-it/` | On your say-so only. The acceptance oracle freezes before the code exists. | `SKILL.md` |
-| `skills/grilling/` | Interrogates a design before you commit to it. Rounds down a design tree, not a checklist. | `SKILL.md` |
-| `skills/unslop/` | Cuts AI tells from any prose surface. Say the thing; delete the throat-clearing. | `SKILL.md` |
 
 ### Supported installation units
 
-Skills install individually, with two exceptions that have required
-companions:
+Skills install individually. Their installation units, in package order, are:
 
-- `reasoning-doctrine`, `grilling`, and `unslop` each work alone;
+- `reasoning-doctrine` works alone;
 - `governed-operator` requires `reasoning-doctrine`;
-- `ship-it-or-fix-it` requires `governed-operator` and `reasoning-doctrine`;
-- the full five-skill package.
+- `write-maintainable-code` works alone;
+- `portable-adaptive-planning` works alone;
+- `test-verification` works alone;
+- `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`, and
+  `test-verification`;
+- the full six-skill package.
 
 ### Patterns (enforcement)
 
@@ -118,9 +123,11 @@ Two modes. Both work; pick per surface.
 
 Recommended load order: `reasoning-doctrine` on any nontrivial task; add
 `governed-operator` (it requires the method) before governed work;
-`ship-it-or-fix-it` loads only on your explicit maximum-assurance decision,
-never on task class alone; use `grilling` before committing to a design; and
-use `unslop` for prose. Independent review follows the change.
+`write-maintainable-code` after the outcome, acceptance evidence, scope, and
+authority are fixed; use `test-verification` when tests are written or
+reviewed. `ship-it-or-fix-it` loads only on your explicit
+maximum-assurance decision, never on task class alone. Independent review
+follows the change.
 
 ## Install as a Claude Code plugin
 
@@ -150,8 +157,8 @@ documentation:
   run by the maintainer.
 - **Manual copy** (folders under `skills/` into your agent's skills
   directory): verified in practice on Antigravity and Kimi on v2 with exact
-  byte-matched installs. Grok on v2 lists and parses the skills shipped in
-  that version; full body readback is not confirmed there.
+  byte-matched installs. Grok on v2 lists and parses all six skills of that
+  version; full body readback is not confirmed there.
 
 Confirmations and failure reports on any route are welcome.
 
@@ -188,11 +195,10 @@ directory, respecting the installation units above.
 
 ## Credits
 
-This repository includes adapted copies of `grilling` and `unslop`. Their
-original MIT-licensed sources are
-[mattpocock/skills](https://github.com/mattpocock/skills) and
-[cursor/plugins](https://github.com/cursor/plugins) (Lauren Tan),
-respectively.
+The repository's editing process drew on `grilling` from
+[mattpocock/skills](https://github.com/mattpocock/skills) and `unslop` from
+[cursor/plugins](https://github.com/cursor/plugins) by Lauren Tan. Both are
+MIT-licensed. Neither skill is included or distributed here.
 
 ## License
 

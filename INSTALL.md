@@ -9,11 +9,15 @@ instructions; the install path differs per surface.
 **Folder names are already canonical.** Each folder under `skills/` matches the
 `name:` in its frontmatter, so copy it across as-is, with no renaming step.
 
-**Respect the installation units.** Three skills work alone:
-`reasoning-doctrine`, `grilling`, and `unslop`. Two have required companions:
+**Respect the installation units.** In package order:
 
+- `reasoning-doctrine` works alone;
 - `governed-operator` requires `reasoning-doctrine`;
-- `ship-it-or-fix-it` requires `governed-operator` and `reasoning-doctrine`.
+- `write-maintainable-code` works alone;
+- `portable-adaptive-planning` works alone;
+- `test-verification` works alone;
+- `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`,
+  and `test-verification`.
 
 Installing a skill without its required companions leaves it honest but
 partially inoperative (for example, G2 work is unavailable without
@@ -72,9 +76,10 @@ Personal (all your projects):
 mkdir -p ~/.claude/skills
 cp -r skills/reasoning-doctrine ~/.claude/skills/reasoning-doctrine
 cp -r skills/governed-operator ~/.claude/skills/governed-operator
+cp -r skills/write-maintainable-code ~/.claude/skills/write-maintainable-code
+cp -r skills/portable-adaptive-planning ~/.claude/skills/portable-adaptive-planning
+cp -r skills/test-verification ~/.claude/skills/test-verification
 cp -r skills/ship-it-or-fix-it ~/.claude/skills/ship-it-or-fix-it
-cp -r skills/grilling ~/.claude/skills/grilling
-cp -r skills/unslop ~/.claude/skills/unslop
 ```
 
 Copy only the units you want; see the installation units above.
@@ -192,25 +197,29 @@ work was done under the wrong rules.
   and commit posture (workers never commit or push). Load it for any work
   that touches a repo, produces an artifact someone else consumes, or
   involves more than one agent.
+- **write-maintainable-code**: use after the outcome, acceptance evidence,
+  scope, and authority are fixed. It compares implementation routes, selects
+  the smallest ownership seam, and declines speculative concepts.
+- **portable-adaptive-planning**: planning discipline. A compact Plan Capsule,
+  safe restoration of prior plan state, and a strict FINAL/GO separation: a
+  settled plan never authorizes execution by itself.
+- **test-verification**: behavioral test evidence through public seams,
+  mandatory failure-path coverage, fixture-versus-deployed divergence, and
+  objective-integrity guidance for load-bearing tests and evaluators.
 - **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
   acceptance oracle is frozen and certified before the candidate exists;
   independent judges run it; a cold, fresh-context judge issues the final
   `SHIP`. Loads only on your explicit decision, never on task class alone.
-- **grilling**: pre-contract interrogation. Works a design tree in rounds
-  before anything is agreed, so a plan is stress-tested while changing it is
-  still cheap. It holds only what waits on a design the user has not agreed;
-  per-act authority stays in `governed-operator`.
-- **unslop**: prose discipline for every writing surface, from replies and
-  docs to convergence packets and commit messages. Cuts AI tells, padding,
-  and false emphasis.
 
 ## Recommended load order
 
 Start with `reasoning-doctrine`; it stands alone. Add `governed-operator`
 (with `reasoning-doctrine`) when work needs governance or seat separation.
-Load `ship-it-or-fix-it` only when you explicitly choose maximum assurance.
-Use `grilling` before committing to a design. Use `unslop` on prose. Independent
-review follows the change under `governed-operator`.
+Load `write-maintainable-code` only after the outcome, acceptance evidence,
+scope, and authority are fixed. Use `test-verification` when tests are
+written or reviewed. Load `ship-it-or-fix-it` only when you explicitly choose
+maximum assurance. Independent review follows the change under
+`governed-operator`.
 
 ## Things to know
 
