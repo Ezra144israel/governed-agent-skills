@@ -1,18 +1,21 @@
 # governed-agent-skills
 
-**Your agent isn't careless. It's grading its own homework.**
+**Instructions guide the work. Guards check what judgment should not decide.**
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-as-a-claude-code-plugin)
-![version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+[![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-the-instruction-layer-as-a-claude-code-plugin)
+![version](https://img.shields.io/badge/version-4.0.0-blue.svg)
 ![skills](https://img.shields.io/badge/skills-6-blue.svg)
-![patterns](https://img.shields.io/badge/patterns-1-orange.svg)
+![guards](https://img.shields.io/badge/guards-2-orange.svg)
 
-Give your AI coding agents a working method, a constitution, an implementation
-lens, planning discipline, test evidence standards, a maximum-assurance
-convergence cycle, and an enforcement hook that blocks catastrophic shell
-commands before they run. The agent that builds a thing is never the agent that
-approves it.
+Version 4 has two layers. The **Instruction Layer** is six skills that tell
+coding agents how to work. The **Enforcement Layer** is two standalone guards
+that check the parts that should not depend on judgment.
+
+The layers work together, but they are installed separately. The plugin installs
+only the six skills. It does not install, wire, or activate either guard. Not
+every skill needs a guard. Add enforcement only where a rule can be checked
+mechanically and the cost of a miss matters.
 
 ![The governed loop](assets/how-it-works.svg)
 
@@ -31,7 +34,7 @@ agent's mistake can reach a codebase, a deploy, or a canonical record.
 If your agents do other work, such as marketing copy, listings, research,
 design, or operations, most of this package is heavier than you need.
 Take `reasoning-doctrine` (the working method: verify before asserting,
-never build on unconfirmed facts, catch drift on long tasks; it applies
+never build on unconfirmed facts, and catch drift on long tasks. It applies
 to any kind of work) and leave the constitution until
 the day your agents touch real code.
 
@@ -49,12 +52,12 @@ agent working for you.
 Any agent can fill any seat: Claude, ChatGPT, Codex, Gemini, a local
 model, whatever you use. The same product can even fill two seats,
 as long as it's two separate sessions with separate context. What
-matters is never which vendor sits down; it's that the agent that
+matters is never which vendor sits down. The agent that
 BUILT a thing is not the agent that APPROVES it.
 
 A concrete day with one person and two agents:
 
-1. You tell an agent what you want (you = operator; it drafts the
+1. You tell an agent what you want (you = operator, it drafts the
    plan = orchestrator seat).
 2. A second agent, or just a fresh session of the first, attacks
    the plan before anything is built (pressure-test seat).
@@ -76,7 +79,10 @@ Why bother? Because an agent grading its own homework misses the
 same things twice. Seat separation is the cheapest independent
 check that exists: it costs one extra session.
 
-## What's here
+## Instruction Layer
+
+These six skills define the working method, roles, planning discipline,
+implementation lens, test evidence, and maximum-assurance review cycle.
 
 | Skill | What it does | Files |
 |---|---|---|
@@ -91,27 +97,32 @@ check that exists: it costs one extra session.
 
 Skills install individually. Their installation units, in package order, are:
 
-- `reasoning-doctrine` works alone;
-- `governed-operator` requires `reasoning-doctrine`;
-- `write-maintainable-code` works alone;
-- `portable-adaptive-planning` works alone;
-- `test-verification` works alone;
+- `reasoning-doctrine` works alone.
+- `governed-operator` requires `reasoning-doctrine`.
+- `write-maintainable-code` works alone.
+- `portable-adaptive-planning` works alone.
+- `test-verification` works alone.
 - `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`, and
-  `test-verification`;
+  `test-verification`.
 - the full six-skill package.
 
-### Patterns (enforcement)
+## Enforcement Layer
 
-Not skills. These are working code you install and wire, for the jobs
-instructions cannot do.
+These guards are working code, not skills. Install and wire each one manually.
+Cloning this repository or installing the plugin activates neither guard.
 
-| Pattern | Purpose |
+| Guard | Purpose |
 |---|---|
-| [`destructive-command-guard/`](destructive-command-guard/) | Pre-execution hook that denies catastrophic shell commands before your agent runs them. Works on Claude Code, Codex, and Antigravity from one file: it detects each surface's payload shape and answers in that surface's deny format. Python, no dependencies, with a regression suite and a built-in sentinel for proving it's live. |
+| [`destructive-command-guard/`](destructive-command-guard/) | Python pre-execution hook that denies a narrow set of catastrophic shell commands. It has no third-party dependencies. Its safe sentinel proves that the hook runs on a live surface. |
+| [`change-containment-guard/`](change-containment-guard/) | Rust final-state guard that seals allowed change classes, then rejects unclassified changes and stale verification receipts. Version 4 ships source only. Build, copy, and hook wiring are separate manual steps. |
 
-## How to use
+Read each guard's README for technical details, verified support, limits, and
+installation. The root README stays short so those facts have one source of
+truth.
 
-Two modes. Both work; pick per surface.
+## Use the Instruction Layer
+
+Two modes. Both work. Pick one per surface.
 
 1. **Manual invoke** (default, zero setup): copy the skill directories into
    your agent's skills folder and invoke by name, or let the agent match on
@@ -119,17 +130,17 @@ Two modes. Both work; pick per surface.
 2. **Progressive loading** (optional): route skills conditionally at session
    start with a small router and an `AGENTS.md` shim, so each skill loads
    only when its trigger fires. See [activation/](activation/) for example
-   files; nothing activates by cloning this repo.
+   files. Nothing activates when you clone this repo.
 
-Recommended load order: `reasoning-doctrine` on any nontrivial task; add
-`governed-operator` (it requires the method) before governed work;
+Recommended load order: `reasoning-doctrine` on any nontrivial task. Add
+`governed-operator` (it requires the method) before governed work.
 `write-maintainable-code` after the outcome, acceptance evidence, scope, and
-authority are fixed; use `test-verification` when tests are written or
+authority are fixed. Use `test-verification` when tests are written or
 reviewed. `ship-it-or-fix-it` loads only on your explicit
 maximum-assurance decision, never on task class alone. Independent review
 follows the change.
 
-## Install as a Claude Code plugin
+## Install the Instruction Layer as a Claude Code plugin
 
 ```
 /plugin marketplace add Ezra144israel/governed-agent-skills
@@ -138,34 +149,38 @@ follows the change.
 
 Skills load namespaced (for example `/governed:reasoning-doctrine`). Manual
 installation, copying `skills/*` into `~/.claude/skills/`, works exactly
-the same; see [INSTALL.md](INSTALL.md).
+the same. The plugin installs only the six skills. It does not install, wire,
+or activate the Enforcement Layer guards. See [INSTALL.md](INSTALL.md).
 
-## Install in other agents
+## Install the Instruction Layer in other agents
 
 This repo also ships an [Agent Plugins](https://agent-plugins.org) manifest.
 Route status is updated as surfaces are run in practice, not on
 documentation:
 
 - **Claude Code** (plugin route): verified in practice for v2.
-- **GitHub Copilot CLI** (direct repo install): verified in practice on v1.x;
+- **GitHub Copilot CLI** (direct repo install): verified in practice on v1.x.
   not yet re-run on v2. Current CLI builds mark direct repo installs as
-  deprecated; a marketplace-based route may be required in future versions.
+  deprecated. A marketplace-based route may be required in future versions.
 - **VS Code** (Agent Plugins install): plugin installs and its skills list
-  correctly on v1.x; chat-side invocation could not be attributed to the
+  correctly on v1.x. Chat-side invocation could not be attributed to the
   plugin. Not yet re-run on v2.
 - **Codex / ChatGPT desktop, Cursor**: documented by their vendors, not yet
   run by the maintainer.
 - **Manual copy** (folders under `skills/` into your agent's skills
   directory): verified in practice on Antigravity and Kimi on v2 with exact
   byte-matched installs. Grok on v2 lists and parses all six skills of that
-  version; full body readback is not confirmed there.
+  version. Full body readback is not confirmed there.
 
 Confirmations and failure reports on any route are welcome.
 
 A note on what "verified" covers: skills are invoked when a request matches
-their description; they are not command-level enforcement. For hard blocking
+their description. They are not command-level enforcement. For hard blocking
 of destructive commands, see
 [destructive-command-guard/](destructive-command-guard/).
+
+Guard installation is separate on every surface. See the
+[Enforcement Layer install routes](INSTALL.md#enforcement-layer).
 
 **GitHub Copilot CLI:**
 
@@ -175,7 +190,7 @@ copilot plugin install Ezra144israel/governed-agent-skills
 
 **VS Code (Copilot):** enable the `chat.plugins.enabled` setting, then Command
 Palette → "Chat: Install Plugin From Source" → paste this repo's URL. (Preview
-feature; may be disabled by your organization.)
+feature. Your organization may disable it.)
 
 **Cursor CLI:** run `agent`, then `/plugin`, paste this repo's URL, choose scope.
 

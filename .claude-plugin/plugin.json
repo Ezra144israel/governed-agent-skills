@@ -1,7 +1,7 @@
 {
   "name": "governed",
-  "description": "Six governed agent skills: reasoning-doctrine, governed-operator, write-maintainable-code, portable-adaptive-planning, test-verification, and ship-it-or-fix-it. The agent that builds a thing never approves it.",
-  "version": "3.0.0",
+  "description": "Six-skill Instruction Layer for governed coding agents. The plugin installs skills only. Enforcement Layer guards are separate and are not installed or activated.",
+  "version": "4.0.0",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",
   "license": "MIT"

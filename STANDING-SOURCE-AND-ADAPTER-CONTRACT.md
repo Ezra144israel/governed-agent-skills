@@ -1,8 +1,11 @@
-# Standing source and adapter contract
+# Instruction Layer source and adapter contract
 
 Status: active.
 
 ## Source home
+
+This document governs the six-skill Instruction Layer. The two Enforcement
+Layer guards have their own READMEs and are outside this distribution table.
 
 This repository is the public source home for its six governed agent skills.
 Installed copies are releases or declared adapters. A byte difference with no

@@ -1,8 +1,11 @@
-# Activation examples
+# Instruction Layer activation examples
 
-Everything in this folder is an **example**. Nothing here runs by cloning the
-repo or installing the plugin. Activation begins only after you copy a file
-into your own configuration and wire it yourself.
+This folder covers the six-skill Instruction Layer. It does not install, wire,
+or activate either Enforcement Layer guard.
+
+Everything here is an **example**. Nothing runs when you clone the repository
+or install the plugin. Activation begins only after you copy a file into your
+configuration and wire it yourself.
 
 Two activation modes exist for these skills:
 
@@ -19,11 +22,11 @@ The rest of this file is mode 2.
 
 Some tools read `CLAUDE.md`, others read `AGENTS.md`, others read a rules
 file. Keep ONE canonical instruction file and make every other entry file a
-one-line shim pointing at it. This repo does it itself: its `CLAUDE.md`
+one-line shim pointing at it. This repo uses that pattern. Its `CLAUDE.md`
 contains only "Read `AGENTS.md`. It governs this repository."
 
-Result: one source of truth for agent instructions, no drift between copies,
-and every surface reaches the same rules.
+The result is one source of truth for agent instructions. Every surface reaches
+the same rules.
 
 ## Pattern 2: the standing instruction
 
@@ -63,7 +66,7 @@ the surface offers.
 Router rules that keep it safe:
 
 - **Fail closed.** Activate a skill only when its listed trigger matches. If
-  the router is missing or stale, fall back to manual invoke; do not guess.
+  the router is missing or stale, fall back to manual invoke. Do not guess.
 - **Vetoes are absolute.** A row's veto (for example, `ship-it-or-fix-it` never
   auto-activates on task class) outranks any trigger match.
 - **The load receipt.** The agent states which skills it applied in the

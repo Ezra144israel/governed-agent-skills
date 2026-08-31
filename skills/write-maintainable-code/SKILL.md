@@ -67,5 +67,11 @@ behavior to obtain a green result.
 Stop when the selected acceptance evidence passes. Do not add cleanup or
 future-proofing after that point.
 
+For tasks that need mechanical containment, the optional Enforcement Layer
+[`change-containment-guard`](../../change-containment-guard/) can seal allowed
+change classes and bind verification to the exact final repository state. It
+does not replace this Instruction Layer skill's maintainability judgment or
+independent review.
+
 With `governed-operator` active, return the route, seam, declined concepts,
 verification, and residual risk in its Builder judgment record.

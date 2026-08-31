@@ -1,21 +1,31 @@
-# Installation & Usage
+# Install and use governed-agent-skills
 
-Package version 3.0.0.
+Package version 4.0.0.
 
-These skills are plain-markdown instruction packages (`SKILL.md` plus optional
-reference files). They work on any agent surface that can read markdown
-instructions; the install path differs per surface.
+Version 4 has two separate install routes. The **Instruction Layer** is six
+plain-markdown skill packages. The **Enforcement Layer** is two standalone
+guards that you install and wire yourself.
+
+The plugin installs only the six Instruction Layer skills. It does not install,
+wire, or activate either Enforcement Layer guard. Cloning the repository also
+activates nothing.
+
+## Instruction Layer
+
+Each skill is a `SKILL.md` file with optional reference files. The skills work
+on any agent surface that can read markdown instructions. The install path
+differs by surface.
 
 **Folder names are already canonical.** Each folder under `skills/` matches the
 `name:` in its frontmatter, so copy it across as-is, with no renaming step.
 
 **Respect the installation units.** In package order:
 
-- `reasoning-doctrine` works alone;
-- `governed-operator` requires `reasoning-doctrine`;
-- `write-maintainable-code` works alone;
-- `portable-adaptive-planning` works alone;
-- `test-verification` works alone;
+- `reasoning-doctrine` works alone.
+- `governed-operator` requires `reasoning-doctrine`.
+- `write-maintainable-code` works alone.
+- `portable-adaptive-planning` works alone.
+- `test-verification` works alone.
 - `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`,
   and `test-verification`.
 
@@ -25,7 +35,7 @@ partially inoperative (for example, G2 work is unavailable without
 
 ---
 
-# Before you install: check for conflicts with your existing setup
+### Before you install: check for conflicts with your existing setup
 
 These skills are opinionated. If your environment already carries
 instructions, such as a `CLAUDE.md`, an `AGENTS.md`, custom rules, other
@@ -45,13 +55,13 @@ Two minutes of checking prevents that:
 
 ```
 Read the SKILL.md files in <path to this repo> but do not install or apply
-them yet. Then read my existing configuration: CLAUDE.md / AGENTS.md /
-project instructions / rules files / currently installed skills. List every
+them yet. Then read my existing configuration, including CLAUDE.md, AGENTS.md,
+project instructions, rules files, and currently installed skills. List every
 place where these skills would contradict, duplicate, or override something
 I already have, especially rules about committing and pushing, test
 ordering, review and approval, when to ask me versus proceed, and output
 format. For each conflict, tell me which side you would obey and why. Do
-not resolve anything; just report.
+not resolve anything. Just report.
 ```
 
 3. **Decide the precedence yourself.** For each conflict, either remove your
@@ -65,7 +75,7 @@ on the wrong thing.
 
 ---
 
-## Claude Code (CLI)
+### Claude Code (CLI)
 
 Skills live as folders on disk. Claude Code discovers them automatically,
 with no configuration or upload step.
@@ -82,38 +92,38 @@ cp -r skills/test-verification ~/.claude/skills/test-verification
 cp -r skills/ship-it-or-fix-it ~/.claude/skills/ship-it-or-fix-it
 ```
 
-Copy only the units you want; see the installation units above.
+Copy only the units you want. See the installation units above.
 
 Per-project (checked into one repo, applies only there): use
 `.claude/skills/` at the repo root instead of `~/.claude/skills/`.
 
 Verify: start a session and ask "what skills do you have available?" The
 installed names should appear. Reference files under `references/` and
-`reference/` load automatically when their trigger fires; don't flatten them.
+`reference/` load automatically when their trigger fires. Do not flatten them.
 
-## Claude web / desktop (claude.ai)
+### Claude web / desktop (claude.ai)
 
 Requires a paid plan (Pro, Max, Team, or Enterprise) with code execution /
 file creation enabled.
 
 1. Zip each skill folder individually, with `SKILL.md` at the top level of
    the folder inside the zip (for example `governed-operator/SKILL.md`).
-2. Go to **Settings → Features** (naming varies slightly by plan; look for
+2. Go to **Settings → Features** (naming varies slightly by plan. Look for
    Skills under Features or Capabilities).
 3. Upload each zip. Skills are per-user, so each team member uploads their
    own copy.
 
 Verify: in a new chat, ask Claude to list its available skills.
 
-## Claude API
+### Claude API
 
 Upload each skill as a zip via the Skills API (`/v1/skills`) with the
 `skills-2025-10-02` beta header, enable the code execution tool, and pass the
 returned `skill_id` in the `container` parameter of your requests. API skills
-are workspace-wide but separate from claude.ai uploads; the two surfaces do
+are workspace-wide but separate from claude.ai uploads. The two surfaces do
 not sync.
 
-## Codex (OpenAI)
+### Codex (OpenAI)
 
 Codex discovers skills from `SKILL.md` folders, in priority order:
 
@@ -135,7 +145,7 @@ can also reference the skills from your `AGENTS.md` (for example "load
 `governed-operator` before any multi-agent or review work") so they activate
 by default.
 
-## ChatGPT (web) and assistants without native skill support
+### ChatGPT (web) and assistants without native skill support
 
 No native `SKILL.md` mechanism. Attach the `SKILL.md` files you want to a
 Project and add instruction lines such as: "Before any multi-step or review
@@ -147,7 +157,7 @@ Reviewer for the final state."
 There is no automatic triggering on these surfaces, so tell the assistant
 when to apply a skill, or bind it in the project instructions.
 
-## Other agents (Cursor, VS Code agents, custom frameworks)
+### Other agents (Cursor, VS Code agents, custom frameworks)
 
 Anything that accepts a system prompt, rules file, or context file can run
 these: point the agent at the skill files at session start, or paste the
@@ -156,20 +166,47 @@ instructions, with no runtime and no dependencies.
 
 ---
 
-# Activation: two modes
+## Enforcement Layer
+
+The guards are separate from every plugin and skill-copy route above. Read each
+guard's README before wiring it. The READMEs are the source of truth for support,
+limits, configuration, and live checks.
+
+### Destructive-command guard
+
+The [destructive-command guard](destructive-command-guard/) is a Python
+pre-execution hook. Copy its two Python files to your hook directory, add the
+documented hook entry, and run its safe sentinel in a fresh session. It uses the
+Python standard library and installs no packages.
+
+### Change-containment guard
+
+The [change-containment guard](change-containment-guard/) is Rust source only in
+version 4. No prebuilt binary or supported native target ships with this
+release. Build it locally with a Rust toolchain:
+
+```text
+cargo build --manifest-path change-containment-guard/Cargo.toml --release --locked
+```
+
+Building does not install or activate the guard. Review the binary, copy it to
+a directory you choose, then wire that exact path into your agent settings as a
+separate manual action. The guard never edits agent settings.
+
+## Instruction Layer activation: two modes
 
 Installing puts the files where the agent can find them. On most surfaces the
 agent still decides *whether* to load a skill by matching your request
 against its description.
 
 1. **Manual invoke (default).** Invoke by name, or rely on description
-   matching. Zero setup; works everywhere.
+   matching. It needs no setup and works everywhere.
 2. **Progressive loading (optional).** Wire a standing instruction or a small
    session router so the right skill loads on the right trigger every
    session. Full worked examples (a SessionStart hook, a router table, and
    the `CLAUDE.md` → `AGENTS.md` shim pattern) live in
-   [activation/](activation/). They are example files: nothing in this repo
-   activates by cloning or installing; activation begins only after you copy
+   [activation/](activation/). They are example files. Nothing in this repo
+   activates by cloning or installing. Activation begins only after you copy
    and wire an example yourself.
 
 **The load receipt (all surfaces).** Whatever wiring you use, have the agent
@@ -180,19 +217,19 @@ work was done under the wrong rules.
 
 ---
 
-# Using the skills
+## Use the Instruction Layer
 
-## What each one is for
+### What each one is for
 
 - **reasoning-doctrine**: the working method for a single agent. A
   five-stage loop (frame, ground, converge, execute, verify), anti-drift
   re-anchoring, and honesty mechanics (mark every claim verified, inferred,
-  or unknown; never present a guess in a confident register). Load it for
+  or unknown. Never present a guess in a confident register). Load it for
   any nontrivial task, with or without the constitution.
 - **governed-operator**: the constitution. Defines four seats (Orchestrator,
   Pressure-Tester, Builder, Reviewer), a G0/G1/G2 governance dial, five
-  non-negotiable gates (ground before drafting; converge before building;
-  dispatch a full outcome contract; independent final-state review; done =
+  non-negotiable gates (ground before drafting, converge before building,
+  dispatch a full outcome contract, independent final-state review, done =
   owner-verified), role integrity (whoever assembled it doesn't approve it),
   and commit posture (workers never commit or push). Load it for any work
   that touches a repo, produces an artifact someone else consumes, or
@@ -207,13 +244,13 @@ work was done under the wrong rules.
   mandatory failure-path coverage, fixture-versus-deployed divergence, and
   objective-integrity guidance for load-bearing tests and evaluators.
 - **ship-it-or-fix-it**: the maximum-assurance convergence cycle. The
-  acceptance oracle is frozen and certified before the candidate exists;
-  independent judges run it; a cold, fresh-context judge issues the final
+  acceptance oracle is frozen and certified before the candidate exists.
+  Independent judges run it. A cold, fresh-context judge issues the final
   `SHIP`. Loads only on your explicit decision, never on task class alone.
 
-## Recommended load order
+### Recommended load order
 
-Start with `reasoning-doctrine`; it stands alone. Add `governed-operator`
+Start with `reasoning-doctrine`. It stands alone. Add `governed-operator`
 (with `reasoning-doctrine`) when work needs governance or seat separation.
 Load `write-maintainable-code` only after the outcome, acceptance evidence,
 scope, and authority are fixed. Use `test-verification` when tests are
@@ -221,15 +258,15 @@ written or reviewed. Load `ship-it-or-fix-it` only when you explicitly choose
 maximum assurance. Independent review follows the change under
 `governed-operator`.
 
-## Things to know
+### Things to know
 
-- **Skills are instructions, not enforcement.** They shape behavior; they
+- **Skills are instructions, not enforcement.** They shape behavior. They
   don't technically prevent an agent from committing or approving. Pair them
   with real permissions (branch protection, read-only tokens) for anything
   that matters.
 - **Progressive loading is intentional.** Reference files load only when
-  their trigger fires (a failure, a delegation, an escalation). Don't paste
-  them all into context up front; the structure exists to protect the
+  their trigger fires (a failure, a delegation, an escalation). Do not paste
+  them all into context up front. The structure exists to protect the
   context budget.
 - **Adapt the vocabulary, keep the mechanisms.** Seat names, verdict labels,
   and return formats are conventions. Rename freely. The load-bearing parts
@@ -241,6 +278,6 @@ maximum assurance. Independent review follows the change under
   non-engineering workload, edit the `description:` frontmatter so it
   fires where you want it, for example "research, money decisions, and
   pre-publish checks", instead of everywhere. Narrowing a trigger is
-  use, not misuse; the mechanisms don't change, only when they load.
+  use, not misuse. The mechanisms do not change, only when they load.
 - **Model-agnostic.** These run on any capable model. They were developed
   and are used daily across multiple vendors' models simultaneously.
