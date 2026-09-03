@@ -1,0 +1,61 @@
+name: Security checks
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 7 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Check out the tested revision
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Install pinned Rust toolchain
+        run: |
+          rustup toolchain install 1.98.0 --profile minimal --component rustfmt,clippy
+          rustup default 1.98.0
+
+      - name: Test the destructive-command guard
+        run: python3 -m unittest discover -s destructive-command-guard -p 'test_*.py' -v
+
+      - name: Test sterile capture process cleanup
+        run: python3 -m unittest discover -s demo/destructive-command-guard -p 'test_*.py' -v
+
+      - name: Prove the guard mutant is rejected
+        run: python3 tools/check_guard_mutant.py
+
+      - name: Test the six-skill distribution
+        run: node tools/check-standing-distribution.test.mjs
+
+      - name: Test the repository security checker
+        run: python3 -m unittest tools/test_repository_security_check.py -v
+
+      - name: Check the repository and Pages proof
+        run: python3 tools/repository_security_check.py
+
+      - name: Check Rust formatting
+        working-directory: change-containment-guard
+        run: cargo fmt --check
+
+      - name: Run Clippy
+        working-directory: change-containment-guard
+        run: cargo clippy --locked --all-targets -- -D warnings
+
+      - name: Run locked Rust tests
+        working-directory: change-containment-guard
+        run: cargo test --locked --all-targets
+
+      - name: Install pinned cargo-audit
+        run: cargo install cargo-audit --version 0.22.2 --locked
+
+      - name: Audit locked Rust dependencies
+        working-directory: change-containment-guard
+        run: cargo audit --file Cargo.lock

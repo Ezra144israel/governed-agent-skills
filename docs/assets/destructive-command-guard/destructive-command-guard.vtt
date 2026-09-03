@@ -1,0 +1,16 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Verified capture replay. The same harmless command appears in both terminals.
+
+00:04.000 --> 00:09.000
+Without the guard, GUARD_INACTIVE_PROOF prints. The missing sentinel fails with shell exit 127.
+
+00:09.000 --> 00:16.000
+With the guard, the request moves from the agent to the PreToolUse guard. The guard stops it before the shell.
+
+00:16.000 --> 00:25.000
+The exact denial appears. There is no command execution event and no marker output.
+
+00:25.000 --> 00:28.000
+Skills are the Instruction Layer. Hooks and guards are the Enforcement Layer.

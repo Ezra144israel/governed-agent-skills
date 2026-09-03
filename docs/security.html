@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Security checks and honest limits for governed-agent-skills.">
+<title>Security checks | Governed Agent Skills</title>
+<style>
+  :root { color-scheme: dark; --bg: #0e1116; --panel: #161b22; --line: #34404d; --ink: #e8edf2; --dim: #a8b3be; --accent: #55c69e; --amber: #e2ad51; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  main { width: calc(100% - 2rem); max-width: 780px; margin: 0 auto; padding: 3rem 0 5rem; }
+  h1 { font-size: clamp(2.3rem, 8vw, 4.5rem); line-height: 1.05; }
+  h2 { margin-top: 2.8rem; color: var(--accent); font-size: 1.25rem; }
+  p, li { max-width: 68ch; }
+  li { margin: 0.45rem 0; }
+  .limit { padding: 1rem 1.2rem; border-left: 3px solid var(--amber); background: var(--panel); }
+  a { color: var(--accent); text-underline-offset: 0.2em; }
+  a:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="index.html">Back to the proof page</a></p>
+  <h1>Security checks</h1>
+  <p>The repository runs one bounded security workflow. A green result means the named checks passed for that revision.</p>
+
+  <h2>Covered</h2>
+  <ul>
+    <li>Exact six-skill distribution and progressive reference files.</li>
+    <li>Git modes, symlinks, submodules, executable files, and approved binary hashes.</li>
+    <li>Hidden text controls, plugin behavior declarations, external page loads, and high-signal credential patterns.</li>
+    <li>The sterile proof evidence, generated-media manifest, local page links, captions, transcript, and video controls.</li>
+    <li>Python and distribution tests, Rust formatting, Clippy, locked tests, and the pinned dependency audit.</li>
+  </ul>
+
+  <h2>Not proved</h2>
+  <div class="limit">
+    <p>Green does not mean malware-free or complete audit coverage. It does not prove safe live wiring, installation, or guaranteed behavior.</p>
+    <p>The plugin installs the <strong>Instruction Layer</strong> only. The <strong>Enforcement Layer</strong> guards need separate manual installation and live proof.</p>
+  </div>
+
+  <h2>Reporting</h2>
+  <p>Use GitHub private vulnerability reporting. Do not send live credentials, personal data, or a destructive proof of concept. See the repository <a href="https://github.com/Ezra144israel/governed-agent-skills/blob/main/SECURITY.md">security policy</a> for the full boundary.</p>
+</main>
+</body>
+</html>

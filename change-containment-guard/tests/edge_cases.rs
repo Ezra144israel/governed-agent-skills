@@ -1,4 +1,4 @@
-use change_containment_guard::{ChangeClass, evaluate_contract, seal_contract};
+use change_containment_guard::{ChangeClass, RepositorySnapshot, evaluate_contract, seal_contract};
 use serde_json::{Value, json};
 use std::fs;
 #[cfg(unix)]
@@ -413,6 +413,117 @@ fn submodule_pointer_needs_explicit_kind_permission() {
             .violations
             .is_empty()
     );
+}
+
+#[test]
+fn dirty_submodule_content_is_rejected_at_the_snapshot_boundary() {
+    let source = repo();
+    fs::write(source.path().join("lib.txt"), "base\n").unwrap();
+    git(&source, &["add", "."]);
+    git(&source, &["commit", "-qm", "base"]);
+
+    let repository = repo();
+    git(
+        &repository,
+        &[
+            "-c",
+            "protocol.file.allow=always",
+            "submodule",
+            "add",
+            "-q",
+            source.path().to_str().unwrap(),
+            "vendor/sub",
+        ],
+    );
+    git(&repository, &["add", "."]);
+    git(&repository, &["commit", "-qm", "base"]);
+    let submodule = repository.path().join("vendor/sub");
+
+    fs::write(submodule.join("lib.txt"), "dirty tracked\n").unwrap();
+    let tracked = RepositorySnapshot::capture(repository.path())
+        .unwrap_err()
+        .to_string();
+    assert!(tracked.contains("dirty initialized submodule"), "{tracked}");
+
+    assert!(
+        Command::new("git")
+            .current_dir(&submodule)
+            .args(["checkout", "-q", "--", "lib.txt"])
+            .status()
+            .unwrap()
+            .success()
+    );
+    fs::write(submodule.join("untracked.txt"), "dirty untracked\n").unwrap();
+    let untracked = RepositorySnapshot::capture(repository.path())
+        .unwrap_err()
+        .to_string();
+    assert!(
+        untracked.contains("dirty initialized submodule"),
+        "{untracked}"
+    );
+}
+
+#[test]
+fn nested_dirty_submodule_content_is_rejected_at_the_snapshot_boundary() {
+    let inner = repo();
+    fs::write(inner.path().join("inner.txt"), "base\n").unwrap();
+    git(&inner, &["add", "."]);
+    git(&inner, &["commit", "-qm", "base"]);
+
+    let middle = repo();
+    git(
+        &middle,
+        &[
+            "-c",
+            "protocol.file.allow=always",
+            "submodule",
+            "add",
+            "-q",
+            inner.path().to_str().unwrap(),
+            "nested/inner",
+        ],
+    );
+    git(&middle, &["add", "."]);
+    git(&middle, &["commit", "-qm", "middle"]);
+
+    let repository = repo();
+    git(
+        &repository,
+        &[
+            "-c",
+            "protocol.file.allow=always",
+            "submodule",
+            "add",
+            "-q",
+            middle.path().to_str().unwrap(),
+            "vendor/middle",
+        ],
+    );
+    git(
+        &repository,
+        &[
+            "-c",
+            "protocol.file.allow=always",
+            "submodule",
+            "update",
+            "--init",
+            "--recursive",
+        ],
+    );
+    git(&repository, &["add", "."]);
+    git(&repository, &["commit", "-qm", "outer"]);
+
+    fs::write(
+        repository
+            .path()
+            .join("vendor/middle/nested/inner/inner.txt"),
+        "nested dirty\n",
+    )
+    .unwrap();
+    let error = RepositorySnapshot::capture(repository.path())
+        .unwrap_err()
+        .to_string();
+    assert!(error.contains("dirty initialized submodule"), "{error}");
 }
 
 #[test]

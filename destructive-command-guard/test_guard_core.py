@@ -17,6 +17,9 @@ spec = importlib.util.spec_from_file_location("guard_core", CORE)
 guard_core = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(guard_core)
 
+# Built from inert fragments so no test string is ever a runnable shell line.
+COVERED = " ".join(("rm", "-rf", "/"))
+
 BLOCKED_COMMANDS = {
     "sentinel": guard_core.SELF_TEST_SENTINEL,
     "rm-short": "rm -rf /",
@@ -79,6 +82,63 @@ BLOCKED_COMMANDS = {
     "diskutil-partition": "diskutil partitionDisk disk4 1 GPT APFS Empty 100%",
     "mkfs": "mkfs /dev/disk4",
     "mkfs-variant": "env X=1 mkfs.ext4 /dev/disk4",
+    "quoted-nested-separator": r'''bash -c 'echo ok; rm -rf "$HOME"' ''',
+    "substring-target": r'''rm -rf "${HOME:0}"''',
+    "alternate-target": r'''rm -rf "${HOME:+/}"''',
+    "brace-target": "rm -rf /{Users,System}",
+    "ansi-executable": r"$'\\x72\\x6d' -rf /",
+    "parameter-executable": r"x=xrm; ${x:1} -rf /",
+    "command-substitution-executable": r"$(printf '%s' rm) -rf $HOME",
+    "interpreter-pipe": r'''printf 'rm -rf "$HOME"' | bash''',
+    "interpreter-here-string": r'''bash <<< 'rm -rf "$HOME"' ''',
+    "subshell": r'''(rm -rf "$HOME")''',
+    "function": r'''wipe() { rm -rf "$HOME"; }; wipe''',
+    "control-flow": r'''if true; then rm -rf "$HOME"; fi''',
+    "async-list": "echo hi & rm -rf /",
+    "prefixed-subshell": "echo ok; (rm -rf /)",
+    "prefixed-control-flow": "true && while :; do rm -rf /; done",
+    "path-shell-pipe": "printf 'rm -rf /' | /bin/bash",
+    "env-shell-pipe": "printf 'rm -rf /' | env bash",
+    "argument-command-substitution": "echo $(rm -rf /)",
+    "assignment-command-substitution": "x=$(rm -rf /)",
+    "input-process-substitution": "cat <(rm -rf /)",
+    "output-process-substitution": "cat >(rm -rf /)",
+    "backtick-substitution": "echo `rm -rf /`",
+    "unmatched-bracket-semicolon": "echo a[b ; rm -rf /",
+    "unmatched-brace-semicolon": "echo a{b ; rm -rf /",
+    "unmatched-bracket-and-if": "echo a[b && rm -rf /",
+    "unmatched-bracket-newline": "echo a[b\nrm -rf /",
+    "quoted-executable-dollar-substitution": 'echo $("rm" -rf /)',
+    "single-quoted-executable-dollar-substitution": "echo $('rm' -rf /)",
+    "quoted-executable-backticks": 'echo `"rm" -rf /`',
+    "quoted-executable-process-substitution": 'cat <("rm" -rf /)',
+    "quoted-executable-piped-to-shell": "printf '\"rm\" -rf /' | bash",
+    "tight-here-string": "bash <<<'rm -rf /'",
+    "attached-here-string": "bash<<<'rm -rf /'",
+    "attached-sh-here-string": "sh<<<'rm -rf /'",
+    "pushd-changes-directory": "pushd /Users && rm -rf *",
+    "builtin-cd-changes-directory": "builtin cd /Users && rm -rf *",
+    "popd-makes-directory-ambiguous": "popd && rm -rf build",
+    "wrapped-builtin-cd-changes-directory": "command builtin cd /Users && rm -rf *",
+    "nested-eval-dollar-substitution": "echo $(eval rm -rf /)",
+    "nested-bash-dollar-substitution": "echo $(bash -c 'rm -rf /')",
+    "nested-bash-backtick-substitution": "echo `bash -c 'rm -rf /'`",
+    "nested-bash-process-substitution": "cat <(bash -c 'rm -rf /')",
+    "nested-subshell-dollar-substitution": "echo $( (rm -rf /) )",
+    "nested-control-flow-dollar-substitution": "echo $(if true; then rm -rf /; fi)",
+    "nested-eval-here-string": "bash <<<'eval rm -rf /'",
+    "nested-bash-here-string": "bash<<<'bash -c \"rm -rf /\"'",
+    "negation-prefix": f"! {COVERED}",
+    "negation-prefix-after-and": f"true && ! {COVERED}",
+    "negation-prefix-subshell": f"! ({COVERED})",
+    "coproc-prefix": f"coproc {COVERED}",
+    "coproc-named-group": f"coproc wipe {{ {COVERED}; }}",
+    "function-keyword": f"function wipe {{ {COVERED}; }}; wipe",
+    "function-keyword-parenthesized": f"function wipe () {{ {COVERED}; }}; wipe",
+    "function-spaced-parentheses": f"wipe ( ) {{ {COVERED}; }}; wipe",
+    "nested-negation-bash": f"bash -c '! {COVERED}'",
+    "nested-coproc-dollar-substitution": f"echo $(coproc {COVERED})",
+    "nested-function-here-string": f"bash <<<'function wipe {{ {COVERED}; }}; wipe'",
 }
 
 SAFE_COMMANDS = {
@@ -107,10 +167,35 @@ SAFE_COMMANDS = {
     "safe-variable-target": "rm -rf $BUILD_DIR",
     "safe-assigned-targets": "TARGET='/tmp/a /tmp/b' rm -rf $TARGET",
     "nonpersistent-assignment": "CMD='rm -rf /' echo ok; $CMD",
-    "unparseable-segment": "rm -rf 'unterminated",
+    "unparseable-ordinary": "echo 'unterminated",
     "ansi-echo": r"echo $'\n'",
     "ansi-rm-recursive-only": r"rm -r /Use$'\x72's",
     "ansi-rm-force-only": r"rm -f /Use$'\x72's",
+    "quoted-ampersand": "echo 'safe & rm -rf /'",
+    "double-quoted-ampersand": 'echo "safe & still text"',
+    "noncovered-async-list": "echo hi & git status",
+    "noncovered-prefixed-subshell": "echo ok; (git status)",
+    "noncovered-shell-pipe": "printf 'echo safe' | /bin/bash",
+    "benign-command-substitution": "echo $(printf safe)",
+    "quoted-command-substitution": "echo '$(rm -rf /)'",
+    "ordinary-unmatched-bracket": "echo a[b",
+    "ordinary-unmatched-brace": "echo a{b",
+    "quoted-benign-substitution-executable": 'echo $("printf" safe)',
+    "quoted-benign-executable-piped-to-shell": "printf '\"echo\" safe' | bash",
+    "tight-safe-here-string": "bash<<<'echo safe'",
+    "safe-pushd-directory": "pushd /tmp && rm -rf build",
+    "safe-builtin-cd-directory": "builtin cd /tmp && rm -rf build",
+    "safe-popd-absolute-target": "popd && rm -rf /tmp/build",
+    "nested-safe-bash-substitution": "echo $(bash -c 'git status')",
+    "nested-safe-eval-here-string": "bash<<<'eval echo safe'",
+    "safe-negation": "! true",
+    "safe-negation-grep": "! grep -q needle notes.txt",
+    "safe-coproc": "coproc printf safe",
+    "safe-coproc-named-group": "coproc worker { printf safe; }",
+    "safe-function-keyword": "function okay { printf safe; }; okay",
+    "safe-function-keyword-parenthesized": "function okay () { printf safe; }; okay",
+    "safe-function-spaced-parentheses": "okay ( ) { printf safe; }; okay",
+    "safe-nested-negation-bash": "bash -c '! true'",
 }
 
 
@@ -129,6 +214,15 @@ class GuardCoreTests(unittest.TestCase):
         nested = "rm -rf /"
         for _ in range(guard_core.MAX_NESTED_COMMAND_DEPTH + 2):
             nested = "bash -c " + shlex.quote(nested)
+        self.assertEqual(
+            guard_core.denial_reason(nested),
+            guard_core.INSPECTION_LIMIT_REASON,
+        )
+
+    def test_nested_substitution_depth_is_bounded(self):
+        nested = "rm -rf /"
+        for _ in range(guard_core.MAX_NESTED_COMMAND_DEPTH + 2):
+            nested = f"echo $({nested})"
         self.assertEqual(
             guard_core.denial_reason(nested),
             guard_core.INSPECTION_LIMIT_REASON,
@@ -165,6 +259,22 @@ class GuardCoreTests(unittest.TestCase):
         self.assertEqual(
             guard_core.denial_reason(guard_core.SELF_TEST_SENTINEL),
             guard_core.SELF_TEST_REASON,
+        )
+
+    def test_static_cwd_changes_bind_relative_targets(self):
+        self.assertIsNotNone(
+            guard_core.denial_reason("cd / && rm -rf System", cwd="/tmp")
+        )
+        self.assertIsNotNone(
+            guard_core.denial_reason("cd /Users && rm -rf *", cwd="/tmp")
+        )
+        self.assertIsNone(
+            guard_core.denial_reason("cd /tmp && rm -rf build", cwd="/tmp")
+        )
+
+    def test_dynamic_cwd_denies_later_recursive_forced_rm(self):
+        self.assertIsNotNone(
+            guard_core.denial_reason("cd \"$TARGET\" && rm -rf build", cwd="/tmp")
         )
 
 

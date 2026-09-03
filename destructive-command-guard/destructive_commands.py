@@ -108,6 +108,16 @@ def detect_envelope(payload):
     return None, [], None, 0
 
 
+def trusted_cwd(payload, envelope_name):
+    if envelope_name == "claude":
+        value = payload.get("cwd")
+    elif envelope_name == "antigravity":
+        value = payload.get("toolCall", {}).get("args", {}).get("Cwd")
+    else:
+        value = None
+    return value if isinstance(value, str) and value.startswith("/") else None
+
+
 def main():
     try:
         payload = json.load(sys.stdin)
@@ -116,12 +126,12 @@ def main():
     if not isinstance(payload, dict):
         return 0
 
-    _name, commands, render, deny_exit_code = detect_envelope(payload)
+    name, commands, render, deny_exit_code = detect_envelope(payload)
     if render is None:
         return 0
 
     for command in commands:
-        reason = guard_core.denial_reason(command)
+        reason = guard_core.denial_reason(command, cwd=trusted_cwd(payload, name))
         if reason:
             json.dump(render(reason), sys.stdout)
             sys.stdout.write("\n")

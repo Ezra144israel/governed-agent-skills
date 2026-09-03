@@ -1,0 +1,4 @@
+2026-09-02T00:00:00Z WARN codex_core::config: reading {{STERILE_ROOT}}/profile/config.toml
+2026-09-02T00:00:01Z INFO codex_core::auth: account {{EMAIL}} session {{THREAD_ID}}
+2026-09-02T00:00:01Z DEBUG codex_core::transport: authorization {{TOKEN}}
+2026-09-02T00:00:02Z INFO codex_core::session: home {{USER_HOME}}/.codex ignored; using {{STERILE_ROOT}}/profile

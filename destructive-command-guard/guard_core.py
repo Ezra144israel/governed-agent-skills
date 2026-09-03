@@ -16,11 +16,10 @@ writing an envelope adapter, never touching this file.
 #   by design and intentionally allowed — e.g. dd to a device, `find … -delete`,
 #   newfs_*, `chmod/chown -R` on system roots, `> /dev/disk*`, and deletion of
 #   /Library, /Applications, /usr, /etc.
-#   Because matching is static (shlex/posix, not a faithful Bash parser), Bash
-#   ANSI-C quoting ($'…') that reaches `rm` from OUTSIDE the checked segment is a
-#   known, accepted residual — e.g. outer-quote concatenation
-#   (`bash -c 'rm -rf /Use'$'\x72''s'`) or variable-carried indirection
-#   (`X=$'\x72'; rm -rf /Use${X}s`). In-segment $'…' IS caught (fail-closed).
+#   This is not a faithful Bash parser. The documented simple-command grammar
+#   is allowed; unsupported executable or protected-target expansion is denied
+#   when it can hide a covered operation. Syntax outside the covered operations
+#   remains outside this guard's decision.
 
 import fnmatch
 import os
@@ -29,7 +28,6 @@ import re
 import shlex
 
 
-SEGMENT_SEPARATOR = re.compile(r"&&|\|\||[;|\r\n]")
 ASSIGNMENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=.*$", re.DOTALL)
 BRACED_PARAMETER = re.compile(r"\$\{[^{}]+\}")
 BRACED_DEFAULT = re.compile(
@@ -51,6 +49,12 @@ INSPECTION_LIMIT_REASON = (
     "Nested shell command exceeds the destructive-command inspection limit."
 )
 DYNAMIC_COMMAND_REASON = "Dynamic nested shell command cannot be safely inspected."
+UNSUPPORTED_SYNTAX_REASON = (
+    "Shell syntax that can hide a covered destructive command cannot be safely inspected."
+)
+AMBIGUOUS_DIRECTORY_REASON = (
+    "A recursive forced deletion after a dynamic directory change cannot be safely inspected."
+)
 
 SELF_TEST_SENTINEL = "destructive-guard-self-test"
 
@@ -98,10 +102,307 @@ ENV_OPTIONS_WITH_VALUE = {"-C", "-u", "--chdir", "--unset"}
 
 
 def split_segments(command):
-    for raw_segment in SEGMENT_SEPARATOR.split(command):
-        normalized = re.sub(r"\s+", " ", raw_segment).strip()
-        if normalized:
-            yield normalized
+    """Split only on unquoted top-level shell separators.
+
+    The scanner is intentionally smaller than Bash. It preserves quoted nested
+    scripts as one simple-command argument and reports lexical errors to the
+    caller instead of silently dropping a fragment.
+    """
+    segments = []
+    current = []
+    preceding_separator = None
+    quote = None
+    escaped = False
+    parenthesis_depth = 0
+    index = 0
+    while index < len(command):
+        char = command[index]
+        if escaped:
+            current.append(char)
+            escaped = False
+            index += 1
+            continue
+        if char == "\\" and quote != "'":
+            current.append(char)
+            escaped = True
+            index += 1
+            continue
+        if quote:
+            current.append(char)
+            if char == quote:
+                quote = None
+            index += 1
+            continue
+        if char in {"'", '"'}:
+            quote = char
+            current.append(char)
+            index += 1
+            continue
+        if char == "(":
+            parenthesis_depth += 1
+            current.append(char)
+            index += 1
+            continue
+        if char == ")" and parenthesis_depth:
+            parenthesis_depth -= 1
+            current.append(char)
+            index += 1
+            continue
+        separator = None
+        if parenthesis_depth == 0:
+            if command.startswith(("&&", "||"), index):
+                separator = command[index : index + 2]
+            elif char in ";|&\r\n":
+                separator = char
+        if separator is not None:
+            segment = "".join(current).strip()
+            if segment:
+                segments.append((segment, preceding_separator))
+            current = []
+            preceding_separator = separator
+            index += len(separator)
+            continue
+        current.append(char)
+        index += 1
+    segment = "".join(current).strip()
+    if segment:
+        segments.append((segment, preceding_separator))
+    return segments, quote is not None or escaped
+
+
+def contains_covered_word(command):
+    return bool(re.search(r"(^|[^A-Za-z0-9_.-])(rm|diskutil|mkfs(?:\.[^\s;|]+)?)(?=$|\s|[;|(){}])", command))
+
+
+CONTROL_FLOW_PREFIX = re.compile(
+    r"(?:if|then|elif|else|fi|for|while|until|do|done|case|esac|select)\b"
+)
+# Bash `!` pipeline negation, `coproc`, and both function declaration forms
+# (`name() { ...; }` and `function name { ...; }`). Each puts a reserved word
+# where the simple-command matcher expects the executable, so a covered
+# operation behind it is denied instead of parsed.
+FUNCTION_OR_PIPELINE_PREFIX = re.compile(
+    r"!|coproc\b|function\b|[A-Za-z_][A-Za-z0-9_]*\s*\(\s*\)\s*\{"
+)
+
+
+def unsupported_compound(command):
+    if not contains_covered_word(command):
+        return False
+    stripped = command.lstrip()
+    return bool(
+        stripped.startswith(("(", "{"))
+        or CONTROL_FLOW_PREFIX.match(stripped)
+        or FUNCTION_OR_PIPELINE_PREFIX.match(stripped)
+    )
+
+
+def balanced_parenthesized_body(command, open_index):
+    depth = 0
+    quote = None
+    escaped = False
+    for index in range(open_index, len(command)):
+        char = command[index]
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\" and quote != "'":
+            escaped = True
+            continue
+        if quote:
+            if char == quote:
+                quote = None
+            continue
+        if char in {"'", '"'}:
+            quote = char
+        elif char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 0:
+                return command[open_index + 1 : index], index, False
+    return command[open_index + 1 :], len(command), True
+
+
+def backtick_body(command, open_index):
+    escaped = False
+    for index in range(open_index + 1, len(command)):
+        char = command[index]
+        if escaped:
+            escaped = False
+            continue
+        if char == "\\":
+            escaped = True
+        elif char == "`":
+            return command[open_index + 1 : index], index, False
+    return command[open_index + 1 :], len(command), True
+
+
+def tokens_start_with_covered_executable(tokens):
+    remaining, _assignments = strip_wrappers(tokens)
+    if not remaining:
+        return False
+    executable = posixpath.basename(remaining[0]).lower()
+    return (
+        executable in {"rm", "diskutil"}
+        or executable == "mkfs"
+        or executable.startswith("mkfs.")
+    )
+
+
+def text_has_covered_operation(text):
+    """Parse literal shell text and find a covered executable at command position."""
+    segments, lexical_error = split_segments(text)
+    for segment, _separator in segments:
+        try:
+            tokens = shlex.split(segment, posix=True)
+        except ValueError:
+            return contains_covered_word(segment)
+        if tokens_start_with_covered_executable(tokens):
+            return True
+    return lexical_error and contains_covered_word(text)
+
+
+def tokens_contain_covered_literal(tokens):
+    remaining, _assignments = strip_wrappers(tokens)
+    if not remaining:
+        return False
+    return any(text_has_covered_operation(token) for token in remaining[1:])
+
+
+def split_active_here_string(segment):
+    quote = None
+    escaped = False
+    index = 0
+    while index < len(segment):
+        char = segment[index]
+        if escaped:
+            escaped = False
+            index += 1
+            continue
+        if char == "\\" and quote != "'":
+            escaped = True
+            index += 1
+            continue
+        if quote:
+            if char == quote:
+                quote = None
+            index += 1
+            continue
+        if char in {"'", '"'}:
+            quote = char
+            index += 1
+            continue
+        if segment.startswith("<<<", index):
+            return segment[:index].strip(), segment[index + 3 :].strip()
+        index += 1
+    return None
+
+
+def nested_body_denial(body, depth, inherited_assignments=None, cwd=None):
+    """Inspect literal nested shell text with the same bounded classifier."""
+    if depth >= MAX_NESTED_COMMAND_DEPTH:
+        return INSPECTION_LIMIT_REASON
+    if text_has_covered_operation(body):
+        return UNSUPPORTED_SYNTAX_REASON
+    nested_reason = denial_reason(
+        body,
+        depth + 1,
+        inherited_assignments,
+        cwd=cwd,
+    )
+    if nested_reason == INSPECTION_LIMIT_REASON:
+        return nested_reason
+    return UNSUPPORTED_SYNTAX_REASON if nested_reason else None
+
+
+def substitution_denial(command, depth, inherited_assignments=None, cwd=None):
+    """Return a reason when active substitution syntax hides a covered operation."""
+    quote = None
+    escaped = False
+    index = 0
+    while index < len(command):
+        char = command[index]
+        if escaped:
+            escaped = False
+            index += 1
+            continue
+        if char == "\\" and quote != "'":
+            escaped = True
+            index += 1
+            continue
+        if quote == "'":
+            if char == "'":
+                quote = None
+            index += 1
+            continue
+        if char == "'" and quote is None:
+            quote = "'"
+            index += 1
+            continue
+        if char == '"':
+            quote = None if quote == '"' else '"'
+            index += 1
+            continue
+        if char == "`":
+            body, end, malformed = backtick_body(command, index)
+            reason = nested_body_denial(body, depth, inherited_assignments, cwd)
+            if reason:
+                return reason
+            if malformed:
+                return None
+            index = end + 1
+            continue
+        marker = command[index : index + 2]
+        active = marker == "$(" or (quote is None and marker in {"<(", ">("})
+        if active:
+            body, end, malformed = balanced_parenthesized_body(command, index + 1)
+            reason = nested_body_denial(body, depth, inherited_assignments, cwd)
+            if reason:
+                return reason
+            if malformed:
+                return None
+            index = end + 1
+            continue
+        index += 1
+    return None
+
+
+def is_shell_interpreter(tokens):
+    remaining, _assignments = strip_wrappers(tokens)
+    return bool(
+        remaining
+        and posixpath.basename(remaining[0]).lower() in SHELL_EXECUTABLES
+    )
+
+
+def has_dynamic_word_syntax(token):
+    return bool(
+        "$" in token
+        or "`" in token
+        or re.search(r"[?*\[]", token)
+        or re.search(r"\{[^{}]*[,][^{}]*\}", token)
+        or "<(" in token
+        or ">(" in token
+    )
+
+
+def has_unsupported_target_syntax(token):
+    if SIMPLE_PARAMETER.fullmatch(token):
+        return False
+    return bool(
+        "$" in token
+        or "`" in token
+        or re.search(r"\{[^{}]*[,][^{}]*\}", token)
+        or "<(" in token
+        or ">(" in token
+    )
+
+
+def has_unsupported_executable_syntax(token):
+    if SIMPLE_PARAMETER.fullmatch(token):
+        return False
+    return has_dynamic_word_syntax(token)
 
 
 def consume_wrapper_options(tokens, options_with_value):
@@ -285,7 +586,7 @@ def target_candidates(target):
     return candidates
 
 
-def is_protected_rm_target(target):
+def is_protected_rm_target(target, cwd=None):
     home = posixpath.normpath(os.path.expanduser("~"))
     protected = {"/", home} | set(PROTECTED_ROOTS)
 
@@ -297,6 +598,8 @@ def is_protected_rm_target(target):
 
     for candidate in target_candidates(target):
         normalized = normalized_target(candidate)
+        if cwd and not normalized.startswith("/"):
+            normalized = posixpath.normpath(posixpath.join(cwd, normalized))
         if normalized == "/*" or normalized in protected:
             return True
         if normalized.startswith("/") and any(
@@ -320,7 +623,7 @@ def self_test_denial(tokens):
     return None
 
 
-def rm_denial(tokens, raw_segment=""):
+def rm_denial(tokens, raw_segment="", cwd=None, cwd_ambiguous=False):
     if not tokens or posixpath.basename(tokens[0]).lower() != "rm":
         return None
 
@@ -353,7 +656,14 @@ def rm_denial(tokens, raw_segment=""):
         # entire quoting class only after this segment resolves to destructive rm.
         if "$'" in raw_segment:
             return RM_REASON
-        if any(is_protected_rm_target(target) for target in targets):
+        if cwd_ambiguous and any(not normalized_target(target).startswith("/") for target in targets):
+            return AMBIGUOUS_DIRECTORY_REASON
+        if any(
+            has_unsupported_target_syntax(target)
+            for target in targets
+        ):
+            return UNSUPPORTED_SYNTAX_REASON
+        if any(is_protected_rm_target(target, cwd) for target in targets):
             return RM_REASON
     return None
 
@@ -408,20 +718,116 @@ def nested_command(tokens):
     return None
 
 
-def denial_reason(command, depth=0, inherited_assignments=None):
+def directory_change(tokens):
+    """Return a static directory target, or None for an ambiguous directory change."""
+    if not tokens:
+        return False, None
+    remaining = tokens
+    executable = posixpath.basename(remaining[0]).lower()
+    if executable == "builtin":
+        remaining = remaining[1:]
+        if not remaining:
+            return False, None
+        executable = posixpath.basename(remaining[0]).lower()
+    if executable not in {"cd", "pushd", "popd"}:
+        return False, None
+    if executable == "popd":
+        return True, None
+    if (
+        len(remaining) != 2
+        or has_dynamic_word_syntax(remaining[1])
+        or remaining[1] == "-"
+        or (executable == "pushd" and remaining[1].startswith(("+", "-")))
+    ):
+        return True, None
+    return True, remaining[1]
+
+
+def denial_reason(command, depth=0, inherited_assignments=None, cwd=None):
     """Return a denial reason string for `command`, or None to allow it."""
+    reason = substitution_denial(command, depth, inherited_assignments, cwd)
+    if reason:
+        return reason
+    if unsupported_compound(command):
+        return UNSUPPORTED_SYNTAX_REASON
+    segments, lexical_error = split_segments(command)
+    if lexical_error and contains_covered_word(command):
+        return UNSUPPORTED_SYNTAX_REASON
     active_assignments = dict(inherited_assignments or {})
-    for segment in split_segments(command):
+    active_cwd = posixpath.normpath(cwd) if cwd else None
+    cwd_ambiguous = False
+    pipeline_contains_covered = False
+    for segment, preceding_separator in segments:
+        if preceding_separator != "|":
+            pipeline_contains_covered = False
+        if unsupported_compound(segment):
+            return UNSUPPORTED_SYNTAX_REASON
         try:
-            tokens = shlex.split(segment, posix=True)
+            raw_tokens = shlex.split(segment, posix=True)
         except ValueError:
+            if contains_covered_word(segment):
+                return UNSUPPORTED_SYNTAX_REASON
             continue
+
+        here_string = split_active_here_string(segment)
+        if here_string is not None:
+            interpreter_text, input_text = here_string
+            try:
+                interpreter_tokens = shlex.split(interpreter_text, posix=True)
+                input_tokens = shlex.split(input_text, posix=True)
+            except ValueError:
+                if contains_covered_word(segment):
+                    return UNSUPPORTED_SYNTAX_REASON
+            else:
+                if is_shell_interpreter(interpreter_tokens):
+                    reason = nested_body_denial(
+                        " ".join(input_tokens),
+                        depth,
+                        active_assignments,
+                        active_cwd,
+                    )
+                    if reason:
+                        return reason
+
+        if (
+            preceding_separator == "|"
+            and pipeline_contains_covered
+            and is_shell_interpreter(raw_tokens)
+        ):
+            return UNSUPPORTED_SYNTAX_REASON
+        pipeline_contains_covered = (
+            pipeline_contains_covered
+            or contains_covered_word(segment)
+            or tokens_contain_covered_literal(raw_tokens)
+        )
+        tokens = raw_tokens
 
         tokens, segment_assignments = prepare_tokens(tokens, active_assignments)
         if not tokens:
             active_assignments = segment_assignments
             continue
-        reason = rm_denial(tokens, segment)
+        executable_word = tokens[0]
+        if has_unsupported_executable_syntax(executable_word):
+            return DYNAMIC_COMMAND_REASON
+
+        changed_directory, directory_target = directory_change(tokens)
+        if changed_directory:
+            if directory_target is None:
+                cwd_ambiguous = True
+                active_cwd = None
+            elif directory_target.startswith("/"):
+                active_cwd = posixpath.normpath(directory_target)
+                cwd_ambiguous = False
+            elif active_cwd:
+                active_cwd = posixpath.normpath(
+                    posixpath.join(active_cwd, directory_target)
+                )
+            else:
+                cwd_ambiguous = True
+            active_assignments = segment_assignments
+            continue
+
+        reason = rm_denial(tokens, segment, active_cwd, cwd_ambiguous)
         if reason:
             return reason
         for matcher in (self_test_denial, diskutil_denial, mkfs_denial):
@@ -435,7 +841,12 @@ def denial_reason(command, depth=0, inherited_assignments=None):
                 return INSPECTION_LIMIT_REASON
             if SIMPLE_PARAMETER.search(nested) or "$(" in nested or "`" in nested:
                 return DYNAMIC_COMMAND_REASON
-            reason = denial_reason(nested, depth + 1, segment_assignments)
+            reason = denial_reason(
+                nested,
+                depth + 1,
+                segment_assignments,
+                cwd=active_cwd,
+            )
             if reason:
                 return reason
     return None

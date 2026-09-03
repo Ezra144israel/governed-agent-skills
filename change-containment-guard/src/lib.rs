@@ -7,7 +7,11 @@ use std::fmt;
 use std::fs;
 use std::io::Read;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::process::{Command, ExitStatus, Stdio};
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, mpsc};
+use std::thread;
+use std::time::Duration;
 
 pub const CONTRACT_SCHEMA: &str = "change-containment-contract/v1";
 pub const RECEIPT_SCHEMA: &str = "change-containment-receipt/v1";
@@ -227,6 +231,75 @@ impl RepositorySnapshot {
     }
 }
 
+#[derive(Clone, Debug)]
+struct ObservedRepositoryState {
+    snapshot: RepositorySnapshot,
+    suppression_counts: BTreeMap<String, u64>,
+}
+
+impl ObservedRepositoryState {
+    fn capture(contract: &Contract, repository: &Path) -> GuardResult<Self> {
+        let mut snapshot = RepositorySnapshot::capture(repository)?;
+        let mut suppression_counts = BTreeMap::new();
+        let root = Path::new(&snapshot.root);
+        for (path, entry) in &mut snapshot.entries {
+            if entry.work_kind != "file" {
+                continue;
+            }
+            let ecosystems = contract
+                .test_ecosystems
+                .iter()
+                .filter(|ecosystem| {
+                    ecosystem
+                        .patterns
+                        .iter()
+                        .any(|pattern| pattern_matches(pattern, path))
+                })
+                .collect::<Vec<_>>();
+            if ecosystems.is_empty() {
+                continue;
+            }
+            let bytes = fs::read(root.join(path)).map_err(|error| {
+                GuardError(format!(
+                    "cannot capture test file bytes for {path}: {error}"
+                ))
+            })?;
+            entry.work_digest = hash_bytes(&bytes);
+            let text = std::str::from_utf8(&bytes).map_err(|_| {
+                GuardError(format!(
+                    "test suppression scan requires UTF-8 text in {path}"
+                ))
+            })?;
+            for ecosystem in ecosystems {
+                for marker in &ecosystem.suppression_markers {
+                    suppression_counts.insert(
+                        suppression_key(&ecosystem.name, path, marker),
+                        text.matches(marker).count() as u64,
+                    );
+                }
+            }
+        }
+        snapshot.state_hash = snapshot_state_hash(&snapshot)?;
+        Ok(Self {
+            snapshot,
+            suppression_counts,
+        })
+    }
+}
+
+fn snapshot_state_hash(snapshot: &RepositorySnapshot) -> GuardResult<String> {
+    let identity = SnapshotIdentity {
+        repository_id: &snapshot.repository_id,
+        branch: &snapshot.branch,
+        head: &snapshot.head,
+        entries: &snapshot.entries,
+        staged_paths: &snapshot.staged_paths,
+        unstaged_paths: &snapshot.unstaged_paths,
+        untracked_paths: &snapshot.untracked_paths,
+    };
+    Ok(hash_bytes(&serde_json::to_vec(&identity)?))
+}
+
 fn nul_path_set(bytes: Vec<u8>) -> GuardResult<BTreeSet<String>> {
     bytes
         .split(|byte| *byte == 0)
@@ -353,8 +426,9 @@ pub fn seal_contract(path: &Path, repository: &Path) -> GuardResult<Contract> {
     {
         return Err(GuardError("seal requires an unsealed contract".to_owned()));
     }
-    let snapshot = RepositorySnapshot::capture(repository)?;
-    let suppression_counts = suppression_counts(&snapshot, &contract.test_ecosystems)?;
+    let observation = ObservedRepositoryState::capture(&contract, repository)?;
+    let snapshot = observation.snapshot;
+    let suppression_counts = observation.suppression_counts;
     contract.repository_id = Some(snapshot.repository_id.clone());
     contract.baseline = Some(Baseline {
         snapshot,
@@ -480,13 +554,21 @@ pub fn verify_contract_hash(contract: &Contract) -> GuardResult<String> {
 }
 
 pub fn evaluate_contract(contract: &Contract, repository: &Path) -> GuardResult<Evaluation> {
+    let observation = ObservedRepositoryState::capture(contract, repository)?;
+    evaluate_observation(contract, &observation)
+}
+
+fn evaluate_observation(
+    contract: &Contract,
+    observation: &ObservedRepositoryState,
+) -> GuardResult<Evaluation> {
     validate_contract_shape(contract)?;
     verify_contract_hash(contract)?;
     let baseline = contract
         .baseline
         .as_ref()
         .ok_or_else(|| GuardError("contract has no sealed baseline".to_owned()))?;
-    let current = RepositorySnapshot::capture(repository)?;
+    let current = &observation.snapshot;
     let mut violations = Vec::new();
     if contract.repository_id.as_deref() != Some(current.repository_id.as_str()) {
         violations.push("repository identity differs from the sealed contract".to_owned());
@@ -573,7 +655,7 @@ pub fn evaluate_contract(contract: &Contract, repository: &Path) -> GuardResult<
         enforce_class_contracts(
             contract,
             baseline,
-            &current,
+            observation,
             &path,
             class.as_ref(),
             rule.as_ref(),
@@ -592,7 +674,7 @@ pub fn evaluate_contract(contract: &Contract, repository: &Path) -> GuardResult<
     violations.sort();
     violations.dedup();
     Ok(Evaluation {
-        state_hash: current.state_hash,
+        state_hash: current.state_hash.clone(),
         changes,
         violations,
     })
@@ -644,12 +726,13 @@ fn matching_rule(
 fn enforce_class_contracts(
     contract: &Contract,
     baseline: &Baseline,
-    current: &RepositorySnapshot,
+    observation: &ObservedRepositoryState,
     path: &str,
     class: Option<&ChangeClass>,
     rule: Option<&EffectiveRule>,
     violations: &mut Vec<String>,
 ) -> GuardResult<()> {
+    let current = &observation.snapshot;
     let dependency = contract
         .dependency_patterns
         .iter()
@@ -706,20 +789,20 @@ fn enforce_class_contracts(
             "{path}: known test path needs test or evaluator class"
         ));
     }
-    if let Some(entry) = current.entries.get(path)
-        && entry.work_kind == "file"
+    if current
+        .entries
+        .get(path)
+        .is_some_and(|entry| entry.work_kind == "file")
     {
-        let root = Path::new(&current.root);
-        let content = fs::read_to_string(root.join(path)).map_err(|error| {
-            GuardError(format!(
-                "cannot inspect test suppression markers in {path}: {error}"
-            ))
-        })?;
         for ecosystem in known {
             for marker in &ecosystem.suppression_markers {
                 let key = suppression_key(&ecosystem.name, path, marker);
                 let before = baseline.suppression_counts.get(&key).copied().unwrap_or(0);
-                let after = content.matches(marker).count() as u64;
+                let after = observation
+                    .suppression_counts
+                    .get(&key)
+                    .copied()
+                    .unwrap_or(0);
                 if after > before && !rule.is_some_and(|rule| rule.allow_test_suppression) {
                     violations.push(format!(
                         "{path}: new {} suppression marker {:?} needs explicit approval",
@@ -759,40 +842,6 @@ fn enforce_generated_sources(
             }
         }
     }
-}
-
-fn suppression_counts(
-    snapshot: &RepositorySnapshot,
-    ecosystems: &[TestEcosystem],
-) -> GuardResult<BTreeMap<String, u64>> {
-    let mut counts = BTreeMap::new();
-    for (path, entry) in &snapshot.entries {
-        if entry.work_kind != "file" {
-            continue;
-        }
-        for ecosystem in ecosystems {
-            if !ecosystem
-                .patterns
-                .iter()
-                .any(|pattern| pattern_matches(pattern, path))
-            {
-                continue;
-            }
-            let content =
-                fs::read_to_string(Path::new(&snapshot.root).join(path)).map_err(|error| {
-                    GuardError(format!(
-                        "cannot inspect test suppression markers in {path}: {error}"
-                    ))
-                })?;
-            for marker in &ecosystem.suppression_markers {
-                counts.insert(
-                    suppression_key(&ecosystem.name, path, marker),
-                    content.matches(marker).count() as u64,
-                );
-            }
-        }
-    }
-    Ok(counts)
 }
 
 fn suppression_key(ecosystem: &str, path: &str, marker: &str) -> String {
@@ -852,6 +901,102 @@ pub struct Receipt {
     pub receipt_hash: Option<String>,
 }
 
+struct BoundedOutput {
+    status: ExitStatus,
+    stdout: Vec<u8>,
+    stderr: Vec<u8>,
+}
+
+fn drain_stream<R: Read + Send + 'static>(
+    mut stream: R,
+    total: Arc<AtomicUsize>,
+    error_tx: mpsc::Sender<GuardError>,
+) -> thread::JoinHandle<Vec<u8>> {
+    thread::spawn(move || {
+        let mut output = Vec::new();
+        let mut buffer = [0_u8; 64 * 1024];
+        loop {
+            let count = match stream.read(&mut buffer) {
+                Ok(0) => break,
+                Ok(count) => count,
+                Err(error) => {
+                    let _ = error_tx.send(GuardError(format!(
+                        "cannot read verification output: {error}"
+                    )));
+                    break;
+                }
+            };
+            let previous = total.fetch_add(count, Ordering::SeqCst);
+            if previous.saturating_add(count) > MAX_VERIFICATION_OUTPUT_BYTES {
+                let _ = error_tx.send(GuardError(format!(
+                    "verification output exceeds the {} byte receipt limit",
+                    MAX_VERIFICATION_OUTPUT_BYTES
+                )));
+                break;
+            }
+            output.extend_from_slice(&buffer[..count]);
+        }
+        output
+    })
+}
+
+fn run_bounded_command(
+    executable: &str,
+    args: &[String],
+    repository: &Path,
+) -> GuardResult<BoundedOutput> {
+    let mut child = Command::new(executable)
+        .args(args)
+        .current_dir(repository)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|error| GuardError(format!("cannot spawn verification command: {error}")))?;
+    let stdout = child
+        .stdout
+        .take()
+        .ok_or_else(|| GuardError("verification stdout pipe is unavailable".to_owned()))?;
+    let stderr = child
+        .stderr
+        .take()
+        .ok_or_else(|| GuardError("verification stderr pipe is unavailable".to_owned()))?;
+    let total = Arc::new(AtomicUsize::new(0));
+    let (error_tx, error_rx) = mpsc::channel();
+    let stdout_thread = drain_stream(stdout, Arc::clone(&total), error_tx.clone());
+    let stderr_thread = drain_stream(stderr, total, error_tx);
+
+    let status = loop {
+        if let Ok(error) = error_rx.try_recv() {
+            let _ = child.kill();
+            let _ = child.wait();
+            let _ = stdout_thread.join();
+            let _ = stderr_thread.join();
+            return Err(error);
+        }
+        if let Some(status) = child
+            .try_wait()
+            .map_err(|error| GuardError(format!("cannot wait for verification child: {error}")))?
+        {
+            break status;
+        }
+        thread::sleep(Duration::from_millis(5));
+    };
+    let stdout = stdout_thread
+        .join()
+        .map_err(|_| GuardError("verification stdout reader panicked".to_owned()))?;
+    let stderr = stderr_thread
+        .join()
+        .map_err(|_| GuardError("verification stderr reader panicked".to_owned()))?;
+    if let Ok(error) = error_rx.try_recv() {
+        return Err(error);
+    }
+    Ok(BoundedOutput {
+        status,
+        stdout,
+        stderr,
+    })
+}
+
 pub fn run_verification(
     contract_path: &Path,
     receipt_path: &Path,
@@ -879,25 +1024,16 @@ pub fn run_verification(
     let executable = command
         .first()
         .ok_or_else(|| GuardError("verification command is empty".to_owned()))?;
-    let output = Command::new(executable)
-        .args(&command[1..])
-        .current_dir(repository)
-        .output()
-        .map_err(|error| GuardError(format!("cannot execute verification command: {error}")))?;
-    if output.stdout.len().saturating_add(output.stderr.len()) > MAX_VERIFICATION_OUTPUT_BYTES {
-        return Err(GuardError(format!(
-            "verification output exceeds the {} byte receipt limit",
-            MAX_VERIFICATION_OUTPUT_BYTES
-        )));
-    }
-    let after = evaluate_contract(&contract, repository)?;
-    if !after.violations.is_empty() {
+    let output = run_bounded_command(executable, &command[1..], repository)?;
+    let after = ObservedRepositoryState::capture(&contract, repository)?;
+    let after_evaluation = evaluate_observation(&contract, &after)?;
+    if !after_evaluation.violations.is_empty() {
         return Err(GuardError(format!(
             "containment rejected after verification: {}",
-            after.violations.join("; ")
+            after_evaluation.violations.join("; ")
         )));
     }
-    let snapshot = RepositorySnapshot::capture(repository)?;
+    let snapshot = after.snapshot;
     let contract_hash = contract
         .contract_hash
         .clone()
@@ -973,25 +1109,25 @@ pub fn check_receipt(
             "verification output digest is malformed".to_owned(),
         ));
     }
-    let evaluation = evaluate_contract(&contract, repository)?;
+    let current = ObservedRepositoryState::capture(&contract, repository)?;
+    let evaluation = evaluate_observation(&contract, &current)?;
     if !evaluation.violations.is_empty() {
         return Err(GuardError(format!(
             "current repository violates containment: {}",
             evaluation.violations.join("; ")
         )));
     }
-    let current = RepositorySnapshot::capture(repository)?;
-    if receipt.repository_id != current.repository_id {
+    if receipt.repository_id != current.snapshot.repository_id {
         return Err(GuardError(
             "receipt belongs to a different repository".to_owned(),
         ));
     }
-    if receipt.branch != current.branch {
+    if receipt.branch != current.snapshot.branch {
         return Err(GuardError(
             "receipt belongs to a different branch".to_owned(),
         ));
     }
-    if receipt.final_state_hash != current.state_hash {
+    if receipt.final_state_hash != current.snapshot.state_hash {
         return Err(GuardError(
             "receipt is stale for the current repository state".to_owned(),
         ));
@@ -1006,12 +1142,12 @@ pub fn compute_receipt_hash(receipt: &Receipt) -> GuardResult<String> {
 }
 
 fn verification_output_digest(stdout: &[u8], stderr: &[u8]) -> String {
-    let mut framed = Vec::with_capacity(stdout.len() + stderr.len() + 16);
-    framed.extend_from_slice(&(stdout.len() as u64).to_be_bytes());
-    framed.extend_from_slice(stdout);
-    framed.extend_from_slice(&(stderr.len() as u64).to_be_bytes());
-    framed.extend_from_slice(stderr);
-    hash_bytes(&framed)
+    let mut digest = Sha256::new();
+    digest.update((stdout.len() as u64).to_be_bytes());
+    digest.update(stdout);
+    digest.update((stderr.len() as u64).to_be_bytes());
+    digest.update(stderr);
+    format!("sha256:{:x}", digest.finalize())
 }
 
 pub fn evaluate_envelope(
@@ -1103,8 +1239,27 @@ fn work_identity(
         return Ok(("file".to_owned(), hash_file(absolute)?));
     }
     if metadata.is_dir() && indexed.is_some_and(|(mode, _)| mode == "160000") {
-        let pointer =
-            git_text(absolute, ["rev-parse", "HEAD"]).unwrap_or_else(|_| "UNAVAILABLE".to_owned());
+        let status = run_git(
+            absolute,
+            [
+                "status",
+                "--porcelain=v2",
+                "-z",
+                "--untracked-files=all",
+                "--ignore-submodules=none",
+            ],
+        )?;
+        if !status.is_empty() {
+            let relative = absolute.strip_prefix(repository).unwrap_or(absolute);
+            return Err(GuardError(format!(
+                "dirty initialized submodule is not accepted: {}",
+                relative.display()
+            )));
+        }
+        let pointer = git_text(absolute, ["rev-parse", "--verify", "HEAD"])?;
+        if pointer.len() != 40 || !pointer.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+            return Err(GuardError("submodule HEAD is malformed".to_owned()));
+        }
         return Ok(("submodule".to_owned(), hash_bytes(pointer.as_bytes())));
     }
     let relative = absolute.strip_prefix(repository).unwrap_or(absolute);

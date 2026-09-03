@@ -15,7 +15,10 @@ then classifies every added, deleted, or modified path as implementation, test,
 evaluator, dependency, generated, or unclassified.
 
 It handles tracked, staged, unstaged, untracked non-ignored files, symlinks, and
-submodule pointers. A rename is reported as a deletion plus an addition.
+submodule pointers. Every initialized submodule must be clean before a snapshot
+or receipt is accepted. This includes tracked and non-ignored untracked changes
+inside an initialized nested submodule. A rename is reported as a deletion plus
+an addition.
 Wherever they appear, `.gitignore`, `.gitattributes`, and `.gitmodules` need
 exact full-path rules. Symlink and submodule changes need their entry kinds
 named. Dependency and generated paths need their matching classes. Test
@@ -65,11 +68,18 @@ Run one command already sealed in `verification_commands` and write a receipt:
 change-containment-guard verify --contract /evidence/contract.json --receipt /evidence/receipt.json --repository /work/repo -- cargo test --all-targets
 ```
 
-The guard checks containment before and after the command. The receipt binds the
-repository, branch, contract hash, final state hash, exact command, exit status,
-and exact stdout/stderr digest. Raw command output is not copied into the
-receipt. Combined captured output is limited to 16 MiB. Larger output fails
-instead of creating an unbounded receipt. Consumers recompute current state:
+The guard checks containment before and after the command. One post-command
+observation supplies both the containment decision and the receipt state. Test
+file suppression counts and digests come from the same captured file bytes.
+The receipt binds the repository, branch, contract hash, final state hash,
+exact command, exit status, and exact stdout/stderr digest. Raw command output
+is not copied into the receipt.
+
+Stdout and stderr are drained concurrently. One combined counter stops at 16
+MiB while the child runs. Output at the exact limit keeps the existing framed
+digest. The next byte kills and reaps the direct child and no receipt is
+written. Spawn failure, output-limit termination, child failure, and normal
+empty output remain distinct results. Consumers recompute current state:
 
 ```text
 change-containment-guard check-receipt --contract /evidence/contract.json --receipt /evidence/receipt.json --repository /work/repo
@@ -78,6 +88,10 @@ change-containment-guard check-receipt --contract /evidence/contract.json --rece
 A replaced contract, changed branch, different repository, later edit, reused
 receipt, or nonzero verification result is rejected. The receipt records command
 output identity but does not authenticate or independently reproduce the output.
+A receipt binds one post-command observation. It does not prove that an
+arbitrary verification command read those exact bytes. A stronger test-to-byte
+claim needs external quiescence or an exclusive writer across the command and
+observation.
 A changed receipt is rejected when its integrity hash no longer matches. A
 writer who can replace both `output_digest` and the unkeyed `receipt_hash` is
 outside this integrity claim.
@@ -116,6 +130,20 @@ scope.
 
 The guard observes state when invoked. It is not a daemon and does not watch
 future edits. A valid receipt becomes stale after any bound state changes.
+
+The verification command has no wall-clock timeout in this version. Output
+growth is bounded, but duration is not. Killing the direct child on an output
+limit does not guarantee descendant cleanup on every platform.
+
+Git and verification executables are selected through `PATH`, and child
+processes inherit the current environment. Reopen executable pinning when the
+subject under test can change `PATH` or that environment. Reopen process-group
+cleanup and a wall-clock timeout before claiming bounded duration or descendant
+termination.
+
+Ignored files remain outside the state identity. An initialized submodule must
+be clean, but ignored inner files are outside this check unless Git reports
+them. A missing or malformed submodule status or HEAD fails closed.
 
 ## Install boundary
 

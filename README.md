@@ -4,6 +4,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-the-instruction-layer-as-a-claude-code-plugin)
+[![Security checks](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml/badge.svg)](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml)
 ![version](https://img.shields.io/badge/version-4.0.0-blue.svg)
 ![skills](https://img.shields.io/badge/skills-6-blue.svg)
 ![guards](https://img.shields.io/badge/guards-2-orange.svg)
@@ -16,6 +17,14 @@ The layers work together, but they are installed separately. The plugin installs
 only the six skills. It does not install, wire, or activate either guard. Not
 every skill needs a guard. Add enforcement only where a rule can be checked
 mechanically and the cost of a miss matters.
+
+[![A visual comparison of the Instruction Layer and Enforcement Layer](assets/destructive-command-guard/destructive-command-guard-poster.png)](https://ezra144israel.github.io/governed-agent-skills/#live-proof)
+
+[Watch the 50-second guard proof](https://ezra144israel.github.io/governed-agent-skills/#live-proof),
+read its [transcript](assets/destructive-command-guard/destructive-command-guard-transcript.md),
+or inspect the [machine-readable evidence](demo/destructive-command-guard/evidence/public-evidence.json).
+This candidate contains one sterile Codex receipt. Older maintainer records for
+Claude Code and Antigravity are separate observations.
 
 ![The governed loop](assets/how-it-works.svg)
 
@@ -119,6 +128,10 @@ Cloning this repository or installing the plugin activates neither guard.
 Read each guard's README for technical details, verified support, limits, and
 installation. The root README stays short so those facts have one source of
 truth.
+
+The [`Security checks`](.github/workflows/security.yml) badge means the named
+checks passed for that revision. It does not mean malware-free, complete audit
+coverage, safe live wiring, or guaranteed behavior. See [SECURITY.md](SECURITY.md).
 
 ## Use the Instruction Layer
 

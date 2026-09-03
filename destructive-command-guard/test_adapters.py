@@ -156,6 +156,21 @@ class EnvelopeTests(unittest.TestCase):
                     result.stdout,
                 )
 
+    def test_claude_envelope_binds_trusted_cwd(self):
+        payload = ENVELOPES["claude"][0]("cd /Users && rm -rf *")
+        payload["cwd"] = "/tmp"
+        result = invoke(json.dumps(payload))
+        self.assertEqual(
+            json.loads(result.stdout)["hookSpecificOutput"]["permissionDecision"],
+            "deny",
+        )
+
+    def test_antigravity_envelope_binds_trusted_cwd(self):
+        payload = ENVELOPES["antigravity"][0]("rm -rf *")
+        payload["toolCall"]["args"]["Cwd"] = "/Users"
+        result = invoke(json.dumps(payload))
+        self.assertEqual(json.loads(result.stdout)["decision"], "deny")
+
 
 
 if __name__ == "__main__":
