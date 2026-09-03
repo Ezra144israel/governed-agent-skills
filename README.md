@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-the-instruction-layer-as-a-claude-code-plugin)
 [![Security checks](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml/badge.svg)](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml)
-![version](https://img.shields.io/badge/version-4.0.0-blue.svg)
+![version](https://img.shields.io/badge/version-4.1.0-blue.svg)
 ![skills](https://img.shields.io/badge/skills-6-blue.svg)
 ![guards](https://img.shields.io/badge/guards-2-orange.svg)
 
