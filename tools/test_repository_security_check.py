@@ -39,7 +39,7 @@ evidence_validator = load_demo_module("validate_evidence")
 
 
 def ignore_copy(directory, names):
-    ignored = {name for name in names if name in {".git", "target", "__pycache__"}}
+    ignored = {name for name in names if name in {".git", ".codex", "target", "__pycache__"}}
     if Path(directory).as_posix().endswith("demo/destructive-command-guard/evidence"):
         ignored.add("private")
     return ignored
@@ -308,6 +308,14 @@ class RepositorySecurityMutants(unittest.TestCase):
         )
         self.assert_rule("workflow:")
 
+    def test_workflow_shallow_checkout_mutant_fails(self):
+        path = self.root / ".github/workflows/security.yml"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("fetch-depth: 0", "fetch-depth: 1"),
+            encoding="utf-8",
+        )
+        self.assert_rule("workflow: required pinned step is missing: fetch-depth: 0")
+
     def test_workflow_push_path_filter_mutant_fails(self):
         path = self.root / ".github/workflows/security.yml"
         path.write_text(
@@ -318,6 +326,67 @@ class RepositorySecurityMutants(unittest.TestCase):
             encoding="utf-8",
         )
         self.assert_rule("workflow: push must cover")
+
+
+class RepositorySecurityGitHistory(unittest.TestCase):
+    def setUp(self):
+        self.owner = tempfile.TemporaryDirectory(prefix="repository-security-git-")
+        self.root = Path(self.owner.name) / "repo"
+        subprocess.run(
+            ["git", "clone", "--quiet", "--no-hardlinks", "--local", str(TOOLS.parent), str(self.root)],
+            check=True,
+        )
+        for relative in (
+            "tools/repository_security_check.py",
+            "tools/test_repository_security_check.py",
+            ".github/workflows/security.yml",
+        ):
+            source = TOOLS.parent / relative
+            destination = self.root / relative
+            shutil.copy2(source, destination)
+        subprocess.run(["git", "config", "user.name", "Repository Security Test"], cwd=self.root, check=True)
+        subprocess.run(["git", "config", "user.email", "security-test@example.invalid"], cwd=self.root, check=True)
+        subprocess.run(
+            ["git", "add", "tools/repository_security_check.py", "tools/test_repository_security_check.py", ".github/workflows/security.yml"],
+            cwd=self.root,
+            check=True,
+        )
+        subprocess.run(
+            ["git", "commit", "--quiet", "--allow-empty", "-m", "candidate descendant"],
+            cwd=self.root,
+            check=True,
+        )
+
+    def tearDown(self):
+        self.owner.cleanup()
+
+    def test_evidence_base_accepts_published_descendant(self):
+        self.assertEqual(check_repository(self.root), [])
+
+    def test_evidence_base_rejects_unrelated_commit(self):
+        tree = subprocess.run(
+            ["git", "write-tree"], cwd=self.root, text=True, capture_output=True, check=True
+        ).stdout.strip()
+        unrelated = subprocess.run(
+            ["git", "commit-tree", tree, "-m", "unrelated base"],
+            cwd=self.root,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout.strip()
+        evidence_path = self.root / EVIDENCE
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        evidence["source"]["base_commit"] = unrelated
+        evidence_path.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        manifest_path = self.root / ARTIFACT_MANIFEST
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["source_evidence"]["sha256"] = digest(evidence_path)
+        manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+        self.assertEqual(
+            check_repository(self.root),
+            ["evidence: base commit is not an ancestor of candidate HEAD"],
+        )
 
 
 if __name__ == "__main__":

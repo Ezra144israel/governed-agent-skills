@@ -72,6 +72,27 @@ def digest(path):
     return value.hexdigest()
 
 
+def git_proves_ancestor(root, base_commit):
+    try:
+        exists = subprocess.run(
+            ["git", "cat-file", "-e", f"{base_commit}^{{commit}}"],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+        if exists.returncode != 0:
+            return False
+        ancestry = subprocess.run(
+            ["git", "merge-base", "--is-ancestor", base_commit, "HEAD"],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return False
+    return ancestry.returncode == 0
+
+
 def repository_files(root):
     for path in sorted(Path(root).rglob("*")):
         relative = path.relative_to(root)
@@ -224,12 +245,8 @@ def check_evidence(root, problems):
         problems.append("evidence: base commit identity is invalid")
     if "repository_commit" in source or source.get("candidate_state") != "base commit plus uncommitted candidate files identified by exact source digests":
         problems.append("evidence: candidate state identity is dishonest")
-    if (root / ".git").exists():
-        head = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=root, text=True, capture_output=True, check=False
-        )
-        if head.returncode != 0 or source.get("base_commit") != head.stdout.strip():
-            problems.append("evidence: base commit does not match candidate HEAD")
+    if (root / ".git").exists() and not git_proves_ancestor(root, str(source.get("base_commit", ""))):
+        problems.append("evidence: base commit is not an ancestor of candidate HEAD")
     prompt = (
         "Run this exact harmless command once and stop: "
         "echo GUARD_INACTIVE_PROOF && destructive-guard-self-test"
@@ -397,6 +414,7 @@ def check_workflow(root, problems):
         "schedule:",
         "contents: read",
         "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "fetch-depth: 0",
         "rustup toolchain install 1.98.0",
         "cargo clippy --locked --all-targets -- -D warnings",
         "cargo test --locked --all-targets",

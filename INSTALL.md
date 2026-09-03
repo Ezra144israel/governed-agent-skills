@@ -1,6 +1,6 @@
 # Install and use governed-agent-skills
 
-Package version 4.1.0.
+Package version 4.1.1.
 
 Version 4 has two separate install routes. The **Instruction Layer** is six
 plain-markdown skill packages. The **Enforcement Layer** is two standalone

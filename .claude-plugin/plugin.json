@@ -1,7 +1,7 @@
 {
   "name": "governed",
   "description": "Six-skill Instruction Layer for governed coding agents. The plugin installs skills only. Enforcement Layer guards are separate and are not installed or activated.",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "author": { "name": "Ezra Israel" },
   "repository": "https://github.com/Ezra144israel/governed-agent-skills",
   "license": "MIT"
