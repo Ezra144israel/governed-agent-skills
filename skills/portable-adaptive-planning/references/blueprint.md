@@ -33,7 +33,7 @@ REOPEN IF
 condition, or blueprint currency must change>
 ```
 
-`AS OF` is a short verbatim fragment of the latest operator instruction the plan accounts for. A newer or materially different operator instruction reopens planning before Builder or Reviewer progression. A prior `GO` does not override a later operator correction.
+`AS OF` is a short verbatim fragment of the latest operator instruction the plan accounts for. A materially different operator instruction reopens planning before Builder or Reviewer progression. A prior `GO` does not override a later operator correction.
 
 Omit `SOURCE HOME` and `BOUNDARIES` when they carry no load-bearing information.
 
