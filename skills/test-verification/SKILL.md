@@ -1,11 +1,150 @@
 ---
 name: test-verification
 description: Requires behavioral, failure-path, and durable-seam evidence for tests and review. Use when writing tests, reviewing test coverage, assessing behavioral test quality, or accepting high-risk behavior on test evidence.
+metadata_schema: team-hub-skill/v1
+summary: Requires behavioral, failure-path, and durable-seam evidence for tests and review.
+skill_id: test-verification
+version: 2.2.0
+lifecycle_status: active
+family: code-quality
+capabilities: []
+source_provenance:
+  kind: original
+  references: []
+  note: null
+authority_boundary: docs-only
+activation_triggers:
+- trigger_id: test-writing
+  task_kinds:
+  - testing
+  risk_flags: []
+  path_globs: []
+  roles: []
+  lanes: []
+  surfaces:
+  - build-review
+  - repository
+  description: tests are being written
+- trigger_id: coverage-review
+  task_kinds:
+  - review
+  - testing
+  risk_flags: []
+  path_globs: []
+  roles: []
+  lanes: []
+  surfaces:
+  - build-review
+  - repository
+  description: test coverage is reviewed
+- trigger_id: behavioral-quality
+  task_kinds:
+  - testing
+  - verification
+  risk_flags: []
+  path_globs: []
+  roles: []
+  lanes: []
+  surfaces:
+  - build-review
+  - repository
+  description: behavioral test quality is assessed
+- trigger_id: high-risk-acceptance
+  task_kinds:
+  - review
+  - testing
+  - verification
+  risk_flags:
+  - high-risk-file
+  path_globs: []
+  roles: []
+  lanes: []
+  surfaces:
+  - build-review
+  - repository
+  description: high-risk behavior needs test evidence
+activation_exclusions: []
+full_load_required_when:
+- behavioral-quality
+- coverage-review
+- high-risk-acceptance
+- test-writing
+section_references: []
+platforms:
+- portable
+- team-hub-runtime-advisory
+surfaces:
+- build-review
+- repository
+required_roles: []
+required_lanes: []
+related_doctrine:
+- docs/architecture/FILE_ARCHITECTURE_AND_MAINTAINABILITY_STANDARD.md
+- docs/architecture/HIGH_RISK_FILE_REGISTRY.md
+graph_edges:
+- type: depends_on
+  target: repo-grounding
+  condition_trigger_ids: []
+- type: related
+  target: code-quality
+  condition_trigger_ids: []
+child_references:
+- child_id: test-verification/objective-integrity
+  path: skills/test-verification/reference/objective-integrity.md
+  lifecycle_status: active
+  platforms:
+  - portable
+  - team-hub-runtime-advisory
+  surfaces:
+  - build-review
+  - repository
+  activation_trigger_ids: []
+  full_load_trigger_ids: []
+  contributes_return_ids: []
+  independently_invocable: false
+  content_origin: authored
+return_contributions:
+- contribution_id: test-verification/test-proof
+  activation_trigger_ids:
+  - test-writing
+  - coverage-review
+  - behavioral-quality
+  - high-risk-acceptance
+  requirement: required
+  order: 310
+  fields:
+  - field_id: behavior-cases
+    value_type: checklist
+    required: true
+    allowed_values: []
+    prompt: List happy, denied, failure, retry, and boundary cases exercised.
+  - field_id: test-results
+    value_type: command-results
+    required: true
+    allowed_values: []
+    prompt: Record focused and broader test commands and results.
+  - field_id: seam-quality
+    value_type: string
+    required: true
+    allowed_values: []
+    prompt: State why tests use a durable public seam.
+  - field_id: unverified-behavior
+    value_type: string-list
+    required: true
+    allowed_values: []
+    prompt: List any behavior not directly verified.
+supersedes: []
 ---
 
-# Test verification
+# test-verification/SKILL.md
 
-## Core rule
+## Purpose
+
+Use this skill to write, evaluate, and verify tests that prove behavior rather
+than implementation details. This skill supersedes and expands the test-writing
+section in `skills/code-quality/SKILL.md`.
+
+## Core Rule
 
 Tests prove behavior through public seams, not implementation internals.
 
@@ -13,13 +152,14 @@ A test that breaks when you rename an internal variable without changing behavio
 is testing the wrong thing. A test that passes when the behavior is broken is
 worse than no test at all.
 
-## Vertical slice discipline
+## Vertical Slice Discipline
 
 Write one test. Implement to pass it. Repeat.
 
-Do not write all tests before all implementation (horizontal slicing). Tests
-written before the code exists verify imagined behavior, become insensitive to
-real changes, and outrun understanding.
+For every behavior change with testable logic, write the smallest targeted test
+and observe it fail for the missing behavior before changing the implementation.
+Do not write a broad suite for imagined internals before learning from one
+vertical slice.
 
 ```text
 WRONG (horizontal):
@@ -30,13 +170,25 @@ RIGHT (vertical):
   RED → GREEN: one test → its implementation → repeat
 ```
 
-For existing code where implementation already exists:
+For a behavior change in existing code:
 
 ```text
-diagnose → implement narrow vertical behavior → add targeted verification
+diagnose → write targeted behavior test → observe RED → implement narrow behavior → observe GREEN
 ```
 
-## Test quality checklist
+For an extraction or refactor intended to preserve current behavior:
+
+```text
+diagnose current behavior → add focused characterization test → observe PASS
+→ move logic without changing behavior → observe PASS
+```
+
+A characterization test is not speculative: it pins behavior already present
+at a durable seam before logic moves. If the slice also changes behavior,
+characterize the current behavior first, then use a separate observed RED for
+the behavior change.
+
+## Test Quality Checklist
 
 Before accepting a test as complete:
 
@@ -45,32 +197,32 @@ Before accepting a test as complete:
 [ ] Test uses a public seam: route, server action, query helper, or pure helper interface
 [ ] Test would survive an internal refactor without changing
 [ ] Code written is the minimum to pass the current test
-[ ] No test written speculatively for behavior not yet implemented
-[ ] Test covers at least one failure or rejection case, not just the happy path
+[ ] No broad test suite speculates about unverified internal structure
+[ ] Test covers at least one failure/rejection case, not just the happy path
 [ ] For high-risk seams: failure path, wrong input, unauthorized access are covered
 ```
 
-## Seam-specific test expectations
+## Seam-Specific Test Expectations
 
 | Seam type | Minimum test coverage |
 |---|---|
-| Pure helper or validation | valid input, invalid input, unsafe or malformed input, edge cases |
+| Pure helper / validation | valid input, invalid input, unsafe/malformed input, edge cases |
 | Parser | correct parse, rejection, precedence between command types |
-| Dispatcher or readback builder | safe input → expected output, authority markers, unsafe input fails closed |
-| Server action | authorized path, wrong project or role → denial, invalid input → failure, idempotency where relevant |
-| Route boundary | method validation, body validation, auth and authority, fail-closed response shape |
+| Dispatcher / readback builder | safe input → expected output, authority markers, unsafe input fails closed |
+| Server action | authorized path, wrong project/role → denial, invalid input → failure, idempotency where relevant |
+| Route boundary | method validation, body validation, auth/authority, fail-closed response shape |
 | DB query helper | correct project-scoped read, wrong-project exclusion, missing record handling |
-| Presentational component | renders given props correctly; does not fetch, store, or dispatch |
-| Hook | hydration and effect behavior, pure helper tests where possible |
-| Natural-language matcher or routing seam | generated class matrix across frames and objects, including guard and veto vocabulary in object position; directive-veto cases; mention and question negatives; verbatim failing deployed inputs |
-| Rendered answer or readback surface | whole-answer pins for each state branch plus structural assertions banning stale or forbidden wording |
+| Presentational component | renders given props correctly; does not fetch/store/dispatch |
+| Hook | hydration/effect behavior, pure helper tests where possible |
+| Natural-language matcher / routing seam | generated class matrix across frames and objects, including guard/veto vocabulary in object position; directive-veto cases; mention/question negatives; verbatim failing deployed inputs |
+| Rendered answer / readback surface | whole-answer pins for each state branch plus structural assertions banning stale/forbidden wording; cross-reference `skills/operator-copy-honesty/SKILL.md` |
 
-The natural-language matcher and routing seam row is load-bearing:
+The natural-language matcher / routing seam row is load-bearing after LSN-028:
 test the direction class, not only the first known phrase. Include adversarial
 object-position vocabulary so a veto or guard does not accidentally reject the
 operator's intended noun phrase.
 
-## Fixture-vs-deployed divergence
+## Fixture-vs-Deployed Divergence
 
 If correctness depends on fields or environment values supplied by the actual
 caller, fixture-only proof is not enough.
@@ -79,14 +231,14 @@ Examples:
 
 - a shell caller passes readiness fields into a rendered answer builder
 - a server action reads runtime configuration from `process.env`
-- a routing seam receives mode, project, and thread context from the live send path
+- a routing seam receives mode/project/thread context from the live send path
 - a grounded packet uses rows read by the live assembler
 
 When the live caller matters, the test or captured evidence must exercise the
 real call path. Hand-shaped fixtures may supplement that proof, but they do not
 replace it.
 
-## Exactly-once and concurrency expectations
+## Exactly-Once and Concurrency Expectations
 
 For state-changing record-family seams, include tests for:
 
@@ -99,11 +251,11 @@ If the repository claims exactly-once behavior through a DB transaction or
 unique constraint, tests must prove that property at the durable record seam,
 not just through an in-memory guard.
 
-## Sad-path acceptance gate (governed crossings)
+## Sad-Path Acceptance Gate (governed crossings)
 
-Every new or changed **governed crossing**, meaning a server action or route
-that records a decision, transitions a status, consumes a grant, or creates
-lineage, requires an explicit **sad-path matrix** in the builder return. A crossing
+Every new or changed **governed crossing** — a server action or route that
+records a decision, transitions a status, consumes a grant, or creates lineage
+— requires an explicit **sad-path matrix** in the builder return. A crossing
 whose changed behavior has only happy-path tests is an incomplete return, not
 a reviewable one.
 
@@ -114,26 +266,36 @@ The matrix has one row per failure condition, with these columns:
 
 The mutation-boundary column states, per row, which effects were prevented: no
 execution, no application, no repo change, no canonical-truth change, no
-duplicate transition, as applicable to the crossing.
+duplicate transition — as applicable to the crossing.
 
 Baseline row set (the starting matrix for any governed crossing):
 
 - malformed input
 - unauthorized actor
 - missing target record
-- stale, already-decided, or duplicate action
+- stale / already-decided / duplicate action
 - partial persistence failure
 - external service failure
 - secret-bearing error (redacted before it reaches UI, log, or readback)
-- conflicting sibling or state
+- conflicting sibling / state
 - happy-path regression after hardening
 
-A row may be marked **not-applicable** with one line of reasoning (for
-example, "no external service on this crossing"). An unexplained empty row is a gap, not a
+A row may be marked **not-applicable** with one line of reasoning (e.g. "no
+external service on this crossing"). An unexplained empty row is a gap, not a
 pass. This gate applies to new and changed crossings from adoption forward; it
 is not a retroactive audit of existing code.
 
-## Source-string tests are guardrails only
+Classify the matrix in the Builder return:
+
+- `COMPLETE` — every applicable row has named evidence and every excluded row
+  has a specific not-applicable reason.
+- `NOT_APPLICABLE` — the slice changes no governed crossing, with the crossing
+  boundary named.
+- `SAD_PATH_PARTIAL` — one or more required cases lack evidence or a valid
+  not-applicable reason; name each missing case. Partial is never silently
+  presented as complete.
+
+## Source-String Tests — Guardrails Only
 
 Source-string tests check whether a string, import, or pattern appears in source
 code. They are guardrails, not behavioral proof.
@@ -141,7 +303,7 @@ code. They are guardrails, not behavioral proof.
 Use source-string tests for:
 - proving a forbidden import is absent
 - proving a file does not call `fetch`, `insert`, or a route directly
-- protecting inertness and non-authority boundaries on contract-only seams
+- protecting inertness/non-authority boundaries on contract-only seams
 - checking that a display-only surface did not gain a forbidden action keyword
 
 Do not use source-string tests alone for:
@@ -149,28 +311,51 @@ Do not use source-string tests alone for:
 - dispatch decisions
 - validation output
 - readback text selection
-- server action success and failure paths
+- server action success/failure paths
 - route authorization
 - state transition logic
 
 When source-string tests are the only coverage for complex behavior, flag the
 gap in the builder return and the reviewer should request behavioral tests.
 
-## Database assertions
+## Database Assertions
 
 For persistence seams, asserting durable database state is the correct proof.
 
-Prefer testing through public seams, such as routes, server actions, and
-query helpers, rather than querying DB internals directly.
+Prefer testing through public seams — routes, server actions, query helpers —
+rather than querying DB internals directly.
 
 When persistence is the behavior being proven, assert the durable record exists
 with the correct fields through the same query layer the app uses.
 
-## What makes a bad test
+## Scouted verification rules
+
+_Salvaged from the retired `scouted-rules` holding pen; sources cited in parentheses._
+
+- A verdict is `VERIFIED`, `NOT VERIFIED`, or `INCONCLUSIVE`. Inconclusive is
+  not a pass, and a negative is never hidden. (`figure-it-out`)
+- When something passes too easily, suspect the observation method before the
+  system. A blank screenshot passes a lazy gate. (`figure-it-out`)
+- Trust artifacts, not self-reports. When verifying delegated work, inspect the
+  diff, the file, and the runtime behavior. Agents report what they intended,
+  not always what happened. (`principle-prove-it-works`)
+- A generated artifact that was never executed is a draft, not a deliverable.
+  (`create-verification-skill`)
+- Verify what a dry run actually skips by observing it, not by trusting its
+  name. Some dry runs still touch the network. (`create-verification-skill`)
+- Evidence survives every cleanup, checked at its named location rather than
+  assumed. (`maintain-verification-skill`)
+- Prefer no new test over a bad test. A bad test mostly tests mocks, encodes
+  current implementation details, depends on timing or global state, needs
+  expensive infrastructure for a small fix, or would be deleted right after
+  proving the fix. (`tdd`)
+
+## What Makes a Bad Test
 
 - Tests a private function or internal helper directly
 - Breaks when you rename an internal variable but behavior is unchanged
-- Was written before the implementation existed and tests imagined structure
+- Speculates about implementation structure instead of pinning required or
+  already-observed behavior
 - Mocks internal collaborators instead of testing through the interface
 - Passes when the actual behavior is broken
 - Only tests the happy path when the seam has real failure modes
@@ -282,15 +467,33 @@ When escalation applies, load `reference/objective-integrity.md` for the
 Level B decision model, escalation handling, and non-claim boundary. Do not
 reconstruct those rules here.
 
-## Return requirement
+## Return Requirement
 
 Include in the unified return block when this skill fires:
 
 ```text
 Test verification:
 - Seam type tested:
-- Behavioral tests added: yes or no, with the list
-- Failure or rejection path covered: yes or no
-- Source-string tests used: yes or no; if used for complex behavior, flag the gap
+- Behavioral tests added: yes/no / list
+- Failure/rejection path covered: yes/no
+- Source-string tests used: yes/no — guardrails only / for complex behavior (flag)
 - Test gaps remaining:
 ```
+
+## Performance and resource boundaries
+
+A changed seam also reports its resource behavior, because a passing functional
+test says nothing about cost:
+
+```text
+Performance / resource boundaries:
+- N+1 queries or repeated remote calls introduced: Yes / No
+- Unbounded list/search/read/loop introduced: Yes / No
+- Blocking work added to a latency-sensitive path: Yes / No
+- Unbounded client work or repeated rendering introduced: Yes / No
+- Evidence: <measurement, named test/inspection, or specific not-applicable basis>
+```
+
+Treat a performance concern as blocking only when the change creates a credible
+correctness, availability, cost, or operator-usability risk. Speculative
+micro-optimization is not a gate.
