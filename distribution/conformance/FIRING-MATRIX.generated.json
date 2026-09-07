@@ -171,6 +171,62 @@
           "trigger_id": "reasoning-doctrine/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "reasoning-doctrine",
       "version": null
@@ -232,6 +288,62 @@
           "trigger_id": "governed-operator/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "governed-operator",
       "version": null
@@ -293,6 +405,62 @@
           "trigger_id": "write-maintainable-code/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "write-maintainable-code",
       "version": null
@@ -359,6 +527,62 @@
           "trigger_id": "portable-adaptive-planning/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "portable-adaptive-planning",
       "version": null
@@ -394,7 +618,7 @@
       "dependency_closure": [
         {
           "condition_trigger_ids": [],
-          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolve in that repository context. Outside it, record REPOSITORY_CONTEXT_REQUIRED for this edge only",
           "target": "repo-grounding"
         }
       ],
@@ -519,6 +743,62 @@
           "trigger_id": "high-risk-acceptance"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "routing-pointer-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [
         {
           "activation_trigger_ids": [
@@ -598,6 +878,62 @@
           "trigger_id": "ship-it-or-fix-it/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "ship-it-or-fix-it",
       "version": null
@@ -657,6 +993,62 @@
           "trigger_id": "grilling/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "grilling",
       "version": null
@@ -718,6 +1110,62 @@
           "trigger_id": "unslop/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "unslop",
       "version": null
@@ -812,6 +1260,62 @@
           "trigger_id": "small-diff-distrust"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "blast-radius",
       "version": "1.0.0"
@@ -910,6 +1414,62 @@
           "trigger_id": "performance-regression"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "diagnosing-bugs",
       "version": "1.0.0"
@@ -989,6 +1549,62 @@
           "trigger_id": "recurring-correction"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "encode-lessons-in-structure",
       "version": "1.0.0"
@@ -1064,6 +1680,62 @@
           "trigger_id": "agent-document-design"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "writing-for-agents",
       "version": "1.0.0"
@@ -1290,6 +1962,62 @@
           "trigger_id": "source-roundup-triage"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "technique-scout",
       "version": "15.0.0"
@@ -1313,7 +2041,7 @@
       "dependency_closure": [
         {
           "condition_trigger_ids": [],
-          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolve in that repository context. Outside it, record REPOSITORY_CONTEXT_REQUIRED for this edge only",
           "target": "repo-grounding"
         }
       ],
@@ -1432,6 +2160,62 @@
           "trigger_id": "over-refactor-risk"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Repository/Project-routed skill. Do not replace its required Project route with a common account owner.",
+          "route": "not-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-code": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Repository/Project-routed skill. Do not replace its required Project route with a common account owner.",
+          "route": "not-target"
+        },
+        "codex": {
+          "adaptation": "native-frontmatter-v1",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [
         {
           "activation_trigger_ids": [
@@ -1524,7 +2308,7 @@
       "dependency_closure": [
         {
           "condition_trigger_ids": [],
-          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolve in that repository context. Outside it, record REPOSITORY_CONTEXT_REQUIRED for this edge only",
           "target": "repo-grounding"
         }
       ],
@@ -1799,6 +2583,62 @@
           "trigger_id": "pressure-tester-designation-addendum"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "antigravity": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "chatgpt": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "claude-web": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "codex": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Keep the accepted surface-specific continuity adapter. Its existing account repair and acceptance gate is separate from this source consolidation.",
+          "route": "preserved-surface-adapter"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        }
+      },
       "return_contributions": [
         {
           "activation_trigger_ids": [
@@ -2018,6 +2858,62 @@
           "trigger_id": "cil-mode-switch/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "cil-mode-switch",
       "version": null
@@ -2077,6 +2973,62 @@
           "trigger_id": "cil-grounding/description"
         }
       ],
+      "qualification_routes": {
+        "agents": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "antigravity": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "chatgpt-project": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "Proposed common account owner; Project attachment removal remains behind the separate version-route acceptance gate.",
+          "route": "not-target"
+        },
+        "claude-code": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "claude-web": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "codex": {
+          "adaptation": "release",
+          "canonical_body_allowed": true,
+          "reason": "",
+          "route": "canonical-target"
+        },
+        "grok": {
+          "adaptation": "BLOCKED",
+          "canonical_body_allowed": false,
+          "reason": "Current host skill loading and account export mechanism not verified.",
+          "route": "blocked"
+        },
+        "substrate8-repository": {
+          "adaptation": "NOT_TARGET",
+          "canonical_body_allowed": false,
+          "reason": "External shared source. Repository consumes the standing or manifest-derived skill without a vendored body.",
+          "route": "not-target"
+        }
+      },
       "return_contributions": [],
       "skill_id": "cil-grounding",
       "version": null

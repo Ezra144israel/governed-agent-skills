@@ -10,20 +10,20 @@
   },
   "files": {
     "ADAPT-THIS-HOST.md": {
-      "bytes": 4362,
-      "sha256": "86824fdf27270f57509978ea30e30b8f27a55d6985500e14c57690d0a8c0001c"
+      "bytes": 8610,
+      "sha256": "a8d2cf0ba6eded59ea84151b33f7ac930d79a9e0375feb32ac6357f2495cac85"
     },
     "CONFORMANCE-PROBES.generated.json": {
-      "bytes": 24327,
-      "sha256": "8d9877abebefdb5913cb779b71db1b7a16731b290f8102c9aaf8f056858b9422"
+      "bytes": 233064,
+      "sha256": "b97bceeffa75eb6fae4b0a041df26f45cc02aabf8933fec423ca2133925b5bc5"
     },
     "CONFORMANCE-PROBES.md": {
-      "bytes": 18737,
-      "sha256": "aeadb3fc33a711605e5e086ca04db2f9b48d37320f15f2e98a1445b8cedb70a4"
+      "bytes": 69170,
+      "sha256": "b783fe7c05c5992180f732e404e4fdf368b8f9cf382fb38589c7d6e493c6b3eb"
     },
     "FIRING-MATRIX.generated.json": {
-      "bytes": 69726,
-      "sha256": "8e1056ae11a00f1de968999d56e6f799b520c9f538b8608d84435359e54038a8"
+      "bytes": 102483,
+      "sha256": "8b26e0db59be714ecbb4d156ea0ee37c7ba3403bec9c4e676a7c057419cc2c27"
     },
     "FIRING-MATRIX.generated.md": {
       "bytes": 15574,

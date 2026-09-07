@@ -286,6 +286,169 @@ class RealSourceTest(unittest.TestCase):
         cls.files = gen.generate(cls.checker, cls.checker_identity, cls.root / "current-skills.json",
                                  inputs["manifest_commit"], inputs["source_roots"], cls.root)
 
+    def qualification_data(self):
+        probes = json.loads(self.files["CONFORMANCE-PROBES.generated.json"])["probes"]
+        rows = json.loads(self.files["FIRING-MATRIX.generated.json"])["skills"]
+        return {p["probe_id"]: p for p in probes}, {r["skill_id"]: r for r in rows}
+
+    def test_all_49_ids_and_canonical_meanings_survive(self):
+        def original(path):
+            return json.loads(subprocess.check_output([
+                "git", "-C", str(self.root), "show",
+                "02a34c775350b17c6150890d035802d44a012992:distribution/conformance/" + path]))
+        probes, rows = self.qualification_data()
+        prior = original("CONFORMANCE-PROBES.generated.json")["probes"]
+        self.assertEqual(len(probes), 49)
+        self.assertEqual(set(probes), {p["probe_id"] for p in prior})
+        for old in prior:
+            for key in ("family", "polarity", "covers"):
+                self.assertEqual(probes[old["probe_id"]][key], old[key])
+        for old in original("FIRING-MATRIX.generated.json")["skills"]:
+            for key in ("canonical_identity", "activation_class", "positive_triggers", "exclusions_and_vetoes",
+                        "eligibility", "distribution_targets", "child_references", "return_contributions"):
+                self.assertEqual(rows[old["skill_id"]][key], old[key], (old["skill_id"], key))
+
+    def test_every_profile_and_host_has_fixed_applicability(self):
+        probes, _ = self.qualification_data()
+        profiles = json.loads(self.files["SURFACE-PROFILES.json"])["profiles"]
+        for probe in probes.values():
+            self.assertEqual(set(probe["qualification"]), set(profiles))
+            for name, profile in profiles.items():
+                plan = probe["qualification"][name]
+                self.assertIn(plan["applicability"], ("APPLICABLE", "NOT_APPLICABLE", "OPERATOR_ACTION_REQUIRED"))
+                self.assertEqual(set(plan["hosts"]), set(profile["manifest_surfaces"]))
+                for host in plan["hosts"].values():
+                    self.assertIn(host["applicability"], ("APPLICABLE", "NOT_APPLICABLE", "OPERATOR_ACTION_REQUIRED"))
+                    self.assertTrue(host["reason"])
+                    if host["applicability"] == "NOT_APPLICABLE":
+                        self.assertFalse(host["cover_candidates"])
+
+    def test_local_seats_are_never_hosted_positive_cases(self):
+        probes, _ = self.qualification_data()
+        for p in probes.values():
+            if p["probe_id"] == "P-SEAT-HOSTED" or any(
+                    set(c["selectors"]["roles"]) & {"orchestrator", "pressure-test"}
+                    for c in p.get("trigger_cases", [])):
+                self.assertEqual(p["qualification"]["hosted-coordination"]["applicability"], "APPLICABLE")
+                for name in ("local-builder-reviewer", "external-host-adapter", "chatgpt-hosted-application"):
+                    self.assertEqual(p["qualification"][name]["applicability"], "NOT_APPLICABLE")
+        self.assertEqual(probes["N-SEAT-LOCAL-PROMOTION"]["qualification"]["local-builder-reviewer"]["applicability"], "APPLICABLE")
+
+    def test_parser_condition_is_antigravity_only(self):
+        probes, _ = self.qualification_data()
+        p = probes["P-HOSTEXC-BLOCKED"]
+        for plan in p["qualification"].values():
+            for surface, host in plan["hosts"].items():
+                self.assertEqual(host["applicability"], "APPLICABLE" if surface == "antigravity" else "NOT_APPLICABLE")
+        self.assertEqual(p["execution_modes"], ["host-parser-fixture"])
+
+    def test_selector_pass_needs_actual_firing_but_no_domain_completion(self):
+        probes, _ = self.qualification_data()
+        p = next(p for p in probes.values() if p["probe_id"].startswith("P-SEL-"))
+        evidence = {"fired": True, "body_loaded": True, "load_receipt": "observed-load-identity",
+                    "dependency_routing_correct": True, "child_routing_correct": True,
+                    "domain_task_completed": False}
+        self.assertEqual(gen.firing_result(p, evidence), "PASS")
+        for key in ("fired", "body_loaded", "load_receipt", "dependency_routing_correct", "child_routing_correct"):
+            self.assertEqual(gen.firing_result(p, {**evidence, key: False}), "BLOCKED", key)
+        negative = next(p for p in probes.values() if p["probe_id"].startswith("N-SEL-"))
+        self.assertEqual(gen.firing_result(negative, {"fired": False, "body_loaded": False}), "PASS")
+        self.assertEqual(gen.firing_result(negative, {"fired": False, "body_loaded": True}), "BLOCKED")
+
+    def test_preserved_adapter_identity_is_required_and_failure_is_skill_local(self):
+        probes, rows = self.qualification_data()
+        p = probes["P-CHILDREF"]
+        host = p["qualification"]["local-builder-reviewer"]["hosts"]["codex"]
+        receipts = {name: {"identity_verified": True} for name in host["cover_candidates"]}
+        route = rows["continuity-handoff"]["qualification_routes"]["codex"]
+        self.assertEqual(route["route"], "preserved-surface-adapter")
+        self.assertFalse(route["canonical_body_allowed"])
+        missing = gen.admitted_cover(p, "local-builder-reviewer", "codex", receipts)
+        self.assertEqual(missing["blocked"], {"continuity-handoff": "ACCEPTED_ADAPTER_IDENTITY_REQUIRED"})
+        self.assertIn("technique-scout", missing["admitted"])
+        identity = {"bytes": 12, "sha256": "a" * 64}
+        proof = {"accepted_source": "immutable-source-receipt", "acceptance_record": "immutable-acceptance-receipt",
+                 "accepted_identity": identity, "observed_identity": identity}
+        receipts["continuity-handoff"] = proof
+        accepted = gen.admitted_cover(p, "local-builder-reviewer", "codex", receipts)
+        self.assertFalse(accepted["blocked"])
+        self.assertIn("continuity-handoff", accepted["admitted"])
+        for key in proof:
+            receipts["continuity-handoff"] = {k: v for k, v in proof.items() if k != key}
+            self.assertIn("continuity-handoff", gen.admitted_cover(p, "local-builder-reviewer", "codex", receipts)["blocked"])
+        receipts["continuity-handoff"] = {**proof, "observed_identity": {"bytes": 13, "sha256": "a" * 64}}
+        self.assertIn("continuity-handoff", gen.admitted_cover(p, "local-builder-reviewer", "codex", receipts)["blocked"])
+        self.assertEqual(gen.qualification_route({"adaptation": "BLOCKED", "reason": "unverified target"})["route"], "blocked")
+
+    def test_child_and_contribution_owners_follow_profile_and_admission(self):
+        probes, _ = self.qualification_data()
+        for pid in ("P-CHILDREF", "N-CHILDREF", "P-RETURN-CONTRIB"):
+            p = probes[pid]
+            local = p["qualification"]["local-builder-reviewer"]["hosts"]["codex"]["cover_candidates"]
+            hosted = p["qualification"]["hosted-coordination"]["hosts"]["chatgpt"]["cover_candidates"]
+            local_ids = local["continuity-handoff"]["member_ids"]
+            self.assertTrue(local_ids)
+            self.assertTrue(all("orchestrator" not in x and "pressure-test" not in x and "relay-queue" not in x for x in local_ids))
+            self.assertTrue(all("builder-session" not in x for x in hosted["continuity-handoff"]["member_ids"]))
+            grok = p["qualification"]["external-host-adapter"]["hosts"]["grok"]["cover_candidates"]
+            if pid == "P-RETURN-CONTRIB":
+                # General continuity contributions are role-agnostic. Grok's
+                # target is BLOCKED, so it remains visible but never admitted.
+                self.assertEqual(grok["continuity-handoff"]["route"], "blocked")
+                resolved = gen.admitted_cover(p, "external-host-adapter", "grok", {})
+                self.assertNotIn("continuity-handoff", resolved["admitted"])
+                self.assertEqual(resolved["blocked"]["continuity-handoff"], "TARGET_BLOCKED")
+            else:
+                self.assertNotIn("continuity-handoff", grok)
+
+    def test_repository_dependency_does_not_poison_unrelated_firing(self):
+        probes, rows = self.qualification_data()
+        p = probes["P-DEPCLOSURE"]
+        self.assertEqual(p["execution_modes"], ["repository-context"])
+        self.assertEqual(p["repository_context"], gen.TEAM_HUB)
+        self.assertIn("edge only", p["evidence_contract"]["outside_repository"])
+        self.assertNotIn("repo-grounding", rows)
+        for row in rows.values():
+            for edge in row["dependency_closure"]:
+                if edge["target"] == "repo-grounding":
+                    self.assertIn("Outside it, record REPOSITORY_CONTEXT_REQUIRED for this edge only", edge["resolution"])
+        for p in probes.values():
+            if p["family"] == "selector":
+                self.assertNotIn("repo-grounding", p["covers"])
+                self.assertNotIn("repository-context", p["execution_modes"])
+
+    def test_retired_refusal_uses_isolated_inventory(self):
+        probes, _ = self.qualification_data()
+        p = probes["N-RETIRED"]
+        self.assertEqual(p["execution_modes"], ["isolated-inventory-fixture"])
+        self.assertFalse(p["inventory_fixture"]["live_root_allowed"])
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp) / "run-review-repair-loop"
+            fixture.mkdir()
+            (fixture / "SKILL.md").write_text("inert retired inventory fixture")
+            inventory = [p.name for p in Path(tmp).iterdir()]
+            retired = ["run-review-repair-loop"]
+            self.assertEqual(gen.retired_fixture_result(retired, inventory, [], retired), "PASS")
+            self.assertEqual(gen.retired_fixture_result(retired, inventory, retired, retired), "BLOCKED")
+            self.assertEqual(gen.retired_fixture_result(retired, inventory, [], []), "BLOCKED")
+
+    def test_entry_residency_and_real_operator_action_are_distinct(self):
+        probes, _ = self.qualification_data()
+        self.assertEqual(probes["P-STANDING-ENTRY"]["execution_modes"], ["fresh-session-entry"])
+        self.assertEqual(probes["N-STANDING-RESIDENCY"]["execution_modes"], ["later-turn-residency"])
+        self.assertIn("same-session", probes["N-STANDING-RESIDENCY"]["evidence_contract"]["prerequisite"])
+        p = probes["P-EXPLICIT-ship-it-or-fix-it"]
+        event = {"origin": "current-operator-instruction", "quoted": False,
+                 "activation_explicit": True, "event_identity": "real-event-receipt"}
+        self.assertTrue(gen.operator_activation_ready(p, event))
+        for bad in ({**event, "quoted": True}, {**event, "origin": "probe-fixture"},
+                    {**event, "activation_explicit": False}, {**event, "event_identity": ""}):
+            self.assertFalse(gen.operator_activation_ready(p, bad))
+        for plan in p["qualification"].values():
+            for host in plan["hosts"].values():
+                if host["cover_candidates"]:
+                    self.assertEqual(host["applicability"], "OPERATOR_ACTION_REQUIRED")
+
     def test_every_current_skill_once_and_no_retired_row(self):
         manifest = json.loads((self.root / "current-skills.json").read_bytes())
         matrix = json.loads(self.files["FIRING-MATRIX.generated.json"])

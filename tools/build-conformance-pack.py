@@ -35,7 +35,7 @@ TEAM_HUB = "Substrate-8/team-hub-operator-web"
 MACHINE_MANIFEST = "skills/generated/skill-manifest.v1.json"
 PACK_SCHEMA = "canonical-conformance-pack/v1"
 MATRIX_SCHEMA = "canonical-firing-matrix/v1"
-PROBES_SCHEMA = "canonical-conformance-probes/v1"
+PROBES_SCHEMA = "canonical-conformance-probes/v2"
 CLASSES = ("standing", "conditional", "explicit-operator")
 EXCLUSION_CUES = ("Not needed", "Not for", "Skip ", "Never ", "Do not ", "Not needed")
 TEAM_HUB_SCHEMA = "team-hub-skill/v1"
@@ -297,8 +297,8 @@ def dependency_closure(frontmatter, current_names, machine_ids):
             resolution = "CURRENT manifest member"
         elif target in machine_ids:
             resolution = ("repository-scoped: declared only in " + TEAM_HUB
-                          + "; not a CURRENT manifest member; resolvable on surface substrate8-repository, "
-                          "otherwise report under host_capability_exception")
+                          + "; not a CURRENT manifest member; resolve in that repository context. "
+                          "Outside it, record REPOSITORY_CONTEXT_REQUIRED for this edge only")
         else:
             raise PackError("DEPENDENCY_UNRESOLVABLE " + target)
         closure.append({"target": target, "resolution": resolution,
@@ -371,6 +371,7 @@ def build_row(name, row, manifest, members, frontmatter, classes, machine, curre
         "dependency_closure": closure, "child_references": children,
         "eligibility": {"task_kinds": task_kinds, "surfaces": surfaces, "roles": roles, "lanes": lanes, "platforms": platforms},
         "distribution_targets": targets, "return_contributions": contributions,
+        "qualification_routes": {surface: qualification_route(target) for surface, target in row["targets"].items()},
         "expected_effect": effect, "positive_probe_ids": [], "negative_probe_ids": [],
         "host_capability_exception": "NONE",
     }
@@ -406,7 +407,10 @@ def build_probes(rows, vocabulary, retired):
         add(f"P-SEL-{number:02d}", "selector", covers,
             "Task selectors: " + "; ".join(f"{key}={','.join(v) or '*'}" for key, v in selectors.items())
             + ". Scenarios: " + " | ".join(f"{skill}/{trigger['trigger_id']}: {trigger['description']}" for skill, trigger in members),
-            "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.")
+            "Each admitted skill fires for its scenario with a load receipt and required dependency/child routing. "
+            "Activation evidence is sufficient; domain-task completion is not required.")
+        probes[-1]["trigger_cases"] = [{"skill_id": skill, "trigger_id": trigger["trigger_id"],
+                                         "selectors": trigger["selectors"]} for skill, trigger in members]
     for row in rows:
         if row["activation_class"] == "conditional" and row["frontmatter_schema"] == TEAM_HUB_SCHEMA:
             kind = first_absent(vocabulary["task_kinds"], set(row["eligibility"]["task_kinds"]))
@@ -432,7 +436,9 @@ def build_probes(rows, vocabulary, retired):
     dependents = [r["skill_id"] for r in rows if r["dependency_closure"]]
     add("P-DEPCLOSURE", "dependency", dependents,
         "A skill with a dependency_closure fires on one of its positive triggers.",
-        "Every closure target loads with it, or the host reports the unresolvable repository-scoped target under host_capability_exception.")
+        "Test each admitted owner and each applicable dependency edge in its required context. "
+        "Resolve repo-grounding in Substrate 8 repository context; outside it, record "
+        "REPOSITORY_CONTEXT_REQUIRED for that edge without failing unrelated firing probes.")
     with_children = [r["skill_id"] for r in rows if r["child_references"]]
     add("P-CHILDREF", "child-reference", with_children,
         "A child reference's activation trigger fires (or the explicit condition the body states occurs).",
@@ -452,15 +458,198 @@ def build_probes(rows, vocabulary, retired):
         "A skill that owns a return contribution fires on one of that contribution's activation triggers.",
         "The return carries the contribution's fields.")
     add("N-RETIRED", "retired", [],
-        "Any task; the host inventory also contains a replica named " + ", ".join(sorted(retired)) + ".",
+        "Any task; an isolated inventory fixture contains a replica named " + ", ".join(sorted(retired)) + ".",
         "No retired name becomes active or appears in the load receipt; a present replica is reported BLOCKED (RETIRED_REPLICA_PRESENT).", negative=True)
     add("P-HOSTEXC-BLOCKED", "host-capability", [],
-        "The host cannot load or parse one required CURRENT skill (known case: KNOWN-ANTIGRAVITY-UNSLOP-YAML).",
+        "An isolated Antigravity parser fixture rejects canonical unslop frontmatter "
+        "under KNOWN-ANTIGRAVITY-UNSLOP-YAML. No live skill root is modified.",
         "The host reports BLOCKED for that skill with a concrete host_capability_exception; it never drops the skill silently or alters its bytes.")
     for row in rows:
         if not row["positive_probe_ids"] or not row["negative_probe_ids"]:
             raise PackError("PROBE_COVERAGE_GAP " + row["skill_id"])
     return probes
+
+
+# Qualification projects the fixed global library onto profile seats and target
+# admission. It does not change selectors or load canonical BLOCKED members.
+PRESERVED_REASON = ("Keep the accepted surface-specific continuity adapter. Its existing account repair "
+                    "and acceptance gate is separate from this source consolidation.")
+ROLE_NAMES = {"PRESSURE-TESTER": "pressure-test", "ORCHESTRATOR": "orchestrator",
+              "BUILDER": "builder", "REVIEWER": "reviewer"}
+
+
+def trigger_allowed(trigger, profile_name, profile):
+    selectors = trigger.get("selectors")
+    roles = selectors.get("roles", []) if selectors else []
+    if set(roles) & {"orchestrator", "pressure-test"} and profile_name != "hosted-coordination":
+        return False
+    return not roles or bool(set(roles) & {ROLE_NAMES.get(role, role.lower())
+                                          for role in profile["governed_roles"]})
+
+
+def qualification_route(target):
+    adaptation = target["adaptation"]
+    if adaptation == "BLOCKED":
+        route = "preserved-surface-adapter" if target.get("reason") == PRESERVED_REASON else "blocked"
+    elif adaptation == "NOT_TARGET":
+        route = "not-target"
+    else:
+        route = "canonical-target"
+    return {"route": route, "adaptation": adaptation, "reason": target.get("reason", ""),
+            "canonical_body_allowed": route == "canonical-target"}
+
+
+def profile_members(row, field, profile_name, profile):
+    allowed = {t["trigger_id"] for t in row["positive_triggers"] if trigger_allowed(t, profile_name, profile)}
+    return [
+        item["child_id" if field == "child_references" else "contribution_id"]
+        for item in row[field] if not item["activation_trigger_ids"]
+        or allowed.intersection(item["activation_trigger_ids"])]
+
+
+def add_qualification(probes, rows, profiles):
+    by_id = {row["skill_id"]: row for row in rows}
+    for probe in probes:
+        pid = probe["probe_id"]
+        modes = {
+            "P-STANDING-ENTRY": ["fresh-session-entry"],
+            "N-STANDING-RESIDENCY": ["later-turn-residency"],
+            "P-DEPCLOSURE": ["repository-context"],
+            "P-SEAT-HOSTED": ["alternate-seat-session"],
+            "P-RETURN-CONTRIB": ["alternate-seat-session"],
+            "N-RETIRED": ["isolated-inventory-fixture"],
+            "P-HOSTEXC-BLOCKED": ["host-parser-fixture"],
+        }.get(pid, ["ordinary-turn"])
+        if pid.startswith("P-EXPLICIT-"):
+            modes = ["operator-authorized"]
+        if any(case["selectors"]["roles"] for case in probe.get("trigger_cases", [])):
+            modes = ["alternate-seat-session"]
+        probe["execution_modes"] = modes
+        probe["evidence_contract"] = {
+            "scope": "activation-load-routing" if probe["family"] == "selector" else probe["family"],
+            "domain_task_completion_required": False,
+            "operator_authority_source": "real-current-operator-instruction" if "operator-authorized" in modes else "unchanged",
+            "quoted_probe_text_grants_authority": False,
+            "results": "per admitted skill and applicable child/contribution; blocked admission stays skill-local",
+        }
+        if pid == "P-RETURN-CONTRIB":
+            probe["evidence_contract"]["scope"] = "required-return-fields"
+        if pid == "N-STANDING-RESIDENCY":
+            probe["evidence_contract"]["prerequisite"] = "same-session P-STANDING-ENTRY receipt; later distinct turn"
+        if pid == "N-RETIRED":
+            probe["inventory_fixture"] = {"live_root_allowed": False, "required_report": "RETIRED_REPLICA_PRESENT"}
+        if pid == "P-DEPCLOSURE":
+            probe["repository_context"] = TEAM_HUB
+            probe["evidence_contract"]["outside_repository"] = "REPOSITORY_CONTEXT_REQUIRED for the edge only"
+        if pid == "P-HOSTEXC-BLOCKED":
+            probe["host_condition"] = {"surface": "antigravity", "exception_id": "KNOWN-ANTIGRAVITY-UNSLOP-YAML",
+                                       "premise": "isolated parser fixture rejects canonical unslop frontmatter"}
+        probe["qualification"] = {}
+        for pname, profile in profiles.items():
+            status, reason = "APPLICABLE", "global probe applies to this profile"
+            if pid == "P-SEAT-HOSTED" and pname != "hosted-coordination":
+                status, reason = "NOT_APPLICABLE", "hosted seat positive belongs only to hosted-coordination"
+            elif pid == "N-SEAT-LOCAL-PROMOTION" and pname != "local-builder-reviewer":
+                status, reason = "NOT_APPLICABLE", "local seat non-promotion probe"
+            elif pid == "P-HOSTEXC-BLOCKED" and "antigravity" not in profile["manifest_surfaces"]:
+                status, reason = "NOT_APPLICABLE", "Antigravity parser condition only"
+            elif probe.get("trigger_cases") and not any(trigger_allowed(c, pname, profile) for c in probe["trigger_cases"]):
+                status, reason = "NOT_APPLICABLE", "no positive scenario has a permitted profile seat"
+            elif pid.startswith("P-EXPLICIT-"):
+                status, reason = "OPERATOR_ACTION_REQUIRED", "requires real operator instruction; quoted probe text is inert"
+            hosts = {}
+            for surface in profile["manifest_surfaces"]:
+                host_status, host_reason = status, reason
+                if pid == "P-HOSTEXC-BLOCKED" and surface != "antigravity":
+                    host_status, host_reason = "NOT_APPLICABLE", "Antigravity parser condition only"
+                cover = {}
+                if host_status != "NOT_APPLICABLE":
+                    for name in probe["covers"]:
+                        row = by_id[name]
+                        if probe.get("trigger_cases") and not any(c["skill_id"] == name and trigger_allowed(c, pname, profile)
+                                                                   for c in probe["trigger_cases"]):
+                            continue
+                        members = None
+                        if probe["family"] in ("child-reference", "return-contribution"):
+                            field = "child_references" if probe["family"] == "child-reference" else "return_contributions"
+                            members = profile_members(row, field, pname, profile)
+                            if not members:
+                                continue
+                        route = row["qualification_routes"][surface]
+                        if route["route"] == "not-target":
+                            continue
+                        cover[name] = {"route": route["route"]}
+                        if members is not None:
+                            cover[name]["member_ids"] = members
+                if probe["covers"] and not cover and host_status != "NOT_APPLICABLE":
+                    host_status, host_reason = "NOT_APPLICABLE", "no target owner with an eligible scenario"
+                hosts[surface] = {"applicability": host_status, "reason": host_reason, "cover_candidates": cover}
+            states = {h["applicability"] for h in hosts.values()}
+            # A profile with a named host condition remains applicable, with a
+            # mandatory host refinement. The host never chooses the branch.
+            profile_status = ("APPLICABLE" if "APPLICABLE" in states else "OPERATOR_ACTION_REQUIRED"
+                              if "OPERATOR_ACTION_REQUIRED" in states else "NOT_APPLICABLE")
+            probe["qualification"][pname] = {"applicability": profile_status, "hosts": hosts}
+
+
+def admitted_cover(probe, profile, surface, admission_evidence):
+    """Resolve generated candidates using identity-verified admission receipts.
+
+    The caller must verify receipt provenance against accepted source evidence
+    and measured host bytes. This function checks receipt completeness, not
+    authenticity, and never reads or loads a skill body.
+    """
+    host = probe["qualification"][profile]["hosts"][surface]
+    active, blocked = {}, {}
+    for name, candidate in host["cover_candidates"].items():
+        route = candidate["route"]
+        receipt = admission_evidence.get(name, {})
+        if route == "blocked":
+            blocked[name] = "TARGET_BLOCKED"
+            continue
+        required = ("accepted_source", "acceptance_record", "accepted_identity", "observed_identity")
+        if route == "preserved-surface-adapter":
+            accepted, observed = receipt.get("accepted_identity", {}), receipt.get("observed_identity", {})
+            complete = (all(receipt.get(k) for k in required) and isinstance(accepted, dict)
+                        and isinstance(accepted.get("bytes"), int) and accepted["bytes"] > 0
+                        and isinstance(accepted.get("sha256"), str) and HEX64.fullmatch(accepted["sha256"])
+                        and accepted == observed)
+            if not complete:
+                blocked[name] = "ACCEPTED_ADAPTER_IDENTITY_REQUIRED"
+                continue
+        elif receipt.get("identity_verified") is not True:
+            blocked[name] = "TARGET_IDENTITY_REQUIRED"
+            continue
+        active[name] = candidate
+    return {"applicability": host["applicability"], "admitted": active, "blocked": blocked}
+
+
+def firing_result(probe, observation):
+    """Check selector evidence only; full domain work is outside this seam.
+
+    Apply per admitted skill/scenario. Values represent independently captured
+    receipts, not a host's unsupported assertion. Admission is checked first.
+    """
+    if probe["family"] != "selector":
+        raise PackError("NOT_A_SELECTOR_PROBE")
+    if probe["polarity"] == "negative":
+        return "PASS" if observation.get("fired") is False and observation.get("body_loaded") is False else "BLOCKED"
+    required = ("fired", "body_loaded", "dependency_routing_correct", "child_routing_correct")
+    return "PASS" if all(observation.get(k) is True for k in required) and observation.get("load_receipt") else "BLOCKED"
+
+
+def operator_activation_ready(probe, authority):
+    """Probe text is data. Only a separately verified operator event can unlock."""
+    if "operator-authorized" not in probe["execution_modes"]:
+        raise PackError("NOT_AN_OPERATOR_PROBE")
+    return (authority.get("origin") == "current-operator-instruction" and authority.get("quoted") is False
+            and authority.get("activation_explicit") is True and bool(authority.get("event_identity")))
+
+
+def retired_fixture_result(retired_names, inventory_names, loaded_names, reported_blocked):
+    """Judge isolated-inventory observations without touching a live root."""
+    present = set(retired_names) & set(inventory_names)
+    return "PASS" if present and not (set(retired_names) & set(loaded_names)) and present <= set(reported_blocked) else "BLOCKED"
 
 
 def matrix_markdown(matrix):
@@ -497,14 +686,23 @@ def matrix_markdown(matrix):
 def probes_markdown(probes):
     lines = ["<!-- GENERATED FILE. Source: CONFORMANCE-PROBES.generated.json. Do not edit. -->",
              "# Conformance probes", "",
-             "Run every probe once per host. One probe may cover several skills. Report PASS or BLOCKED per probe id "
-             "and per skill id as `ADAPT-THIS-HOST.md` states. Known host exceptions are listed in `SURFACE-PROFILES.json`.", ""]
+             "Account for every global ID. Execute only its generated profile and host applicability. "
+             "Use the required execution modes and admission route in ADAPT-THIS-HOST.md.", ""]
     for family in sorted({p["family"] for p in probes["probes"]}):
         lines += [f"## {family}", ""]
         for probe in [p for p in probes["probes"] if p["family"] == family]:
             covers = ", ".join("`" + s + "`" for s in probe["covers"]) or "(all skills / host)"
             lines += [f"### `{probe['probe_id']}` ({probe['polarity']})", "", f"Covers: {covers}", "",
                       f"Scenario: {probe['scenario']}", "", f"Expected: {probe['expected']}", ""]
+            if "qualification" in probe:
+                lines += ["Execution modes: " + ", ".join(probe["execution_modes"]), "",
+                          "| Profile | Host | Applicability | Candidate owners |",
+                          "|---|---|---|---|"]
+                for profile, plan in sorted(probe["qualification"].items()):
+                    for host, entry in sorted(plan["hosts"].items()):
+                        owners = ", ".join(name + ":" + cover["route"] for name, cover in sorted(entry["cover_candidates"].items())) or "none"
+                        lines.append(f"| {profile} | {host} | {entry['applicability']} | {owners} |")
+                lines += ["", "Use the machine row for exact reasons and child/contribution case IDs.", ""]
     return ("\n".join(lines).rstrip("\n") + "\n").encode()
 
 
@@ -547,6 +745,7 @@ def generate(checker, checker_identity, manifest_path, manifest_commit, roots, r
               "selector_vocabulary": vocabulary, "retired": retired, "skills": rows}
     probes = {"schema": PROBES_SCHEMA, "manifest_sha256": matrix["manifest"]["sha256"],
               "probes": build_probes(rows, vocabulary, retired)}
+    add_qualification(probes["probes"], rows, json.loads(authored["SURFACE-PROFILES.json"])["profiles"])
     files["current-skills.json"] = manifest_bytes
     files["FIRING-MATRIX.generated.json"] = json_bytes(matrix)
     files["FIRING-MATRIX.generated.md"] = matrix_markdown(matrix)
