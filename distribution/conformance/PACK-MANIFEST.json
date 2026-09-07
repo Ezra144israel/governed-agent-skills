@@ -1,0 +1,292 @@
+{
+  "authored_inputs": [
+    "ADAPT-THIS-HOST.md",
+    "SURFACE-PROFILES.json",
+    "tools/conformance/activation-classes.json"
+  ],
+  "checker": {
+    "bytes": 32282,
+    "sha256": "7adbcb1e07ae5c6a7203a7fdbb9375b4b327952ec1416e45295c2b91ab859b87"
+  },
+  "files": {
+    "ADAPT-THIS-HOST.md": {
+      "bytes": 4362,
+      "sha256": "86824fdf27270f57509978ea30e30b8f27a55d6985500e14c57690d0a8c0001c"
+    },
+    "CONFORMANCE-PROBES.generated.json": {
+      "bytes": 24327,
+      "sha256": "8d9877abebefdb5913cb779b71db1b7a16731b290f8102c9aaf8f056858b9422"
+    },
+    "CONFORMANCE-PROBES.md": {
+      "bytes": 18737,
+      "sha256": "aeadb3fc33a711605e5e086ca04db2f9b48d37320f15f2e98a1445b8cedb70a4"
+    },
+    "FIRING-MATRIX.generated.json": {
+      "bytes": 69726,
+      "sha256": "8e1056ae11a00f1de968999d56e6f799b520c9f538b8608d84435359e54038a8"
+    },
+    "FIRING-MATRIX.generated.md": {
+      "bytes": 15574,
+      "sha256": "483698083e7205f05ed61badfdf078e9a894a761ef4489b6d7770dcd60871f1d"
+    },
+    "SURFACE-PROFILES.json": {
+      "bytes": 3781,
+      "sha256": "18428f9044c67d1b6df95b72c44fdec0f1787ec55614cebcd80ee75326c75a4d"
+    },
+    "current-skills.json": {
+      "bytes": 62018,
+      "sha256": "b29ca4332422b9e4b5ef922c09b16d2e34b53c6db6bb870fe9d17f3ce2f5a002"
+    },
+    "skills/blast-radius/SKILL.md": {
+      "bytes": 5574,
+      "sha256": "4f29bb3d42344f46b68930ecd374b20bc114efcd4ed66ec9f61f8906098469fd"
+    },
+    "skills/cil-grounding/SKILL.md": {
+      "bytes": 10190,
+      "sha256": "f9320814265a1136be9f0899cfea3cb94d78899e440fa76baa2989f5d53c5fd6"
+    },
+    "skills/cil-mode-switch/SKILL.md": {
+      "bytes": 14225,
+      "sha256": "2fbd82958a20c2df828dd22fca2eacbb30b59a6ba6a67b71f1cda48c3463c973"
+    },
+    "skills/cil-mode-switch/acceptance/frozen-prompts.json": {
+      "bytes": 2568,
+      "sha256": "eda10f48cffbe89e017f9968360c90465b268722b6a600eff4a16a371179ddd5"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/artifacts/surface-alpha-install-observation.json": {
+      "bytes": 1380,
+      "sha256": "87603032bd53df7afca79eb1689fb1ba0e64fd14241661a1ae91f63bb86dc0be"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/artifacts/surface-beta-install-observation.json": {
+      "bytes": 1356,
+      "sha256": "ad99621425171da196855e8f5fafd2a8b4073ca31ae4d08594fb80ab03cb6f22"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/capability/INSTALL-AUTHORITY.json": {
+      "bytes": 634,
+      "sha256": "737ddc0d14e085962785d352a27b7421d904c3b75761c4d8c3c8e192669aa327"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/capability/INSTALL-PIN.json": {
+      "bytes": 332,
+      "sha256": "731de47fb1793b0b435793ab77a4f0e372f1ae9a15f6465c657a10079a4faec3"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/capability/surface-alpha.json": {
+      "bytes": 3293,
+      "sha256": "2ebf4875afc944b83676c97cbe686252e9d5dd1d8576c10cdeee75b26464a7f7"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence-install-bound/capability/surface-beta.json": {
+      "bytes": 3391,
+      "sha256": "5c1f7c435dfa71e361a9de4067d037154de4460450059f8b2767aff60c003c1e"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence/artifacts/surface-alpha-install-observation.json": {
+      "bytes": 1380,
+      "sha256": "87603032bd53df7afca79eb1689fb1ba0e64fd14241661a1ae91f63bb86dc0be"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence/artifacts/surface-beta-install-observation.json": {
+      "bytes": 1356,
+      "sha256": "ad99621425171da196855e8f5fafd2a8b4073ca31ae4d08594fb80ab03cb6f22"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence/capability/INSTALL-PIN.json": {
+      "bytes": 332,
+      "sha256": "731de47fb1793b0b435793ab77a4f0e372f1ae9a15f6465c657a10079a4faec3"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence/capability/surface-alpha.json": {
+      "bytes": 3293,
+      "sha256": "2ebf4875afc944b83676c97cbe686252e9d5dd1d8576c10cdeee75b26464a7f7"
+    },
+    "skills/cil-mode-switch/lib/fixtures/evidence/capability/surface-beta.json": {
+      "bytes": 3391,
+      "sha256": "5c1f7c435dfa71e361a9de4067d037154de4460450059f8b2767aff60c003c1e"
+    },
+    "skills/cil-mode-switch/lib/fixtures/restore-vectors.json": {
+      "bytes": 14507,
+      "sha256": "1fa264c8c68e95e2b490d3a48d082f885bde63faa2a628da0a698650eb27b3df"
+    },
+    "skills/cil-mode-switch/schema/capability-record.schema.json": {
+      "bytes": 3619,
+      "sha256": "a3fc3ff251b10ebd122bebc8aded9abb8eb07bd300bfac95ea8f1efe5a2a3721"
+    },
+    "skills/cil-mode-switch/schema/install-authority.schema.json": {
+      "bytes": 2771,
+      "sha256": "9e1511e0dd7c08582a96c02765aff72bbee704245295bbc5bf727ca9d33b4f8b"
+    },
+    "skills/cil-mode-switch/schema/install-pin.schema.json": {
+      "bytes": 817,
+      "sha256": "100ff57d7f3092736d2d7d04e2e72fa4dad102074c57d40b63ff3ce1c5286f76"
+    },
+    "skills/cil-mode-switch/schema/mode-baseline.schema.json": {
+      "bytes": 1184,
+      "sha256": "d103a96c750528de193f920d1763ca2a10ca703c90ad4eb8a5d641ca7af28093"
+    },
+    "skills/cil-mode-switch/schema/restore-trace.schema.json": {
+      "bytes": 2163,
+      "sha256": "2901fb9d9a22563aa54d0b71c06f151b7578d06af64c0d9a3dc0109676eb6275"
+    },
+    "skills/cil-mode-switch/schema/rollback-requirements.schema.json": {
+      "bytes": 2653,
+      "sha256": "b1673e222be7879b2228449ecc48ec1c569adf587ff9ac88ead29b25246010a3"
+    },
+    "skills/cil-mode-switch/schema/source-set-measurement.schema.json": {
+      "bytes": 640,
+      "sha256": "b0281c66ac257ee6d8cccf82b21b8de5b89b249c2921c6b278bce31633848511"
+    },
+    "skills/cil-mode-switch/template/rollback-requirements.template.json": {
+      "bytes": 1746,
+      "sha256": "091fe6a04c05d2fc46bbd47e2f7bc51e2e3c6a988b39cdcca24f3499b3dd39df"
+    },
+    "skills/code-quality/SKILL.md": {
+      "bytes": 20871,
+      "sha256": "55df500311ab9505e8bca07ed24613df88c6198046a181cab20d2a6e611fa341"
+    },
+    "skills/continuity-handoff/SKILL.md": {
+      "bytes": 48730,
+      "sha256": "f6ffea7192239985ecbfc7c449990ab43521f50e6c264506c1eae4a6864cbdaf"
+    },
+    "skills/continuity-handoff/reference/builder-session.md": {
+      "bytes": 3804,
+      "sha256": "f09ce69af8aa075713cd51828871e65a4ec51a89daae1776d914e56f50c8c143"
+    },
+    "skills/continuity-handoff/reference/orchestrator-session.md": {
+      "bytes": 3025,
+      "sha256": "b2a8391a602e74001662e2ad721a469ad03a91e52fcf9e7b92959cd320627470"
+    },
+    "skills/continuity-handoff/reference/pressure-tester-session.md": {
+      "bytes": 3013,
+      "sha256": "13c898de97ec2cd12b03c879f7c41acfa4de3593fe5bcbf619c0227f44484089"
+    },
+    "skills/continuity-handoff/reference/relay-queue.md": {
+      "bytes": 6684,
+      "sha256": "be151a20f1c0b6d0a8089f37a4ba7aec025505ae0a262095e87fef77711bccb5"
+    },
+    "skills/diagnosing-bugs/SKILL.md": {
+      "bytes": 9800,
+      "sha256": "3166460a8c4f88c3782abdcc298b9c8fd43535ee642bf95388d2b42a8347dcfe"
+    },
+    "skills/encode-lessons-in-structure/SKILL.md": {
+      "bytes": 5040,
+      "sha256": "e26296e18d4e101da517b7155dd110172fe801de06cdd5b80ee85486d172c3b7"
+    },
+    "skills/governed-operator/SKILL.md": {
+      "bytes": 17020,
+      "sha256": "6e731963212006e83c441f3128ec2ab78996cf9f7a96e5ab0a24f90316705a68"
+    },
+    "skills/grilling/SKILL.md": {
+      "bytes": 5075,
+      "sha256": "f1f6f3048709105879dfc3a420a5a86ca882e4cc39d5483a4a3e1f62c2b14472"
+    },
+    "skills/portable-adaptive-planning/SKILL.md": {
+      "bytes": 3496,
+      "sha256": "e8b0b213fa5b7b1ac7e718bd896c096ab02a1fe9ffd81027e9a17b7f2b86e1d0"
+    },
+    "skills/portable-adaptive-planning/references/blueprint.md": {
+      "bytes": 1370,
+      "sha256": "c532c1030fa5fe72050770fd69ca120806415612352ed0a092893acea8b14627"
+    },
+    "skills/reasoning-doctrine/SKILL.md": {
+      "bytes": 4382,
+      "sha256": "5062ed79aca8064345194fc1d9b644816db2c897dfd414c92221e138ad2d6314"
+    },
+    "skills/reasoning-doctrine/references/decomposition-and-delegation.md": {
+      "bytes": 3319,
+      "sha256": "d0c18f080650159a2e23a11b3bd7f3c6bd658803d69095cd1198cea4bf98ff71"
+    },
+    "skills/reasoning-doctrine/references/escalation-and-retries.md": {
+      "bytes": 3054,
+      "sha256": "91869c84a0e476bd85f3bd697fb282b265c1dc1a3fb47d8cbbcd9b68a64038b5"
+    },
+    "skills/reasoning-doctrine/references/failure-patterns.md": {
+      "bytes": 3516,
+      "sha256": "54aa145572365c79a4fb491c8ffdea0cb1eb38f932e8ac3881d0c74d51560215"
+    },
+    "skills/reasoning-doctrine/references/find-a-way.md": {
+      "bytes": 5488,
+      "sha256": "d8cb85868d682563560e1c7314a1327cdf04fe856ecf0bc4b311342aca993343"
+    },
+    "skills/ship-it-or-fix-it/SKILL.md": {
+      "bytes": 22673,
+      "sha256": "d20caad4d590744f2afc32c95d168161f99108ba81a0e584e8bff7304a85b49e"
+    },
+    "skills/technique-scout/MANIFEST.md": {
+      "bytes": 5856,
+      "sha256": "e3e43d4054e154ff7359deea57f210d47446b60fd6bfad288174685fd527ea52"
+    },
+    "skills/technique-scout/SKILL.md": {
+      "bytes": 30317,
+      "sha256": "63b64c9844ce7c4da670af77620bcce483e3d4c947fe1e35ebba459eb2649221"
+    },
+    "skills/technique-scout/references/crosswalk.md": {
+      "bytes": 37214,
+      "sha256": "6566c0e526cd26c993481eabb6d7cf66479b1be374d2ada642cda0d88ae17643"
+    },
+    "skills/technique-scout/references/deposit.md": {
+      "bytes": 6377,
+      "sha256": "b4da3ced43a06fcc719cb15465aaaebb877536b1be856e4bcf8bf612da672985"
+    },
+    "skills/technique-scout/references/failure-modes.md": {
+      "bytes": 11192,
+      "sha256": "c40adb3c569820641f46ad176e096cfc819a1665938ccd8ceb599d9835f4513c"
+    },
+    "skills/technique-scout/references/provenance.md": {
+      "bytes": 11937,
+      "sha256": "4014ba231a34c537bbe73f6cd7803d624b6da6bdb670ac3eb5f15ac801fd90a2"
+    },
+    "skills/technique-scout/references/relevance.md": {
+      "bytes": 12076,
+      "sha256": "43252ef11548c4d70385b58221b397a2e9b1494381dc50861768b4c2d80bf819"
+    },
+    "skills/technique-scout/references/security.md": {
+      "bytes": 8751,
+      "sha256": "537630a1ee53aec52fa4339ef3ffef2adb34e50786adc8c584740209fc450cf5"
+    },
+    "skills/technique-scout/references/sources.md": {
+      "bytes": 14548,
+      "sha256": "f257e3b59879695b8a75ee3c61218bac4d522c3b2718cc5ca0f0f4a74435d563"
+    },
+    "skills/test-verification/SKILL.md": {
+      "bytes": 19713,
+      "sha256": "2bfaf989f952ed098fad528a49ab1ed3db08bbe74dd1d38fbfc9b02de3302786"
+    },
+    "skills/test-verification/reference/objective-integrity.md": {
+      "bytes": 6627,
+      "sha256": "f58659860e469a491e9f9b67f6b42d6bd88ec62fca811a684a8e5f149a92f2e1"
+    },
+    "skills/unslop/SKILL.md": {
+      "bytes": 9940,
+      "sha256": "8e6472835009def01137d6c3fb241d6d3dbbc59ce4f5bd613dd34636b8d83bd1"
+    },
+    "skills/write-maintainable-code/SKILL.md": {
+      "bytes": 3892,
+      "sha256": "982b078511aedc30001f7926880f1c79c3d814875bacc640e6c46a7fda4cc4f5"
+    },
+    "skills/writing-for-agents/SKILL.md": {
+      "bytes": 10883,
+      "sha256": "2099180e990aaf69b5c8049d5f9c0164966cd4b4de9500fefcca1184a0d40a20"
+    }
+  },
+  "manifest": {
+    "bytes": 62018,
+    "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+    "repository": "Ezra144israel/governed-agent-skills",
+    "revision": "2026-09-06-ownership-resolution-v1",
+    "sha256": "b29ca4332422b9e4b5ef922c09b16d2e34b53c6db6bb870fe9d17f3ce2f5a002"
+  },
+  "note": "Derived distribution snapshot. Not a source owner. Regenerate with tools/build-conformance-pack.py; identical source commits and inputs produce identical bytes.",
+  "schema": "canonical-conformance-pack/v1",
+  "sources": [
+    {
+      "commit": "650148ffe5cb1f96b04efd2b1dccff217122a7c8",
+      "repository": "Ezra144israel/cil-mode-switch"
+    },
+    {
+      "commit": "db692c833f227ac790788a6a7fa32e4e8fbba039",
+      "repository": "Ezra144israel/collective-intelligence-layer"
+    },
+    {
+      "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+      "repository": "Ezra144israel/governed-agent-skills"
+    },
+    {
+      "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+      "repository": "Substrate-8/team-hub-operator-web"
+    }
+  ]
+}

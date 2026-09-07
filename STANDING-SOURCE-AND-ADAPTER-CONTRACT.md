@@ -74,6 +74,14 @@ legacy replica and cannot select source bytes. Generated packets live only in
 `distribution/current/` and carry the manifest identity, surface adaptation,
 complete member identities, and a detached packet SHA-256.
 
+The portable conformance pack lives only in `distribution/conformance/`.
+`tools/build-conformance-pack.py` generates it from the CURRENT manifest and
+each canonical SKILL.md frontmatter, resolving member bytes through the same
+`skillsync` checker. It carries the exact manifest, one firing matrix, one probe
+set, the operator-owned surface profiles, and the canonical bodies. It is a
+derived distribution snapshot for hosts; it is never a source owner, and its
+`--check` mode must reproduce the committed pack byte for byte.
+
 `test-verification` has one consolidated behavior body here. The Team Hub
 repository keeps a generated routing pointer controlled by this manifest.
 Its pointer contains no second test policy. The objective-integrity reference

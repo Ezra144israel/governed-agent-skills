@@ -1,0 +1,28 @@
+{
+  "schema": "cil-mode-switch-rollback-requirements/v2",
+  "status": "TEMPLATE",
+  "authoritative": false,
+  "installId": null,
+  "requirements": [
+    "Every installed surface has its own rollback entry. Rollback is per surface and is never falsely atomic.",
+    "Capture the prior known-good payload identity for a surface BEFORE the first install mutation on that surface. A capture taken after the write is not a known-good identity.",
+    "Where a surface genuinely held no prior payload, record priorIdentity as absent:<REASON> and make removal the rollback action. Never leave it null.",
+    "Capture the candidate payload identity as part of the install receipt for that surface.",
+    "A location is not an identity. A path can be rewritten, and a path to an uncommitted local file cannot be restored from.",
+    "Rollback removes the candidate payload, any adapter or hook it installed, and any cached evidence home it created.",
+    "Rollback restores the prior known-good payload and reruns that surface's prior entry proof.",
+    "If the candidate changed wake or compaction behavior, verify the prior post-compaction behavior is restored.",
+    "Publication never implies install state, and install state never implies behavioral proof.",
+    "A surface with no durable prior and candidate identity is not installable."
+  ],
+  "surfaces": [
+    {
+      "surface": "<SURFACE_ID>",
+      "payloadLocation": "<INSTALL_RESOLVED_PAYLOAD_LOCATION>",
+      "priorKnownGood": "<INSTALL_RESOLVED_PRIOR_PAYLOAD_LOCATION>",
+      "rollbackAction": "Remove the candidate payload and adapter, restore the prior known-good payload, and rerun this surface's entry proof.",
+      "candidateIdentity": null,
+      "priorIdentity": null
+    }
+  ]
+}

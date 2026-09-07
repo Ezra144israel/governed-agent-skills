@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CIL Mode Switch Surface Capability Record",
+  "description": "Per-surface capability evidence. This package ships the MODEL only. A record instance is written into the install-bound evidence home at install time and is never supplied as an argument to an evaluation call.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "surface", "recordId", "establishedAt", "establishedOutsideEvaluationCall", "capabilities"],
+  "properties": {
+    "schema": { "const": "cil-mode-switch-capability-record/v1" },
+    "surface": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+    "recordId": { "type": "string", "minLength": 8 },
+    "establishedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "establishedOutsideEvaluationCall": { "const": true },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["freshSessionEntry", "explicitSwitch", "compactionSignal", "softRefresh", "standingResidency", "sourceIdentityRead", "authorityRead", "triggerAttachment", "structuralBoundary"],
+      "properties": {
+        "freshSessionEntry": { "$ref": "#/$defs/capability" },
+        "explicitSwitch": { "$ref": "#/$defs/capability" },
+        "compactionSignal": { "$ref": "#/$defs/capability" },
+        "softRefresh": { "$ref": "#/$defs/capability" },
+        "standingResidency": { "$ref": "#/$defs/capability" },
+        "sourceIdentityRead": { "$ref": "#/$defs/capability" },
+        "authorityRead": { "$ref": "#/$defs/capability" },
+        "triggerAttachment": { "$ref": "#/$defs/capability" },
+        "structuralBoundary": { "$ref": "#/$defs/capability" }
+      }
+    },
+    "rollbackRequirementsRef": { "type": "string" }
+  },
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "evidence", "evidenceIdentity", "directEvidence"],
+      "description": "A proof-bearing state — PROVEN or NOT_APPLICABLE — is a positive claim about the surface. It must also carry directEvidence, an evidenceBasis that classifies the surface, an evidencePath contained by the evidence home, and an evidenceIdentity that is the SHA-256 of that artifact's bytes. Those extra requirements live in validateCapabilityRecord, because a path and a digest can only be resolved against a specific evidence home.",
+      "properties": {
+        "state": { "enum": ["PROVEN", "POSSIBLE_UNPROVEN", "NOT_APPLICABLE", "ABSENT", "UNKNOWN"] },
+        "evidence": { "type": "string", "minLength": 1 },
+        "evidenceIdentity": {
+          "type": ["string", "null"],
+          "description": "Durable content identity of the cited evidence artifact, as sha256:<64 lowercase hex>. Required for a proof-bearing state. A free-text label is not an identity."
+        },
+        "directEvidence": { "type": ["string", "null"] },
+        "evidenceBasis": {
+          "type": ["string", "null"],
+          "enum": ["SURFACE_INSPECTED", "SURFACE_DOCUMENTED", "EVALUATOR_NO_READ_PATH", null],
+          "description": "What the state rests on. SURFACE_INSPECTED and SURFACE_DOCUMENTED classify the surface itself. EVALUATOR_NO_READ_PATH says only that the evaluating actor could not inspect the surface; that is UNKNOWN, and never a proof-bearing state."
+        },
+        "evidencePath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Evidence artifact, relative to the evidence home. It may not be absolute and may not escape the home."
+        }
+      }
+    }
+  }
+}

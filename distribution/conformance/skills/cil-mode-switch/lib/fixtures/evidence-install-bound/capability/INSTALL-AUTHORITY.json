@@ -1,0 +1,11 @@
+{
+  "schema": "cil-mode-switch-install-authority/v1",
+  "installId": "fixture-install-0001",
+  "boundary": "INSTALL_BOUND",
+  "establishedBy": "fixture-installer",
+  "evidenceHomeControl": "MODEL ONLY. A real Q4 install holds this home read-only to the evaluating actor, by filesystem ownership, image layer, or managed configuration. This fixture models that state so the qualified path is testable; it is not itself a Q4 boundary.",
+  "evaluatorCanWriteEvidenceHome": false,
+  "evaluatorCanRedirectEvidenceHome": false,
+  "qualifiedAt": "2026-08-23",
+  "note": "Synthetic fixture. Q4 has not been performed for any real surface."
+}

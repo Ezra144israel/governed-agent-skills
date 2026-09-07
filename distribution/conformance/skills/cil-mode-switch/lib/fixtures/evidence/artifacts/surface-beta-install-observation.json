@@ -1,0 +1,39 @@
+{
+  "schema": "cil-mode-switch-install-observation/v1",
+  "surface": "surface-beta",
+  "observedAt": "2026-08-23",
+  "observedBy": "fixture-installer",
+  "note": "Synthetic fixture. It models the durable artifact a real install writes when it inspects a surface. It is not any real surface's capability state.",
+  "observations": [
+    {
+      "capability": "freshSessionEntry",
+      "result": "OBSERVED",
+      "detail": "The install saw the entry event fire on a fresh session."
+    },
+    {
+      "capability": "standingResidency",
+      "result": "OBSERVED",
+      "detail": "The install saw the standing stack load and stay loaded."
+    },
+    {
+      "capability": "sourceIdentityRead",
+      "result": "OBSERVED",
+      "detail": "The install resolved a source identity through the surface's own read path."
+    },
+    {
+      "capability": "authorityRead",
+      "result": "OBSERVED",
+      "detail": "The install resolved an authority record through the surface's own read path."
+    },
+    {
+      "capability": "triggerAttachment",
+      "result": "OBSERVED",
+      "detail": "The install read live trigger attachment through the surface's own introspection path."
+    },
+    {
+      "capability": "structuralBoundary",
+      "result": "OBSERVED",
+      "detail": "The install saw a structural work-boundary event on this surface."
+    }
+  ]
+}

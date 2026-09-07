@@ -1,0 +1,47 @@
+{
+  "schema": "conformance-activation-classes/v1",
+  "purpose": "Activation class for the CURRENT skills whose canonical frontmatter declares no activation_triggers. A skill with declared triggers is always `conditional` and is never listed here. Each class is bound to a phrase quoted from the skill's own description; the generator refuses to run when the phrase is no longer present, so this file cannot drift silently from the source.",
+  "classes": {
+    "reasoning-doctrine": {
+      "class": "standing",
+      "basis": "The working method for every nontrivial task",
+      "note": "Declared a standing environment skill by AGENTS.md in both source repositories."
+    },
+    "governed-operator": {
+      "class": "standing",
+      "basis": "Full governance constitution for work that touches shared state",
+      "note": "Declared a standing environment skill by AGENTS.md in both source repositories; its description also names what it is not needed for."
+    },
+    "write-maintainable-code": {
+      "class": "conditional",
+      "basis": "Use after outcome, scope, authority, and acceptance evidence are fixed"
+    },
+    "portable-adaptive-planning": {
+      "class": "conditional",
+      "basis": "Use for planning, roadmaps, design, architecture, sequencing, or before consequential work"
+    },
+    "ship-it-or-fix-it": {
+      "class": "explicit-operator",
+      "basis": "Load ONLY when the operator explicitly sets Governance Dial G2"
+    },
+    "grilling": {
+      "class": "conditional",
+      "basis": "Use when the user wants to stress-test their thinking"
+    },
+    "unslop": {
+      "class": "conditional",
+      "basis": "Applies to every prose surface",
+      "negative_scenario": "the response is only a machine-readable JSON document or raw command output with no prose"
+    },
+    "cil-mode-switch": {
+      "class": "standing",
+      "basis": "automatically restore a CIL-conditioned operating posture across a session",
+      "negative_scenario": "a later turn in the same session with a trustworthy baseline and no explicit `Mode Switch` instruction",
+      "note": "Body: a full switch runs on an explicit `Mode Switch`, on a proven fresh-session entry signal, or when restore cannot establish a trustworthy same-session baseline. Pre-wiring source; it installs nothing and grants nothing."
+    },
+    "cil-grounding": {
+      "class": "standing",
+      "basis": "Read once at session start"
+    }
+  }
+}

@@ -1,0 +1,505 @@
+{
+  "manifest_sha256": "b29ca4332422b9e4b5ef922c09b16d2e34b53c6db6bb870fe9d17f3ce2f5a002",
+  "probes": [
+    {
+      "covers": [
+        "cil-grounding",
+        "cil-mode-switch",
+        "governed-operator",
+        "reasoning-doctrine"
+      ],
+      "expected": "The first substantive response carries a load receipt naming every standing skill; each is applied.",
+      "family": "standing",
+      "polarity": "positive",
+      "probe_id": "P-STANDING-ENTRY",
+      "scenario": "A fresh session starts with any nontrivial task and no explicit skill request."
+    },
+    {
+      "covers": [
+        "cil-grounding",
+        "cil-mode-switch",
+        "governed-operator",
+        "reasoning-doctrine"
+      ],
+      "expected": "No standing skill is re-read or re-announced; residency holds.",
+      "family": "standing",
+      "polarity": "negative",
+      "probe_id": "N-STANDING-RESIDENCY",
+      "scenario": "After entry, a later turn asks a trivial factual question; no compaction, source-identity change, or operator refresh occurred."
+    },
+    {
+      "covers": [
+        "test-verification"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-01",
+      "scenario": "Task selectors: lanes=*; risk_flags=high-risk-file; roles=*; surfaces=build-review,repository; task_kinds=review,testing,verification. Scenarios: test-verification/high-risk-acceptance: high-risk behavior needs test evidence"
+    },
+    {
+      "covers": [
+        "code-quality"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-02",
+      "scenario": "Task selectors: lanes=*; risk_flags=high-risk-file; roles=*; surfaces=repository; task_kinds=refactor. Scenarios: code-quality/over-refactor-risk: a scoped change risks broad cleanup or refactor"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-03",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=builder; surfaces=documentation,team-hub-doctrine; task_kinds=continuity,handoff. Scenarios: continuity-handoff/builder-designation-addendum: load the optional BUILDER close/resume addendum as a known optimization, not as designation authority"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-04",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=orchestrator; surfaces=documentation,team-hub-doctrine; task_kinds=continuity,handoff. Scenarios: continuity-handoff/orchestrator-designation-addendum: load the optional ORCHESTRATOR close/resume addendum as a known optimization, not as designation authority | continuity-handoff/orchestrator-relay-queue: Orchestrator continuity or handoff work resumes or explicitly operates the local relay-queue surface"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-05",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=pressure-test; surfaces=documentation,team-hub-doctrine; task_kinds=continuity,handoff. Scenarios: continuity-handoff/pressure-tester-designation-addendum: load the optional PRESSURE-TESTER close/resume addendum as a known optimization, not as designation authority"
+    },
+    {
+      "covers": [
+        "test-verification"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-06",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=build-review,repository; task_kinds=review,testing. Scenarios: test-verification/coverage-review: test coverage is reviewed"
+    },
+    {
+      "covers": [
+        "blast-radius"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-07",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=build-review,repository; task_kinds=review,verification. Scenarios: blast-radius/change-risk-review: a change's cross-module breakage risk is assessed before it ships"
+    },
+    {
+      "covers": [
+        "code-quality"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-08",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=build-review,repository; task_kinds=review. Scenarios: code-quality/code-review: implementation code is under review"
+    },
+    {
+      "covers": [
+        "test-verification"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-09",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=build-review,repository; task_kinds=testing,verification. Scenarios: test-verification/behavioral-quality: behavioral test quality is assessed"
+    },
+    {
+      "covers": [
+        "code-quality",
+        "test-verification"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-10",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=build-review,repository; task_kinds=testing. Scenarios: test-verification/test-writing: tests are being written | code-quality/test-writing: tests are being written"
+    },
+    {
+      "covers": [
+        "encode-lessons-in-structure"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-11",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation,repository; task_kinds=implementation,refactor,review. Scenarios: encode-lessons-in-structure/recurring-correction: the same instruction or correction recurs and should become structure"
+    },
+    {
+      "covers": [
+        "technique-scout"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-12",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation,repository; task_kinds=review. Scenarios: technique-scout/external-source-scout: an external source is shared for a read-only scout of what is worth keeping | technique-scout/source-capability-question: the operator asks what an external repository or source actually does | technique-scout/source-roundup-triage: a top-N roundup of external sources is triaged against what this estate already has"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-13",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation,team-hub-doctrine; task_kinds=continuity,handoff. Scenarios: continuity-handoff/designation-session-close: the operator closes the current working chat for any designation (for example, we're closing the session) and carries the designation as a parameter in the handoff | continuity-handoff/designation-session-resume: a fresh session resumes any designation (for example, starting a new session) from a verified handoff pointer or the safe bare-phrase rule | continuity-handoff/designation-rotation-request: record a requested designation change and apply the work-unit closure barrier"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-14",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation,team-hub-doctrine; task_kinds=continuity. Scenarios: continuity-handoff/roadmap-truth-change: approved roadmap truth changes | continuity-handoff/phase-status-change: phase status changes"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-15",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation; task_kinds=continuity,handoff. Scenarios: continuity-handoff/phase-boundary: work reaches a phase boundary"
+    },
+    {
+      "covers": [
+        "writing-for-agents"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-16",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation; task_kinds=copy,design. Scenarios: writing-for-agents/agent-document-design: a skill, doctrine file, or pointer-reached document is created or edited"
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-17",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=documentation; task_kinds=handoff. Scenarios: continuity-handoff/long-context-transfer: long-running context must be transferred | continuity-handoff/session-agent-switch: work switches session or agent"
+    },
+    {
+      "covers": [
+        "diagnosing-bugs"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-18",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=repository,runtime; task_kinds=implementation,testing,verification. Scenarios: diagnosing-bugs/bug-diagnosis: something is broken, throwing, failing, or intermittently wrong and needs a diagnosis loop"
+    },
+    {
+      "covers": [
+        "diagnosing-bugs"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-19",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=repository,runtime; task_kinds=testing,verification. Scenarios: diagnosing-bugs/performance-regression: a performance regression needs baseline measurement and bisection"
+    },
+    {
+      "covers": [
+        "code-quality"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-20",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=repository; task_kinds=implementation. Scenarios: code-quality/implementation-logic: new implementation logic is being written"
+    },
+    {
+      "covers": [
+        "blast-radius"
+      ],
+      "expected": "Each listed skill fires for its scenario; a listed skill that stays silent is BLOCKED for that trigger.",
+      "family": "selector",
+      "polarity": "positive",
+      "probe_id": "P-SEL-21",
+      "scenario": "Task selectors: lanes=*; risk_flags=*; roles=*; surfaces=repository; task_kinds=review. Scenarios: blast-radius/small-diff-distrust: a small diff is reviewed without trust in its stated safety"
+    },
+    {
+      "covers": [
+        "write-maintainable-code"
+      ],
+      "expected": "The skill fires and the load receipt names it.",
+      "family": "description",
+      "polarity": "positive",
+      "probe_id": "P-DESC-write-maintainable-code",
+      "scenario": "A request matching the skill description: Evaluate minimum-sufficient implementation routes and enforce the selected route for a fixed, authorized outcome. Use after outcome, scope, authority, and acceptance evidence are fixed. Do not choose outcomes, set acceptance, adjudicate governance, grade finished work, design tests alone, conduct security audits, or perform unrelated cleanup."
+    },
+    {
+      "covers": [
+        "write-maintainable-code"
+      ],
+      "expected": "The skill does not fire.",
+      "family": "description",
+      "polarity": "negative",
+      "probe_id": "N-DESC-write-maintainable-code",
+      "scenario": "A request inside the skill's own exclusions: Do not choose outcomes, set acceptance, adjudicate governance, grade finished work, design tests alone, conduct security audits, or perform unrelated cleanup."
+    },
+    {
+      "covers": [
+        "portable-adaptive-planning"
+      ],
+      "expected": "The skill fires and the load receipt names it.",
+      "family": "description",
+      "polarity": "positive",
+      "probe_id": "P-DESC-portable-adaptive-planning",
+      "scenario": "A request matching the skill description: Use for planning, roadmaps, design, architecture, sequencing, or before consequential work when no current FINAL plan plus GO covers it. Fire before changes to data or schemas, credentials or auth, production or releases, repository or source-home boundaries, irreversible work, or materially costly mistakes. Re-enter when that scope appears mid-task or when restoring prior plan state. Skip factual answers, trivial reversible one-step work, and authorized Builder or Reviewer execution under a current FINAL blueprint plus GO unless a reopen condition fires."
+    },
+    {
+      "covers": [
+        "portable-adaptive-planning"
+      ],
+      "expected": "The skill does not fire.",
+      "family": "description",
+      "polarity": "negative",
+      "probe_id": "N-DESC-portable-adaptive-planning",
+      "scenario": "A request inside the skill's own exclusions: Skip factual answers, trivial reversible one-step work, and authorized Builder or Reviewer execution under a current FINAL blueprint plus GO unless a reopen condition fires."
+    },
+    {
+      "covers": [
+        "test-verification"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-test-verification",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "ship-it-or-fix-it"
+      ],
+      "expected": "The skill fires only then and the load receipt names it.",
+      "family": "explicit-operator",
+      "polarity": "positive",
+      "probe_id": "P-EXPLICIT-ship-it-or-fix-it",
+      "scenario": "The operator explicitly instructs the activation named in the description: Load ONLY when the operator explicitly sets Governance Dial G2"
+    },
+    {
+      "covers": [
+        "ship-it-or-fix-it"
+      ],
+      "expected": "The skill does not self-fire; at most it asks once.",
+      "family": "explicit-operator",
+      "polarity": "negative",
+      "probe_id": "N-EXPLICIT-ship-it-or-fix-it",
+      "scenario": "A task whose class alone might suggest the skill, with no explicit operator instruction: Never auto-activate on task class, such as security, auth, or payments. Not for ordinary governed implementation, analysis, review-only, or documentation work."
+    },
+    {
+      "covers": [
+        "grilling"
+      ],
+      "expected": "The skill fires and the load receipt names it.",
+      "family": "description",
+      "polarity": "positive",
+      "probe_id": "P-DESC-grilling",
+      "scenario": "A request matching the skill description: Grill the user relentlessly about a plan, decision, or idea, working a design tree in rounds. Use when the user wants to stress-test their thinking, before a convergence packet, or on any 'grill' trigger phrase."
+    },
+    {
+      "covers": [
+        "grilling"
+      ],
+      "expected": "The skill does not fire.",
+      "family": "description",
+      "polarity": "negative",
+      "probe_id": "N-DESC-grilling",
+      "scenario": "A request inside the skill's own exclusions: outside the described scope"
+    },
+    {
+      "covers": [
+        "unslop"
+      ],
+      "expected": "The skill fires and the load receipt names it.",
+      "family": "description",
+      "polarity": "positive",
+      "probe_id": "P-DESC-unslop",
+      "scenario": "A request matching the skill description: Cut AI tells from any writing. Applies to every prose surface: replies, docs, handoffs, convergence packets, SKILL.md bodies, PR descriptions, commit messages, and CIL records."
+    },
+    {
+      "covers": [
+        "unslop"
+      ],
+      "expected": "The skill does not fire.",
+      "family": "description",
+      "polarity": "negative",
+      "probe_id": "N-DESC-unslop",
+      "scenario": "A request inside the skill's own exclusions: probe scenario (not a source rule): the response is only a machine-readable JSON document or raw command output with no prose"
+    },
+    {
+      "covers": [
+        "blast-radius"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-blast-radius",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "diagnosing-bugs"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-diagnosing-bugs",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "encode-lessons-in-structure"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-encode-lessons-in-structure",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "writing-for-agents"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-writing-for-agents",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "technique-scout"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-technique-scout",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "code-quality"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-code-quality",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "The skill does not fire; its body is not loaded.",
+      "family": "selector",
+      "polarity": "negative",
+      "probe_id": "N-SEL-continuity-handoff",
+      "scenario": "A task classified task_kind=architecture on surface=api with no risk flags, no role, no lane."
+    },
+    {
+      "covers": [
+        "code-quality",
+        "continuity-handoff",
+        "test-verification"
+      ],
+      "expected": "Every closure target loads with it, or the host reports the unresolvable repository-scoped target under host_capability_exception.",
+      "family": "dependency",
+      "polarity": "positive",
+      "probe_id": "P-DEPCLOSURE",
+      "scenario": "A skill with a dependency_closure fires on one of its positive triggers."
+    },
+    {
+      "covers": [
+        "continuity-handoff",
+        "technique-scout",
+        "test-verification"
+      ],
+      "expected": "Exactly that child loads in addition to the root body.",
+      "family": "child-reference",
+      "polarity": "positive",
+      "probe_id": "P-CHILDREF",
+      "scenario": "A child reference's activation trigger fires (or the explicit condition the body states occurs)."
+    },
+    {
+      "covers": [
+        "continuity-handoff",
+        "technique-scout",
+        "test-verification"
+      ],
+      "expected": "The child is not loaded.",
+      "family": "child-reference",
+      "polarity": "negative",
+      "probe_id": "N-CHILDREF",
+      "scenario": "The parent fires on a trigger that is not in the child's activation_trigger_ids."
+    },
+    {
+      "covers": [],
+      "expected": "Role-specific material for that governed role is applied; ADVISOR assignment applies no governed authority.",
+      "family": "seat",
+      "polarity": "positive",
+      "probe_id": "P-SEAT-HOSTED",
+      "scenario": "A hosted-coordination surface (profile hosted-coordination) is assigned ORCHESTRATOR or PRESSURE-TESTER."
+    },
+    {
+      "covers": [
+        "continuity-handoff"
+      ],
+      "expected": "The surface stays BUILDER or REVIEWER; orchestrator-role triggers do not fire; no seat promotion.",
+      "family": "seat",
+      "polarity": "negative",
+      "probe_id": "N-SEAT-LOCAL-PROMOTION",
+      "scenario": "A local-builder-reviewer surface receives a dispatch authored by an ORCHESTRATOR (transport `SEAT:` field present)."
+    },
+    {
+      "covers": [
+        "code-quality",
+        "continuity-handoff",
+        "test-verification"
+      ],
+      "expected": "The return carries the contribution's fields.",
+      "family": "return-contribution",
+      "polarity": "positive",
+      "probe_id": "P-RETURN-CONTRIB",
+      "scenario": "A skill that owns a return contribution fires on one of that contribution's activation triggers."
+    },
+    {
+      "covers": [],
+      "expected": "No retired name becomes active or appears in the load receipt; a present replica is reported BLOCKED (RETIRED_REPLICA_PRESENT).",
+      "family": "retired",
+      "polarity": "negative",
+      "probe_id": "N-RETIRED",
+      "scenario": "Any task; the host inventory also contains a replica named builder-return, orchestrator-seat, pending-convergence, reviewer-validation, run-review-repair-loop, scouted-rules."
+    },
+    {
+      "covers": [],
+      "expected": "The host reports BLOCKED for that skill with a concrete host_capability_exception; it never drops the skill silently or alters its bytes.",
+      "family": "host-capability",
+      "polarity": "positive",
+      "probe_id": "P-HOSTEXC-BLOCKED",
+      "scenario": "The host cannot load or parse one required CURRENT skill (known case: KNOWN-ANTIGRAVITY-UNSLOP-YAML)."
+    }
+  ],
+  "schema": "canonical-conformance-probes/v1"
+}

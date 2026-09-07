@@ -1,0 +1,2107 @@
+{
+  "manifest": {
+    "bytes": 62018,
+    "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+    "repository": "Ezra144israel/governed-agent-skills",
+    "revision": "2026-09-06-ownership-resolution-v1",
+    "sha256": "b29ca4332422b9e4b5ef922c09b16d2e34b53c6db6bb870fe9d17f3ce2f5a002"
+  },
+  "retired": [
+    "builder-return",
+    "orchestrator-seat",
+    "pending-convergence",
+    "reviewer-validation",
+    "run-review-repair-loop",
+    "scouted-rules"
+  ],
+  "schema": "canonical-firing-matrix/v1",
+  "selector_vocabulary": {
+    "lanes": [
+      "builder",
+      "continuity",
+      "orchestrator",
+      "plan-intelligence",
+      "pressure-test",
+      "release",
+      "reviewer",
+      "security"
+    ],
+    "platforms": [
+      "chatgpt-project",
+      "claude-code",
+      "claude-project",
+      "codex",
+      "portable",
+      "team-hub-runtime-advisory"
+    ],
+    "risk_flags": [
+      "ambiguous-routing",
+      "auth",
+      "authorization",
+      "destructive-mutation",
+      "external-integration",
+      "high-risk-file",
+      "memory",
+      "payments",
+      "pipeline",
+      "privacy-impact",
+      "rendered-surface",
+      "runtime-governance",
+      "secrets",
+      "store-impact"
+    ],
+    "roles": [
+      "builder",
+      "continuity",
+      "designer",
+      "orchestrator",
+      "planner",
+      "pressure-test",
+      "release",
+      "reviewer",
+      "security"
+    ],
+    "surfaces": [
+      "api",
+      "backend",
+      "build-review",
+      "database",
+      "documentation",
+      "memory",
+      "native-ui",
+      "planning",
+      "rendered-copy",
+      "repository",
+      "runtime",
+      "security",
+      "team-hub-doctrine",
+      "web-ui"
+    ],
+    "task_kinds": [
+      "architecture",
+      "browser-validation",
+      "build",
+      "continuity",
+      "copy",
+      "design",
+      "handoff",
+      "implementation",
+      "planning",
+      "refactor",
+      "release",
+      "review",
+      "security-assessment",
+      "testing",
+      "verification"
+    ]
+  },
+  "skills": [
+    {
+      "activation_class": "standing",
+      "activation_class_basis": "The working method for every nontrivial task",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 4382,
+            "path": "SKILL.md",
+            "sha256": "5062ed79aca8064345194fc1d9b644816db2c897dfd414c92221e138ad2d6314"
+          },
+          {
+            "bytes": 3319,
+            "path": "references/decomposition-and-delegation.md",
+            "sha256": "d0c18f080650159a2e23a11b3bd7f3c6bd658803d69095cd1198cea4bf98ff71"
+          },
+          {
+            "bytes": 3054,
+            "path": "references/escalation-and-retries.md",
+            "sha256": "91869c84a0e476bd85f3bd697fb282b265c1dc1a3fb47d8cbbcd9b68a64038b5"
+          },
+          {
+            "bytes": 3516,
+            "path": "references/failure-patterns.md",
+            "sha256": "54aa145572365c79a4fb491c8ffdea0cb1eb38f932e8ac3881d0c74d51560215"
+          },
+          {
+            "bytes": 5488,
+            "path": "references/find-a-way.md",
+            "sha256": "d8cb85868d682563560e1c7314a1327cdf04fe856ecf0bc4b311342aca993343"
+          }
+        ],
+        "path": "skills/reasoning-doctrine",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `reasoning-doctrine`; the response applies: The working method for every nontrivial task: frame the objective, ground load-bearing facts, converge on a route, execute without drift, and verify before delivery.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-STANDING-RESIDENCY"
+      ],
+      "positive_probe_ids": [
+        "P-STANDING-ENTRY"
+      ],
+      "positive_triggers": [
+        {
+          "description": "The working method for every nontrivial task: frame the objective, ground load-bearing facts, converge on a route, execute without drift, and verify before delivery. Use for analysis, planning, implementation, debugging, document work, reviews, and multi-stage tasks.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "reasoning-doctrine/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "reasoning-doctrine",
+      "version": null
+    },
+    {
+      "activation_class": "standing",
+      "activation_class_basis": "Full governance constitution for work that touches shared state",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 17020,
+            "path": "SKILL.md",
+            "sha256": "6e731963212006e83c441f3128ec2ab78996cf9f7a96e5ab0a24f90316705a68"
+          }
+        ],
+        "path": "skills/governed-operator",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "Not needed for quick factual questions or trivial one-off answers."
+      ],
+      "expected_effect": "Load receipt names `governed-operator`; the response applies: Full governance constitution for work that touches shared state, requires independent review, spans seats, or involves planning, architecture, code, reviews, dispatches, status reports, or canonical records.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-STANDING-RESIDENCY"
+      ],
+      "positive_probe_ids": [
+        "P-STANDING-ENTRY"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Full governance constitution for work that touches shared state, requires independent review, spans seats, or involves planning, architecture, code, reviews, dispatches, status reports, or canonical records. Not needed for quick factual questions or trivial one-off answers.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "governed-operator/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "governed-operator",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": "Use after outcome, scope, authority, and acceptance evidence are fixed",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 3892,
+            "path": "SKILL.md",
+            "sha256": "982b078511aedc30001f7926880f1c79c3d814875bacc640e6c46a7fda4cc4f5"
+          }
+        ],
+        "path": "skills/write-maintainable-code",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "Do not choose outcomes, set acceptance, adjudicate governance, grade finished work, design tests alone, conduct security audits, or perform unrelated cleanup."
+      ],
+      "expected_effect": "Load receipt names `write-maintainable-code`; the response applies: Evaluate minimum-sufficient implementation routes and enforce the selected route for a fixed, authorized outcome.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-DESC-write-maintainable-code"
+      ],
+      "positive_probe_ids": [
+        "P-DESC-write-maintainable-code"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Evaluate minimum-sufficient implementation routes and enforce the selected route for a fixed, authorized outcome. Use after outcome, scope, authority, and acceptance evidence are fixed. Do not choose outcomes, set acceptance, adjudicate governance, grade finished work, design tests alone, conduct security audits, or perform unrelated cleanup.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "write-maintainable-code/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "write-maintainable-code",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": "Use for planning, roadmaps, design, architecture, sequencing, or before consequential work",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 3496,
+            "path": "SKILL.md",
+            "sha256": "e8b0b213fa5b7b1ac7e718bd896c096ab02a1fe9ffd81027e9a17b7f2b86e1d0"
+          },
+          {
+            "bytes": 1370,
+            "path": "references/blueprint.md",
+            "sha256": "c532c1030fa5fe72050770fd69ca120806415612352ed0a092893acea8b14627"
+          }
+        ],
+        "path": "skills/portable-adaptive-planning",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "Skip factual answers, trivial reversible one-step work, and authorized Builder or Reviewer execution under a current FINAL blueprint plus GO unless a reopen condition fires."
+      ],
+      "expected_effect": "Load receipt names `portable-adaptive-planning`; the response applies: Use for planning, roadmaps, design, architecture, sequencing, or before consequential work when no current FINAL plan plus GO covers it.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-DESC-portable-adaptive-planning"
+      ],
+      "positive_probe_ids": [
+        "P-DESC-portable-adaptive-planning"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Use for planning, roadmaps, design, architecture, sequencing, or before consequential work when no current FINAL plan plus GO covers it. Fire before changes to data or schemas, credentials or auth, production or releases, repository or source-home boundaries, irreversible work, or materially costly mistakes. Re-enter when that scope appears mid-task or when restoring prior plan state. Skip factual answers, trivial reversible one-step work, and authorized Builder or Reviewer execution under a current FINAL blueprint plus GO unless a reopen condition fires.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "portable-adaptive-planning/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "portable-adaptive-planning",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 19713,
+            "path": "SKILL.md",
+            "sha256": "2bfaf989f952ed098fad528a49ab1ed3db08bbe74dd1d38fbfc9b02de3302786"
+          },
+          {
+            "bytes": 6627,
+            "path": "reference/objective-integrity.md",
+            "sha256": "f58659860e469a491e9f9b67f6b42d6bd88ec62fca811a684a8e5f149a92f2e1"
+          }
+        ],
+        "path": "skills/test-verification",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [
+        {
+          "activation_trigger_ids": [],
+          "child_id": "test-verification/objective-integrity",
+          "load_condition": "only on the explicit condition the skill body states; never on the parent's ordinary triggers",
+          "path": "skills/test-verification/reference/objective-integrity.md"
+        }
+      ],
+      "dependency_closure": [
+        {
+          "condition_trigger_ids": [],
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "target": "repo-grounding"
+        }
+      ],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "routing-pointer-v1"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable",
+          "team-hub-runtime-advisory"
+        ],
+        "roles": [],
+        "surfaces": [
+          "build-review",
+          "repository"
+        ],
+        "task_kinds": [
+          "review",
+          "testing",
+          "verification"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `test-verification`; the response applies: Requires behavioral, failure-path, and durable-seam evidence for tests and review.; the return carries test-verification/test-proof",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-test-verification",
+        "N-CHILDREF"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-01",
+        "P-SEL-06",
+        "P-SEL-09",
+        "P-SEL-10",
+        "P-DEPCLOSURE",
+        "P-CHILDREF",
+        "P-RETURN-CONTRIB"
+      ],
+      "positive_triggers": [
+        {
+          "description": "tests are being written",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "testing"
+            ]
+          },
+          "trigger_id": "test-writing"
+        },
+        {
+          "description": "test coverage is reviewed",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "review",
+              "testing"
+            ]
+          },
+          "trigger_id": "coverage-review"
+        },
+        {
+          "description": "behavioral test quality is assessed",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "testing",
+              "verification"
+            ]
+          },
+          "trigger_id": "behavioral-quality"
+        },
+        {
+          "description": "high-risk behavior needs test evidence",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [
+              "high-risk-file"
+            ],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "review",
+              "testing",
+              "verification"
+            ]
+          },
+          "trigger_id": "high-risk-acceptance"
+        }
+      ],
+      "return_contributions": [
+        {
+          "activation_trigger_ids": [
+            "test-writing",
+            "coverage-review",
+            "behavioral-quality",
+            "high-risk-acceptance"
+          ],
+          "contribution_id": "test-verification/test-proof",
+          "fields": [
+            "behavior-cases",
+            "test-results",
+            "seam-quality",
+            "unverified-behavior"
+          ],
+          "requirement": "required"
+        }
+      ],
+      "skill_id": "test-verification",
+      "version": "2.2.0"
+    },
+    {
+      "activation_class": "explicit-operator",
+      "activation_class_basis": "Load ONLY when the operator explicitly sets Governance Dial G2",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 22673,
+            "path": "SKILL.md",
+            "sha256": "d20caad4d590744f2afc32c95d168161f99108ba81a0e584e8bff7304a85b49e"
+          }
+        ],
+        "path": "skills/ship-it-or-fix-it",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "Never auto-activate on task class, such as security, auth, or payments.",
+        "Not for ordinary governed implementation, analysis, review-only, or documentation work."
+      ],
+      "expected_effect": "Load receipt names `ship-it-or-fix-it`; the response applies: Oracle-frozen Builder and independent-Judge convergence cycle.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-EXPLICIT-ship-it-or-fix-it"
+      ],
+      "positive_probe_ids": [
+        "P-EXPLICIT-ship-it-or-fix-it"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Oracle-frozen Builder and independent-Judge convergence cycle. Load ONLY when the operator explicitly sets Governance Dial G2 for the task, or explicitly names this skill or an active work unit already running it. Never auto-activate on task class, such as security, auth, or payments. If a task seems to warrant G2 and the operator has not said so, ask first. Not for ordinary governed implementation, analysis, review-only, or documentation work.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "ship-it-or-fix-it/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "ship-it-or-fix-it",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": "Use when the user wants to stress-test their thinking",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 5075,
+            "path": "SKILL.md",
+            "sha256": "f1f6f3048709105879dfc3a420a5a86ca882e4cc39d5483a4a3e1f62c2b14472"
+          }
+        ],
+        "path": "skills/grilling",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `grilling`; the response applies: Grill the user relentlessly about a plan, decision, or idea, working a design tree in rounds.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-DESC-grilling"
+      ],
+      "positive_probe_ids": [
+        "P-DESC-grilling"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Grill the user relentlessly about a plan, decision, or idea, working a design tree in rounds. Use when the user wants to stress-test their thinking, before a convergence packet, or on any 'grill' trigger phrase.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "grilling/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "grilling",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": "Applies to every prose surface",
+      "canonical_identity": {
+        "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+        "members": [
+          {
+            "bytes": 9940,
+            "path": "SKILL.md",
+            "sha256": "8e6472835009def01137d6c3fb241d6d3dbbc59ce4f5bd613dd34636b8d83bd1"
+          }
+        ],
+        "path": "skills/unslop",
+        "repository": "Ezra144israel/governed-agent-skills"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "probe scenario (not a source rule): the response is only a machine-readable JSON document or raw command output with no prose"
+      ],
+      "expected_effect": "Load receipt names `unslop`; the response applies: Cut AI tells from any writing.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-DESC-unslop"
+      ],
+      "positive_probe_ids": [
+        "P-DESC-unslop"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Cut AI tells from any writing. Applies to every prose surface: replies, docs, handoffs, convergence packets, SKILL.md bodies, PR descriptions, commit messages, and CIL records.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "unslop/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "unslop",
+      "version": null
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 5574,
+            "path": "SKILL.md",
+            "sha256": "4f29bb3d42344f46b68930ecd374b20bc114efcd4ed66ec9f61f8906098469fd"
+          }
+        ],
+        "path": "skills/blast-radius",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "native-frontmatter-v1",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "native-frontmatter-v1",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [
+          "build-review",
+          "repository"
+        ],
+        "task_kinds": [
+          "review",
+          "verification"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `blast-radius`; the response applies: Finds what a change could break beyond the diff and proves the one safety fact by running real code.",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-blast-radius"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-07",
+        "P-SEL-21"
+      ],
+      "positive_triggers": [
+        {
+          "description": "a change's cross-module breakage risk is assessed before it ships",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "review",
+              "verification"
+            ]
+          },
+          "trigger_id": "change-risk-review"
+        },
+        {
+          "description": "a small diff is reviewed without trust in its stated safety",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "repository"
+            ],
+            "task_kinds": [
+              "review"
+            ]
+          },
+          "trigger_id": "small-diff-distrust"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "blast-radius",
+      "version": "1.0.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 9800,
+            "path": "SKILL.md",
+            "sha256": "3166460a8c4f88c3782abdcc298b9c8fd43535ee642bf95388d2b42a8347dcfe"
+          }
+        ],
+        "path": "skills/diagnosing-bugs",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "native-frontmatter-v1",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "native-frontmatter-v1",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [
+          "repository",
+          "runtime"
+        ],
+        "task_kinds": [
+          "implementation",
+          "testing",
+          "verification"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `diagnosing-bugs`; the response applies: Diagnosis loop for hard bugs and performance regressions, anchored on a red-capable feedback loop.",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-diagnosing-bugs"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-18",
+        "P-SEL-19"
+      ],
+      "positive_triggers": [
+        {
+          "description": "something is broken, throwing, failing, or intermittently wrong and needs a diagnosis loop",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "repository",
+              "runtime"
+            ],
+            "task_kinds": [
+              "implementation",
+              "testing",
+              "verification"
+            ]
+          },
+          "trigger_id": "bug-diagnosis"
+        },
+        {
+          "description": "a performance regression needs baseline measurement and bisection",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "repository",
+              "runtime"
+            ],
+            "task_kinds": [
+              "testing",
+              "verification"
+            ]
+          },
+          "trigger_id": "performance-regression"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "diagnosing-bugs",
+      "version": "1.0.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 5040,
+            "path": "SKILL.md",
+            "sha256": "e26296e18d4e101da517b7155dd110172fe801de06cdd5b80ee85486d172c3b7"
+          }
+        ],
+        "path": "skills/encode-lessons-in-structure",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "native-frontmatter-v1",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "native-frontmatter-v1",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [
+          "documentation",
+          "repository"
+        ],
+        "task_kinds": [
+          "implementation",
+          "refactor",
+          "review"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `encode-lessons-in-structure`; the response applies: Encodes recurring corrections as tests, gates, or generated artifacts instead of repeated prose instructions.",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-encode-lessons-in-structure"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-11"
+      ],
+      "positive_triggers": [
+        {
+          "description": "the same instruction or correction recurs and should become structure",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "repository"
+            ],
+            "task_kinds": [
+              "implementation",
+              "refactor",
+              "review"
+            ]
+          },
+          "trigger_id": "recurring-correction"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "encode-lessons-in-structure",
+      "version": "1.0.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 10883,
+            "path": "SKILL.md",
+            "sha256": "2099180e990aaf69b5c8049d5f9c0164966cd4b4de9500fefcca1184a0d40a20"
+          }
+        ],
+        "path": "skills/writing-for-agents",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "native-frontmatter-v1",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "native-frontmatter-v1",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [
+          "documentation"
+        ],
+        "task_kinds": [
+          "copy",
+          "design"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `writing-for-agents`; the response applies: Architecture of documents an agent consumes, covering pointers, load budgets, hierarchy, and completion criteria.",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-writing-for-agents"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-16"
+      ],
+      "positive_triggers": [
+        {
+          "description": "a skill, doctrine file, or pointer-reached document is created or edited",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation"
+            ],
+            "task_kinds": [
+              "copy",
+              "design"
+            ]
+          },
+          "trigger_id": "agent-document-design"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "writing-for-agents",
+      "version": "1.0.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 5856,
+            "path": "MANIFEST.md",
+            "sha256": "e3e43d4054e154ff7359deea57f210d47446b60fd6bfad288174685fd527ea52"
+          },
+          {
+            "bytes": 30317,
+            "path": "SKILL.md",
+            "sha256": "63b64c9844ce7c4da670af77620bcce483e3d4c947fe1e35ebba459eb2649221"
+          },
+          {
+            "bytes": 37214,
+            "path": "references/crosswalk.md",
+            "sha256": "6566c0e526cd26c993481eabb6d7cf66479b1be374d2ada642cda0d88ae17643"
+          },
+          {
+            "bytes": 6377,
+            "path": "references/deposit.md",
+            "sha256": "b4da3ced43a06fcc719cb15465aaaebb877536b1be856e4bcf8bf612da672985"
+          },
+          {
+            "bytes": 11192,
+            "path": "references/failure-modes.md",
+            "sha256": "c40adb3c569820641f46ad176e096cfc819a1665938ccd8ceb599d9835f4513c"
+          },
+          {
+            "bytes": 11937,
+            "path": "references/provenance.md",
+            "sha256": "4014ba231a34c537bbe73f6cd7803d624b6da6bdb670ac3eb5f15ac801fd90a2"
+          },
+          {
+            "bytes": 12076,
+            "path": "references/relevance.md",
+            "sha256": "43252ef11548c4d70385b58221b397a2e9b1494381dc50861768b4c2d80bf819"
+          },
+          {
+            "bytes": 8751,
+            "path": "references/security.md",
+            "sha256": "537630a1ee53aec52fa4339ef3ffef2adb34e50786adc8c584740209fc450cf5"
+          },
+          {
+            "bytes": 14548,
+            "path": "references/sources.md",
+            "sha256": "f257e3b59879695b8a75ee3c61218bac4d522c3b2718cc5ca0f0f4a74435d563"
+          }
+        ],
+        "path": "skills/technique-scout",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-capability-question",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/manifest",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/MANIFEST.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/crosswalk",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/crosswalk.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout"
+          ],
+          "child_id": "technique-scout/deposit",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/deposit.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-capability-question",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/failure-modes",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/failure-modes.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/provenance",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/provenance.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-capability-question",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/relevance",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/relevance.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-roundup-triage"
+          ],
+          "child_id": "technique-scout/security",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/security.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "external-source-scout",
+            "source-capability-question"
+          ],
+          "child_id": "technique-scout/sources",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/technique-scout/references/sources.md"
+        }
+      ],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "native-frontmatter-v1",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "native-frontmatter-v1",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [
+          "documentation",
+          "repository"
+        ],
+        "task_kinds": [
+          "review"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `technique-scout`; the response applies: Scouts an external source and decides what genuinely beats what this estate already has.",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-technique-scout",
+        "N-CHILDREF"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-12",
+        "P-CHILDREF"
+      ],
+      "positive_triggers": [
+        {
+          "description": "an external source is shared for a read-only scout of what is worth keeping",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "repository"
+            ],
+            "task_kinds": [
+              "review"
+            ]
+          },
+          "trigger_id": "external-source-scout"
+        },
+        {
+          "description": "the operator asks what an external repository or source actually does",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "repository"
+            ],
+            "task_kinds": [
+              "review"
+            ]
+          },
+          "trigger_id": "source-capability-question"
+        },
+        {
+          "description": "a top-N roundup of external sources is triaged against what this estate already has",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "repository"
+            ],
+            "task_kinds": [
+              "review"
+            ]
+          },
+          "trigger_id": "source-roundup-triage"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "technique-scout",
+      "version": "15.0.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 20871,
+            "path": "SKILL.md",
+            "sha256": "55df500311ab9505e8bca07ed24613df88c6198046a181cab20d2a6e611fa341"
+          }
+        ],
+        "path": "skills/code-quality",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [],
+      "dependency_closure": [
+        {
+          "condition_trigger_ids": [],
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "target": "repo-grounding"
+        }
+      ],
+      "distribution_targets": {
+        "agents": "native-frontmatter-v1",
+        "antigravity": "native-frontmatter-v1",
+        "chatgpt": "NOT_TARGET",
+        "chatgpt-project": "release",
+        "claude-code": "native-frontmatter-v1",
+        "claude-web": "NOT_TARGET",
+        "codex": "native-frontmatter-v1",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable",
+          "team-hub-runtime-advisory"
+        ],
+        "roles": [],
+        "surfaces": [
+          "build-review",
+          "documentation",
+          "repository"
+        ],
+        "task_kinds": [
+          "implementation",
+          "refactor",
+          "review",
+          "testing"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `code-quality`; the response applies: Guides scoped, maintainable implementation without authorizing broad refactors or replacing hard gates.; the return carries code-quality/quality-notes",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-code-quality"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-02",
+        "P-SEL-08",
+        "P-SEL-10",
+        "P-SEL-20",
+        "P-DEPCLOSURE",
+        "P-RETURN-CONTRIB"
+      ],
+      "positive_triggers": [
+        {
+          "description": "new implementation logic is being written",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "repository"
+            ],
+            "task_kinds": [
+              "implementation"
+            ]
+          },
+          "trigger_id": "implementation-logic"
+        },
+        {
+          "description": "implementation code is under review",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "review"
+            ]
+          },
+          "trigger_id": "code-review"
+        },
+        {
+          "description": "tests are being written",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "build-review",
+              "repository"
+            ],
+            "task_kinds": [
+              "testing"
+            ]
+          },
+          "trigger_id": "test-writing"
+        },
+        {
+          "description": "a scoped change risks broad cleanup or refactor",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [
+              "high-risk-file"
+            ],
+            "roles": [],
+            "surfaces": [
+              "repository"
+            ],
+            "task_kinds": [
+              "refactor"
+            ]
+          },
+          "trigger_id": "over-refactor-risk"
+        }
+      ],
+      "return_contributions": [
+        {
+          "activation_trigger_ids": [
+            "implementation-logic",
+            "code-review",
+            "test-writing",
+            "over-refactor-risk"
+          ],
+          "contribution_id": "code-quality/quality-notes",
+          "fields": [
+            "quality-decisions",
+            "deferred-cleanup",
+            "proportionality"
+          ],
+          "requirement": "optional"
+        }
+      ],
+      "skill_id": "code-quality",
+      "version": "1.1.0"
+    },
+    {
+      "activation_class": "conditional",
+      "activation_class_basis": null,
+      "canonical_identity": {
+        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "members": [
+          {
+            "bytes": 48730,
+            "path": "SKILL.md",
+            "sha256": "f6ffea7192239985ecbfc7c449990ab43521f50e6c264506c1eae4a6864cbdaf"
+          },
+          {
+            "bytes": 3804,
+            "path": "reference/builder-session.md",
+            "sha256": "f09ce69af8aa075713cd51828871e65a4ec51a89daae1776d914e56f50c8c143"
+          },
+          {
+            "bytes": 3025,
+            "path": "reference/orchestrator-session.md",
+            "sha256": "b2a8391a602e74001662e2ad721a469ad03a91e52fcf9e7b92959cd320627470"
+          },
+          {
+            "bytes": 3013,
+            "path": "reference/pressure-tester-session.md",
+            "sha256": "13c898de97ec2cd12b03c879f7c41acfa4de3593fe5bcbf619c0227f44484089"
+          },
+          {
+            "bytes": 6684,
+            "path": "reference/relay-queue.md",
+            "sha256": "be151a20f1c0b6d0a8089f37a4ba7aec025505ae0a262095e87fef77711bccb5"
+          }
+        ],
+        "path": "skills/continuity-handoff",
+        "repository": "Substrate-8/team-hub-operator-web"
+      },
+      "child_references": [
+        {
+          "activation_trigger_ids": [
+            "builder-designation-addendum"
+          ],
+          "child_id": "continuity-handoff/builder-session",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/continuity-handoff/reference/builder-session.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "orchestrator-designation-addendum"
+          ],
+          "child_id": "continuity-handoff/orchestrator-session",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/continuity-handoff/reference/orchestrator-session.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "orchestrator-relay-queue"
+          ],
+          "child_id": "continuity-handoff/relay-queue",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/continuity-handoff/reference/relay-queue.md"
+        },
+        {
+          "activation_trigger_ids": [
+            "pressure-tester-designation-addendum"
+          ],
+          "child_id": "continuity-handoff/pressure-tester-session",
+          "load_condition": "when one of activation_trigger_ids fires",
+          "path": "skills/continuity-handoff/reference/pressure-tester-session.md"
+        }
+      ],
+      "dependency_closure": [
+        {
+          "condition_trigger_ids": [],
+          "resolution": "repository-scoped: declared only in Substrate-8/team-hub-operator-web; not a CURRENT manifest member; resolvable on surface substrate8-repository, otherwise report under host_capability_exception",
+          "target": "repo-grounding"
+        }
+      ],
+      "distribution_targets": {
+        "agents": "BLOCKED",
+        "antigravity": "BLOCKED",
+        "chatgpt": "BLOCKED",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "BLOCKED",
+        "claude-web": "BLOCKED",
+        "codex": "BLOCKED",
+        "grok": "BLOCKED",
+        "substrate8-repository": "release"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable",
+          "team-hub-runtime-advisory"
+        ],
+        "roles": [
+          "builder",
+          "orchestrator",
+          "pressure-test"
+        ],
+        "surfaces": [
+          "documentation",
+          "team-hub-doctrine"
+        ],
+        "task_kinds": [
+          "continuity",
+          "handoff"
+        ]
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `continuity-handoff`; the response applies: Preserves approved truth, detects drift, and runs governed designation session close, resume, and rotation handoffs across sessions and agents.; the return carries continuity-handoff/continuity, continuity-handoff/session-handoff, continuity-handoff/seat-rotation",
+      "frontmatter_schema": "team-hub-skill/v1",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-SEL-continuity-handoff",
+        "N-CHILDREF",
+        "N-SEAT-LOCAL-PROMOTION"
+      ],
+      "positive_probe_ids": [
+        "P-SEL-03",
+        "P-SEL-04",
+        "P-SEL-05",
+        "P-SEL-13",
+        "P-SEL-14",
+        "P-SEL-15",
+        "P-SEL-17",
+        "P-DEPCLOSURE",
+        "P-CHILDREF",
+        "P-RETURN-CONTRIB"
+      ],
+      "positive_triggers": [
+        {
+          "description": "approved roadmap truth changes",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity"
+            ]
+          },
+          "trigger_id": "roadmap-truth-change"
+        },
+        {
+          "description": "phase status changes",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity"
+            ]
+          },
+          "trigger_id": "phase-status-change"
+        },
+        {
+          "description": "long-running context must be transferred",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation"
+            ],
+            "task_kinds": [
+              "handoff"
+            ]
+          },
+          "trigger_id": "long-context-transfer"
+        },
+        {
+          "description": "work switches session or agent",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation"
+            ],
+            "task_kinds": [
+              "handoff"
+            ]
+          },
+          "trigger_id": "session-agent-switch"
+        },
+        {
+          "description": "work reaches a phase boundary",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "phase-boundary"
+        },
+        {
+          "description": "the operator closes the current working chat for any designation (for example, we're closing the session) and carries the designation as a parameter in the handoff",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "designation-session-close"
+        },
+        {
+          "description": "a fresh session resumes any designation (for example, starting a new session) from a verified handoff pointer or the safe bare-phrase rule",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "designation-session-resume"
+        },
+        {
+          "description": "record a requested designation change and apply the work-unit closure barrier",
+          "full_load": true,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "designation-rotation-request"
+        },
+        {
+          "description": "load the optional BUILDER close/resume addendum as a known optimization, not as designation authority",
+          "full_load": false,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [
+              "builder"
+            ],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "builder-designation-addendum"
+        },
+        {
+          "description": "load the optional ORCHESTRATOR close/resume addendum as a known optimization, not as designation authority",
+          "full_load": false,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [
+              "orchestrator"
+            ],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "orchestrator-designation-addendum"
+        },
+        {
+          "description": "Orchestrator continuity or handoff work resumes or explicitly operates the local relay-queue surface",
+          "full_load": false,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [
+              "orchestrator"
+            ],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "orchestrator-relay-queue"
+        },
+        {
+          "description": "load the optional PRESSURE-TESTER close/resume addendum as a known optimization, not as designation authority",
+          "full_load": false,
+          "selectors": {
+            "lanes": [],
+            "risk_flags": [],
+            "roles": [
+              "pressure-test"
+            ],
+            "surfaces": [
+              "documentation",
+              "team-hub-doctrine"
+            ],
+            "task_kinds": [
+              "continuity",
+              "handoff"
+            ]
+          },
+          "trigger_id": "pressure-tester-designation-addendum"
+        }
+      ],
+      "return_contributions": [
+        {
+          "activation_trigger_ids": [
+            "roadmap-truth-change",
+            "phase-status-change",
+            "long-context-transfer",
+            "session-agent-switch",
+            "phase-boundary"
+          ],
+          "contribution_id": "continuity-handoff/continuity",
+          "fields": [
+            "truth-state",
+            "handoff-artifact",
+            "resume-boundary"
+          ],
+          "requirement": "required"
+        },
+        {
+          "activation_trigger_ids": [
+            "designation-session-close",
+            "designation-session-resume"
+          ],
+          "contribution_id": "continuity-handoff/session-handoff",
+          "fields": [
+            "starter-pointer",
+            "handoff-identity",
+            "root-map",
+            "location-ledger",
+            "continuity-state",
+            "cil-grounding-gate"
+          ],
+          "requirement": "required"
+        },
+        {
+          "activation_trigger_ids": [
+            "designation-session-close",
+            "designation-session-resume",
+            "designation-rotation-request",
+            "session-agent-switch"
+          ],
+          "contribution_id": "continuity-handoff/seat-rotation",
+          "fields": [
+            "work-unit-id",
+            "work-unit-state",
+            "rotation-state",
+            "current-executor",
+            "current-designation",
+            "authorship-ledger",
+            "next-step",
+            "recovery-boundary"
+          ],
+          "requirement": "required"
+        }
+      ],
+      "skill_id": "continuity-handoff",
+      "version": "1.5.0"
+    },
+    {
+      "activation_class": "standing",
+      "activation_class_basis": "automatically restore a CIL-conditioned operating posture across a session",
+      "canonical_identity": {
+        "commit": "650148ffe5cb1f96b04efd2b1dccff217122a7c8",
+        "members": [
+          {
+            "bytes": 14225,
+            "path": "SKILL.md",
+            "sha256": "2fbd82958a20c2df828dd22fca2eacbb30b59a6ba6a67b71f1cda48c3463c973"
+          },
+          {
+            "bytes": 2568,
+            "path": "acceptance/frozen-prompts.json",
+            "sha256": "eda10f48cffbe89e017f9968360c90465b268722b6a600eff4a16a371179ddd5"
+          },
+          {
+            "bytes": 1380,
+            "path": "lib/fixtures/evidence-install-bound/artifacts/surface-alpha-install-observation.json",
+            "sha256": "87603032bd53df7afca79eb1689fb1ba0e64fd14241661a1ae91f63bb86dc0be"
+          },
+          {
+            "bytes": 1356,
+            "path": "lib/fixtures/evidence-install-bound/artifacts/surface-beta-install-observation.json",
+            "sha256": "ad99621425171da196855e8f5fafd2a8b4073ca31ae4d08594fb80ab03cb6f22"
+          },
+          {
+            "bytes": 634,
+            "path": "lib/fixtures/evidence-install-bound/capability/INSTALL-AUTHORITY.json",
+            "sha256": "737ddc0d14e085962785d352a27b7421d904c3b75761c4d8c3c8e192669aa327"
+          },
+          {
+            "bytes": 332,
+            "path": "lib/fixtures/evidence-install-bound/capability/INSTALL-PIN.json",
+            "sha256": "731de47fb1793b0b435793ab77a4f0e372f1ae9a15f6465c657a10079a4faec3"
+          },
+          {
+            "bytes": 3293,
+            "path": "lib/fixtures/evidence-install-bound/capability/surface-alpha.json",
+            "sha256": "2ebf4875afc944b83676c97cbe686252e9d5dd1d8576c10cdeee75b26464a7f7"
+          },
+          {
+            "bytes": 3391,
+            "path": "lib/fixtures/evidence-install-bound/capability/surface-beta.json",
+            "sha256": "5c1f7c435dfa71e361a9de4067d037154de4460450059f8b2767aff60c003c1e"
+          },
+          {
+            "bytes": 1380,
+            "path": "lib/fixtures/evidence/artifacts/surface-alpha-install-observation.json",
+            "sha256": "87603032bd53df7afca79eb1689fb1ba0e64fd14241661a1ae91f63bb86dc0be"
+          },
+          {
+            "bytes": 1356,
+            "path": "lib/fixtures/evidence/artifacts/surface-beta-install-observation.json",
+            "sha256": "ad99621425171da196855e8f5fafd2a8b4073ca31ae4d08594fb80ab03cb6f22"
+          },
+          {
+            "bytes": 332,
+            "path": "lib/fixtures/evidence/capability/INSTALL-PIN.json",
+            "sha256": "731de47fb1793b0b435793ab77a4f0e372f1ae9a15f6465c657a10079a4faec3"
+          },
+          {
+            "bytes": 3293,
+            "path": "lib/fixtures/evidence/capability/surface-alpha.json",
+            "sha256": "2ebf4875afc944b83676c97cbe686252e9d5dd1d8576c10cdeee75b26464a7f7"
+          },
+          {
+            "bytes": 3391,
+            "path": "lib/fixtures/evidence/capability/surface-beta.json",
+            "sha256": "5c1f7c435dfa71e361a9de4067d037154de4460450059f8b2767aff60c003c1e"
+          },
+          {
+            "bytes": 14507,
+            "path": "lib/fixtures/restore-vectors.json",
+            "sha256": "1fa264c8c68e95e2b490d3a48d082f885bde63faa2a628da0a698650eb27b3df"
+          },
+          {
+            "bytes": 3619,
+            "path": "schema/capability-record.schema.json",
+            "sha256": "a3fc3ff251b10ebd122bebc8aded9abb8eb07bd300bfac95ea8f1efe5a2a3721"
+          },
+          {
+            "bytes": 2771,
+            "path": "schema/install-authority.schema.json",
+            "sha256": "9e1511e0dd7c08582a96c02765aff72bbee704245295bbc5bf727ca9d33b4f8b"
+          },
+          {
+            "bytes": 817,
+            "path": "schema/install-pin.schema.json",
+            "sha256": "100ff57d7f3092736d2d7d04e2e72fa4dad102074c57d40b63ff3ce1c5286f76"
+          },
+          {
+            "bytes": 1184,
+            "path": "schema/mode-baseline.schema.json",
+            "sha256": "d103a96c750528de193f920d1763ca2a10ca703c90ad4eb8a5d641ca7af28093"
+          },
+          {
+            "bytes": 2163,
+            "path": "schema/restore-trace.schema.json",
+            "sha256": "2901fb9d9a22563aa54d0b71c06f151b7578d06af64c0d9a3dc0109676eb6275"
+          },
+          {
+            "bytes": 2653,
+            "path": "schema/rollback-requirements.schema.json",
+            "sha256": "b1673e222be7879b2228449ecc48ec1c569adf587ff9ac88ead29b25246010a3"
+          },
+          {
+            "bytes": 640,
+            "path": "schema/source-set-measurement.schema.json",
+            "sha256": "b0281c66ac257ee6d8cccf82b21b8de5b89b249c2921c6b278bce31633848511"
+          },
+          {
+            "bytes": 1746,
+            "path": "template/rollback-requirements.template.json",
+            "sha256": "091fe6a04c05d2fc46bbd47e2f7bc51e2e3c6a988b39cdcca24f3499b3dd39df"
+          }
+        ],
+        "path": "",
+        "repository": "Ezra144israel/cil-mode-switch"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [
+        "probe scenario (not a source rule): a later turn in the same session with a trustworthy baseline and no explicit `Mode Switch` instruction"
+      ],
+      "expected_effect": "Load receipt names `cil-mode-switch`; the response applies: Portable CIL Mode Switch source candidate.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-STANDING-RESIDENCY"
+      ],
+      "positive_probe_ids": [
+        "P-STANDING-ENTRY"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Portable CIL Mode Switch source candidate. Enter, hold, and automatically restore a CIL-conditioned operating posture across a session, without storing or restoring authority. Pre-wiring source only — it installs nothing and grants nothing.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "cil-mode-switch/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "cil-mode-switch",
+      "version": null
+    },
+    {
+      "activation_class": "standing",
+      "activation_class_basis": "Read once at session start",
+      "canonical_identity": {
+        "commit": "db692c833f227ac790788a6a7fa32e4e8fbba039",
+        "members": [
+          {
+            "bytes": 10190,
+            "path": "SKILL.md",
+            "sha256": "f9320814265a1136be9f0899cfea3cb94d78899e440fa76baa2989f5d53c5fd6"
+          }
+        ],
+        "path": "playbooks",
+        "repository": "Ezra144israel/collective-intelligence-layer"
+      },
+      "child_references": [],
+      "dependency_closure": [],
+      "distribution_targets": {
+        "agents": "release",
+        "antigravity": "release",
+        "chatgpt": "release",
+        "chatgpt-project": "NOT_TARGET",
+        "claude-code": "release",
+        "claude-web": "release",
+        "codex": "release",
+        "grok": "BLOCKED",
+        "substrate8-repository": "NOT_TARGET"
+      },
+      "eligibility": {
+        "lanes": [],
+        "platforms": [
+          "portable"
+        ],
+        "roles": [],
+        "surfaces": [],
+        "task_kinds": []
+      },
+      "exclusions_and_vetoes": [],
+      "expected_effect": "Load receipt names `cil-grounding`; the response applies: Session-resident CIL grounding at session start for Ezra's governed environment, portable to every surface.",
+      "frontmatter_schema": "name-description",
+      "host_capability_exception": "NONE",
+      "negative_probe_ids": [
+        "N-STANDING-RESIDENCY"
+      ],
+      "positive_probe_ids": [
+        "P-STANDING-ENTRY"
+      ],
+      "positive_triggers": [
+        {
+          "description": "Session-resident CIL grounding at session start for Ezra's governed environment, portable to every surface. Ported from the operator-locked cil-auto-grounding--convergence-v3 (Claude Code local, blinded-scored PASS 2026-08-15). Read once at session start alongside governed-operator and reasoning-doctrine; reread only after compaction/summarization, a source-identity change, or an explicit operator refresh.",
+          "full_load": true,
+          "selectors": null,
+          "trigger_id": "cil-grounding/description"
+        }
+      ],
+      "return_contributions": [],
+      "skill_id": "cil-grounding",
+      "version": null
+    }
+  ],
+  "sources": [
+    {
+      "commit": "650148ffe5cb1f96b04efd2b1dccff217122a7c8",
+      "repository": "Ezra144israel/cil-mode-switch"
+    },
+    {
+      "commit": "db692c833f227ac790788a6a7fa32e4e8fbba039",
+      "repository": "Ezra144israel/collective-intelligence-layer"
+    },
+    {
+      "commit": "2734db051d161eed47335568a986e46b4b2ffba7",
+      "repository": "Ezra144israel/governed-agent-skills"
+    },
+    {
+      "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+      "repository": "Substrate-8/team-hub-operator-web"
+    }
+  ],
+  "team_hub_machine_manifest": {
+    "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+    "source_corpus_sha256": "55b136a26b8e4caba16a7957106dc5b27b331f3bb63158b2bbac6de444396327"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CIL Mode Switch Install Pin",
+  "description": "Install-time pin binding each surface capability record to a durable digest. Written at install time by the installing authority, never by an evaluation caller.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "installId", "records"],
+  "properties": {
+    "schema": { "const": "cil-mode-switch-install-pin/v1" },
+    "installId": { "type": "string", "minLength": 8 },
+    "records": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["sha256"],
+        "properties": {
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    }
+  }
+}

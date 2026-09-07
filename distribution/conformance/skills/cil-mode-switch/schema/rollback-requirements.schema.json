@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CIL Mode Switch Rollback Requirements",
+  "description": "Portable rollback REQUIREMENTS. Concrete per-surface locations and identities are install-time state produced by Q4, never package truth. A TEMPLATE carries placeholder locations and no identities. A RESOLVED document is authoritative for exactly one install and pins, for every surface, a durable identity for the candidate payload it installs AND for the prior known-good payload or state it would restore. A location alone is not an identity: a path can be rewritten, and a path to an uncommitted local file is not recoverable.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "status", "authoritative", "installId", "requirements", "surfaces"],
+  "properties": {
+    "schema": { "const": "cil-mode-switch-rollback-requirements/v2" },
+    "status": { "enum": ["TEMPLATE", "RESOLVED"] },
+    "authoritative": { "type": "boolean" },
+    "installId": {
+      "type": ["string", "null"],
+      "description": "The install this document resolves, equal to the installId of that install's INSTALL-PIN.json. Null in a template; required in a RESOLVED document, so a resolved rollback plan cannot float free of the install it claims to cover."
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["surface", "payloadLocation", "priorKnownGood", "rollbackAction", "candidateIdentity", "priorIdentity"],
+        "properties": {
+          "surface": { "type": "string", "minLength": 1 },
+          "payloadLocation": { "type": "string", "minLength": 1 },
+          "priorKnownGood": { "type": "string", "minLength": 1 },
+          "rollbackAction": { "type": "string", "minLength": 1 },
+          "candidateIdentity": {
+            "type": ["string", "null"],
+            "description": "Durable identity of the payload this install writes to the surface. Null in a template. In a RESOLVED document it is sha256:<64 hex> or git:<40 hex>."
+          },
+          "priorIdentity": {
+            "type": ["string", "null"],
+            "description": "Durable identity of the prior known-good payload or state this surface is restored to. Null in a template. In a RESOLVED document it is sha256:<64 hex>, git:<40 hex>, or absent:<REASON> where the surface genuinely held no prior payload and rollback is removal."
+          }
+        }
+      }
+    }
+  }
+}
