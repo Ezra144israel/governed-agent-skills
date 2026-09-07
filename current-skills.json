@@ -5,7 +5,7 @@
     "repository": "Ezra144israel/operator-agent-relay"
   },
   "repository": "Ezra144israel/governed-agent-skills",
-  "revision": "2026-09-06-ownership-resolution-v1",
+  "revision": "2026-09-07-friction-reporting-v1",
   "schema": "canonical-current-skills/v1",
   "skills": [
     {
@@ -88,10 +88,10 @@
         "commit": "MANIFEST",
         "members": [
           {
-            "blob": "ff55d8dc29d6377876de3fea5d0f6dfea33ec2e5",
-            "bytes": 17020,
+            "blob": "457c41bc9f9d1452bc534bb1ade9243009e3261e",
+            "bytes": 19860,
             "path": "SKILL.md",
-            "sha256": "6e731963212006e83c441f3128ec2ab78996cf9f7a96e5ab0a24f90316705a68"
+            "sha256": "e43d9435246d95c6358ce1429cd7dcc2afb46cc084df0b36f5d391d8047dc35e"
           }
         ],
         "path": "skills/governed-operator",
@@ -447,7 +447,7 @@
       "lifecycle": "CURRENT",
       "name": "blast-radius",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "172c76d5a72383e5ac8e355a8b27c8671c8e9c11",
@@ -549,7 +549,7 @@
       "lifecycle": "CURRENT",
       "name": "diagnosing-bugs",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "02e2fbb0b8c229a97ba344dad17d1c96ac0158cc",
@@ -651,7 +651,7 @@
       "lifecycle": "CURRENT",
       "name": "encode-lessons-in-structure",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "ae6ae8f3383ba89d03d7f8e12efc0031dd2429f2",
@@ -753,7 +753,7 @@
       "lifecycle": "CURRENT",
       "name": "writing-for-agents",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "69f8e95bbe37fd64f1ebaa95b2ea8a260d4f3dfe",
@@ -855,7 +855,7 @@
       "lifecycle": "CURRENT",
       "name": "technique-scout",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "7807901427f1aea1233e206afea03d24989988d6",
@@ -1041,7 +1041,7 @@
       "lifecycle": "CURRENT",
       "name": "code-quality",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "2ea4d73f3f43cb446386bda0ea7b673f4258683f",
@@ -1126,7 +1126,7 @@
       "lifecycle": "CURRENT",
       "name": "continuity-handoff",
       "source": {
-        "commit": "c1185348f9b99209003b4297f8679f56587a78ce",
+        "commit": "12941ecca6f44be60f42ad9f722e7da15920de24",
         "members": [
           {
             "blob": "f327228efbfae60d6f4fd85682c198d9cbc2a44b",
@@ -1379,7 +1379,7 @@
       "lifecycle": "CURRENT",
       "name": "cil-grounding",
       "source": {
-        "commit": "db692c833f227ac790788a6a7fa32e4e8fbba039",
+        "commit": "d159b371d25b2aea58eb31c7faa313354c128dcd",
         "members": [
           {
             "blob": "2f58d808dceaa8fd304e5b0510d3e1aee927fcc7",

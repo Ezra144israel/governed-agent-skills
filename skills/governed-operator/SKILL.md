@@ -96,6 +96,57 @@ lineage, independent rereading of acceptance evidence, rerun decisive checks,
 and reconciliation of any identity or evidence mismatch. Candidate tests may
 support acceptance but cannot be their own sole proof.
 
+## Operator outcome lock
+
+When the operator explicitly locks an outcome, preserve the operator's exact
+locked request as `OPERATOR_LOCK`.
+
+`OPERATOR_LOCK` is immutable until the operator explicitly amends or replaces
+it.
+
+The ORCHESTRATOR may clarify implementation details, but it may not add,
+remove, substitute, redefine, or promote anything that changes the locked:
+
+- outcome;
+- scope;
+- success condition;
+- acceptance condition;
+- required evidence;
+- hard stop;
+- non-goal.
+
+Extra ideas, checks, evidence, improvements, or recommendations may be
+ADVISORY. They may not become required work or acceptance gates unless the
+operator explicitly adds them to the lock or an existing safety or authority
+rule independently requires them.
+
+Before substantive governed work, compare the received plan, dispatch, review
+target, or work unit against `OPERATOR_LOCK`.
+
+If there is a material mismatch, do not execute the drifted portion. Return
+`CONTRACT_DRIFT`, then state:
+
+```text
+ADDED:
+REMOVED:
+CHANGED:
+SMALLEST CORRECTION:
+```
+
+Do not repair, reinterpret, broaden, or narrow the operator lock yourself.
+
+This check applies independently to ORCHESTRATOR, PRESSURE-TESTER, BUILDER,
+and REVIEWER. A BUILDER must reject an Orchestrator dispatch that materially
+differs from the operator lock. A REVIEWER must check objective fidelity
+against the operator lock before checking implementation correctness. A
+PRESSURE-TESTER may identify consequences or risks but may not reopen or
+expand a settled operator lock.
+
+Only the operator may materially amend `OPERATOR_LOCK`.
+
+If there is no explicit operator lock, existing normal governance continues
+unchanged.
+
 ## Five gates
 
 1. **Ground before drafting.** Check load-bearing claims against original
@@ -164,6 +215,29 @@ SCOPE ADAPTATION:
 DECLINED ACTIONS / BOUNDARY HELD:
 VERIFICATION:
 RESIDUAL RISK:
+```
+
+Every BUILDER, REVIEWER, and PRESSURE-TESTER return also carries this block.
+It reports the cost of the work; it never decides whether the work passes.
+`NONE` is a required explicit value when nothing was observed. Silence is not
+`NONE`, and a return without the block is incomplete under this contract. A
+`PASS` or `ACCEPTED` may still report friction. Acting on an observation is
+advisory unless the same observation independently qualifies as a correctness,
+safety, authority, or operator-locked outcome defect. A friction observation
+alone opens no repair task and becomes no acceptance condition.
+
+```text
+FRICTION / EFFICIENCY OBSERVATIONS
+
+FRICTION OBSERVED: NONE | <what happened>
+SLOWDOWN / LATENCY: NONE | <what consumed extra time>
+REPEATED WORK: NONE | <double reads, triple checks, repeated verification, retries>
+TOKEN / CONTEXT WASTE: NONE | <avoidable repeated context or large reads>
+TOOL / HOOK FRICTION: NONE | <failures, noise, degraded tools, workarounds>
+MANUAL OPERATOR BURDEN: NONE | <anything the operator had to do>
+WORKAROUND USED: NONE | <temporary route>
+RECURRING PATTERN: NO | YES — <pattern>
+SMALLEST FUTURE IMPROVEMENT: NONE | <advisory only>
 ```
 
 For a deterministic mechanical correction, a Reviewer names the recomputation,
