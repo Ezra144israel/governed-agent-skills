@@ -34,8 +34,11 @@ jobs:
       - name: Prove the guard mutant is rejected
         run: python3 tools/check_guard_mutant.py
 
-      - name: Test the six-skill distribution
-        run: node tools/check-standing-distribution.test.mjs
+      - name: Test public package isolation
+        run: python3 -m unittest tools/test_check_public_package.py -v
+
+      - name: Check the public package
+        run: python3 tools/check_public_package.py
 
       - name: Test the repository security checker
         run: python3 -m unittest tools/test_repository_security_check.py -v

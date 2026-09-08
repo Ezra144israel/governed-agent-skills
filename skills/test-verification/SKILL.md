@@ -1,139 +1,6 @@
 ---
 name: test-verification
 description: Requires behavioral, failure-path, and durable-seam evidence for tests and review. Use when writing tests, reviewing test coverage, assessing behavioral test quality, or accepting high-risk behavior on test evidence.
-metadata_schema: team-hub-skill/v1
-summary: Requires behavioral, failure-path, and durable-seam evidence for tests and review.
-skill_id: test-verification
-version: 2.2.0
-lifecycle_status: active
-family: code-quality
-capabilities: []
-source_provenance:
-  kind: original
-  references: []
-  note: null
-authority_boundary: docs-only
-activation_triggers:
-- trigger_id: test-writing
-  task_kinds:
-  - testing
-  risk_flags: []
-  path_globs: []
-  roles: []
-  lanes: []
-  surfaces:
-  - build-review
-  - repository
-  description: tests are being written
-- trigger_id: coverage-review
-  task_kinds:
-  - review
-  - testing
-  risk_flags: []
-  path_globs: []
-  roles: []
-  lanes: []
-  surfaces:
-  - build-review
-  - repository
-  description: test coverage is reviewed
-- trigger_id: behavioral-quality
-  task_kinds:
-  - testing
-  - verification
-  risk_flags: []
-  path_globs: []
-  roles: []
-  lanes: []
-  surfaces:
-  - build-review
-  - repository
-  description: behavioral test quality is assessed
-- trigger_id: high-risk-acceptance
-  task_kinds:
-  - review
-  - testing
-  - verification
-  risk_flags:
-  - high-risk-file
-  path_globs: []
-  roles: []
-  lanes: []
-  surfaces:
-  - build-review
-  - repository
-  description: high-risk behavior needs test evidence
-activation_exclusions: []
-full_load_required_when:
-- behavioral-quality
-- coverage-review
-- high-risk-acceptance
-- test-writing
-section_references: []
-platforms:
-- portable
-- team-hub-runtime-advisory
-surfaces:
-- build-review
-- repository
-required_roles: []
-required_lanes: []
-related_doctrine:
-- docs/architecture/FILE_ARCHITECTURE_AND_MAINTAINABILITY_STANDARD.md
-- docs/architecture/HIGH_RISK_FILE_REGISTRY.md
-graph_edges:
-- type: depends_on
-  target: repo-grounding
-  condition_trigger_ids: []
-- type: related
-  target: code-quality
-  condition_trigger_ids: []
-child_references:
-- child_id: test-verification/objective-integrity
-  path: skills/test-verification/reference/objective-integrity.md
-  lifecycle_status: active
-  platforms:
-  - portable
-  - team-hub-runtime-advisory
-  surfaces:
-  - build-review
-  - repository
-  activation_trigger_ids: []
-  full_load_trigger_ids: []
-  contributes_return_ids: []
-  independently_invocable: false
-  content_origin: authored
-return_contributions:
-- contribution_id: test-verification/test-proof
-  activation_trigger_ids:
-  - test-writing
-  - coverage-review
-  - behavioral-quality
-  - high-risk-acceptance
-  requirement: required
-  order: 310
-  fields:
-  - field_id: behavior-cases
-    value_type: checklist
-    required: true
-    allowed_values: []
-    prompt: List happy, denied, failure, retry, and boundary cases exercised.
-  - field_id: test-results
-    value_type: command-results
-    required: true
-    allowed_values: []
-    prompt: Record focused and broader test commands and results.
-  - field_id: seam-quality
-    value_type: string
-    required: true
-    allowed_values: []
-    prompt: State why tests use a durable public seam.
-  - field_id: unverified-behavior
-    value_type: string-list
-    required: true
-    allowed_values: []
-    prompt: List any behavior not directly verified.
-supersedes: []
 ---
 
 # test-verification/SKILL.md
@@ -141,8 +8,7 @@ supersedes: []
 ## Purpose
 
 Use this skill to write, evaluate, and verify tests that prove behavior rather
-than implementation details. This skill supersedes and expands the test-writing
-section in `skills/code-quality/SKILL.md`.
+than implementation details.
 
 ## Core Rule
 
@@ -215,9 +81,9 @@ Before accepting a test as complete:
 | Presentational component | renders given props correctly; does not fetch/store/dispatch |
 | Hook | hydration/effect behavior, pure helper tests where possible |
 | Natural-language matcher / routing seam | generated class matrix across frames and objects, including guard/veto vocabulary in object position; directive-veto cases; mention/question negatives; verbatim failing deployed inputs |
-| Rendered answer / readback surface | whole-answer pins for each state branch plus structural assertions banning stale/forbidden wording; cross-reference `skills/operator-copy-honesty/SKILL.md` |
+| Rendered answer / readback surface | whole-answer pins for each state branch plus structural assertions banning stale or forbidden wording |
 
-The natural-language matcher / routing seam row is load-bearing after LSN-028:
+The natural-language matcher or routing seam row is load-bearing:
 test the direction class, not only the first known phrase. Include adversarial
 object-position vocabulary so a veto or guard does not accidentally reject the
 operator's intended noun phrase.
@@ -328,27 +194,24 @@ rather than querying DB internals directly.
 When persistence is the behavior being proven, assert the durable record exists
 with the correct fields through the same query layer the app uses.
 
-## Scouted verification rules
-
-_Salvaged from the retired `scouted-rules` holding pen; sources cited in parentheses._
+## Verification rules
 
 - A verdict is `VERIFIED`, `NOT VERIFIED`, or `INCONCLUSIVE`. Inconclusive is
-  not a pass, and a negative is never hidden. (`figure-it-out`)
+  not a pass, and a negative is never hidden.
 - When something passes too easily, suspect the observation method before the
-  system. A blank screenshot passes a lazy gate. (`figure-it-out`)
+  system. A blank screenshot passes a lazy gate.
 - Trust artifacts, not self-reports. When verifying delegated work, inspect the
   diff, the file, and the runtime behavior. Agents report what they intended,
-  not always what happened. (`principle-prove-it-works`)
+  not always what happened.
 - A generated artifact that was never executed is a draft, not a deliverable.
-  (`create-verification-skill`)
 - Verify what a dry run actually skips by observing it, not by trusting its
-  name. Some dry runs still touch the network. (`create-verification-skill`)
+  name. Some dry runs still touch the network.
 - Evidence survives every cleanup, checked at its named location rather than
-  assumed. (`maintain-verification-skill`)
+  assumed.
 - Prefer no new test over a bad test. A bad test mostly tests mocks, encodes
   current implementation details, depends on timing or global state, needs
   expensive infrastructure for a small fix, or would be deleted right after
-  proving the fix. (`tdd`)
+  proving the fix.
 
 ## What Makes a Bad Test
 

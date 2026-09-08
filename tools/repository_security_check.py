@@ -420,6 +420,8 @@ def check_workflow(root, problems):
         "cargo test --locked --all-targets",
         "cargo-audit --version 0.22.2 --locked",
         "cargo audit --file Cargo.lock",
+        "python3 -m unittest tools/test_check_public_package.py -v",
+        "python3 tools/check_public_package.py",
         "python3 tools/repository_security_check.py",
         "python3 tools/check_guard_mutant.py",
         "python3 -m unittest discover -s demo/destructive-command-guard -p 'test_*.py' -v",

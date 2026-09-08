@@ -5,16 +5,16 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![plugin](https://img.shields.io/badge/plugin-governed%40ezra--governed-blueviolet.svg)](#install-the-instruction-layer-as-a-claude-code-plugin)
 [![Security checks](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml/badge.svg)](https://github.com/Ezra144israel/governed-agent-skills/actions/workflows/security.yml)
-![version](https://img.shields.io/badge/version-4.1.1-blue.svg)
+![version](https://img.shields.io/badge/version-4.2.1-blue.svg)
 ![skills](https://img.shields.io/badge/skills-6-blue.svg)
 ![guards](https://img.shields.io/badge/guards-2-orange.svg)
 
-Version 4 has two layers. The **Instruction Layer** is eight skills that tell
+Version 4 has two layers. The **Instruction Layer** is six skills that tell
 coding agents how to work. The **Enforcement Layer** is two standalone guards
 that check the parts that should not depend on judgment.
 
 The layers work together, but they are installed separately. The plugin installs
-only the eight skills. It does not install, wire, or activate either guard. Not
+only the six skills. It does not install, wire, or activate either guard. Not
 every skill needs a guard. Add enforcement only where a rule can be checked
 mechanically and the cost of a miss matters.
 
@@ -90,7 +90,7 @@ check that exists: it costs one extra session.
 
 ## Instruction Layer
 
-These eight skills define the working method, roles, planning discipline,
+These six skills define the working method, roles, planning discipline,
 implementation lens, test evidence, and maximum-assurance review cycle.
 
 | Skill | What it does | Files |
@@ -101,8 +101,6 @@ implementation lens, test evidence, and maximum-assurance review cycle.
 | `skills/portable-adaptive-planning/` | A plan is not permission. FINAL, then GO, and nothing runs without both. | `SKILL.md` + 1 reference |
 | `skills/test-verification/` | Tests prove behavior, not internals. Green is not proof. | `SKILL.md` + 1 reference |
 | `skills/ship-it-or-fix-it/` | On your say-so only. The acceptance oracle freezes before the code exists. | `SKILL.md` |
-| `skills/grilling/` | Tests a plan through direct questions. | `SKILL.md` |
-| `skills/unslop/` | Removes vague wording and AI writing patterns. | `SKILL.md` |
 
 ### Supported installation units
 
@@ -115,9 +113,7 @@ Skills install individually. Their installation units, in package order, are:
 - `test-verification` works alone.
 - `ship-it-or-fix-it` requires `governed-operator`, `reasoning-doctrine`, and
   `test-verification`.
-- `grilling` works alone.
-- `unslop` works alone.
-- the full eight-skill package.
+- the full six-skill package.
 
 ## Enforcement Layer
 
@@ -166,7 +162,7 @@ follows the change.
 
 Skills load namespaced (for example `/governed:reasoning-doctrine`). Manual
 installation, copying `skills/*` into `~/.claude/skills/`, works exactly
-the same. The plugin installs only the eight skills. It does not install, wire,
+the same. The plugin installs only the six skills. It does not install, wire,
 or activate the Enforcement Layer guards. See [INSTALL.md](INSTALL.md).
 
 ## Install the Instruction Layer in other agents
@@ -224,14 +220,6 @@ session.
 these require marketplace/directory listing. Until then, manual install works
 everywhere: copy any folder under `skills/` into your agent's skills
 directory, respecting the installation units above.
-
-## Credits
-
-The accepted `grilling` adaptation originates from
-[mattpocock/skills](https://github.com/mattpocock/skills). The accepted `unslop`
-adaptation originates from [cursor/plugins](https://github.com/cursor/plugins)
-by Lauren Tan. Both are MIT-licensed. This repository maintains the accepted
-adaptations. Upstream repositories supply provenance, not automatic updates.
 
 ## License
 

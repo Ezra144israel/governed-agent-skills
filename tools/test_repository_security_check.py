@@ -336,18 +336,29 @@ class RepositorySecurityGitHistory(unittest.TestCase):
             ["git", "clone", "--quiet", "--no-hardlinks", "--local", str(TOOLS.parent), str(self.root)],
             check=True,
         )
-        for relative in (
-            "tools/repository_security_check.py",
-            "tools/test_repository_security_check.py",
-            ".github/workflows/security.yml",
-        ):
-            source = TOOLS.parent / relative
-            destination = self.root / relative
-            shutil.copy2(source, destination)
+        for path in self.root.iterdir():
+            if path.name == ".git":
+                continue
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
+        for source in TOOLS.parent.iterdir():
+            if source.name in {".git", "__pycache__", "target"}:
+                continue
+            destination = self.root / source.name
+            if source.is_dir():
+                shutil.copytree(
+                    source,
+                    destination,
+                    ignore=shutil.ignore_patterns("__pycache__", "target"),
+                )
+            else:
+                shutil.copy2(source, destination)
         subprocess.run(["git", "config", "user.name", "Repository Security Test"], cwd=self.root, check=True)
         subprocess.run(["git", "config", "user.email", "security-test@example.invalid"], cwd=self.root, check=True)
         subprocess.run(
-            ["git", "add", "tools/repository_security_check.py", "tools/test_repository_security_check.py", ".github/workflows/security.yml"],
+            ["git", "add", "-A"],
             cwd=self.root,
             check=True,
         )

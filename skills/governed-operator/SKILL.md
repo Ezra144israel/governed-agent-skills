@@ -26,8 +26,9 @@ change a governed seat.
 On an eligible worker execution surface, the operator may instead establish
 or change an eligible worker seat by supplying, in the operator's own
 current-session message, the exact active governed ORCHESTRATOR `DISPATCH`
-addressed to that worker seat. The dispatch must verify by exact Relay path,
-bytes, SHA-256, and Git blob identity before it establishes or changes a seat.
+addressed to that worker seat. The dispatch must verify by an exact artifact
+path, byte count, SHA-256, and durable source identity before it establishes or
+changes a seat.
 No second seat sentence is required. Dispatch-driven establishment applies
 only to `BUILDER`, `REVIEWER`, and `PRESSURE-TESTER` where the current surface
 binding or policy expressly permits it.
